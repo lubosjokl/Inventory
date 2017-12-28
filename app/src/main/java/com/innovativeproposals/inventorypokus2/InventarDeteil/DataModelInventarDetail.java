@@ -44,25 +44,12 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> alVysledky;
 
         alVysledky = new ArrayList<HashMap<String, String>>();
-
-        /*
-
-
-        toto treba volat aj s obrazkom a naplnit class, kde obrazok bude blob, zvysok su string
-        Ale neviem ako to naplnit do maphash, kedze ta vyzaduje string - string, pripadne zmen na string-list?
-
-        String sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription,aa.status,aa.datum,bb.obrazok,aa.datumREAL FROM majetok aa left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " +
-                "WHERE aa.roomcodenew = '"+myPoschodieKod+"' order by aa.datumREAL asc";
-
-        kuk sem
-        https://junjunguo.com/blog/android-sqlite-image-view-b/
-
-        */
-        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '"+myPoschodieKod+"'";
+        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr, zodpovednaosoba, datumzaradenia, extranotice, typmajetku " +
+                " FROM " + DB_TABULKA + " WHERE itembarcode = '"+myPoschodieKod+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
-        //kurzor na prvy zaznam
+        // toto treba prerobit na class, ktory naplnim a vratim
         if (cursor.moveToFirst())
         {
             do
@@ -78,6 +65,10 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
                 hm.put("datumDispose", cursor.getString(6));
                 hm.put("datumREAL", cursor.getString(7));
                 hm.put("serialnr", cursor.getString(8));
+                hm.put("zodpovednaosoba", cursor.getString(9));
+                hm.put("datumzaradenia", cursor.getString(10));
+                hm.put("extranotice", cursor.getString(11));
+                hm.put("typmajetku", cursor.getString(12));
                 alVysledky.add(hm);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
