@@ -47,6 +47,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
         /*
 
+
         toto treba volat aj s obrazkom a naplnit class, kde obrazok bude blob, zvysok su string
         Ale neviem ako to naplnit do maphash, kedze ta vyzaduje string - string, pripadne zmen na string-list?
 

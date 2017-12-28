@@ -50,7 +50,7 @@ public class ViewInventarDetail extends ListActivity
         setContentView(R.layout.inventar_vmiestnosti);
 
     //    TextView textView = findViewById(R.id.miestnostiET);
-    //    textView.setText(myRoomcode);
+    //    textView.setText(myRoomcode); 
 
         ArrayList<HashMap<String, String>> zoznamHM  = null;
         try {
