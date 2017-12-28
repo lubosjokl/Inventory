@@ -15,13 +15,13 @@
 
     <TextView
         android:id="@+id/poschodieET"
-        style="@style/MyListText"
+        style="@style/ListView_RowStyle"
         android:text="poschodie"
         />
 
     <TextView
         android:id="@+id/kodOddeleniaET"
-        style="@style/MyListText"
+        style="@style/ListView_RowStyle"
         android:text="Kod"
         />
     </TableRow>

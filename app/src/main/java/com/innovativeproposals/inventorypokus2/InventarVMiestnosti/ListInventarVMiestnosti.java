@@ -54,6 +54,7 @@ public class ListInventarVMiestnosti extends ListActivity
         TextView textView = findViewById(R.id.miestnostiET);
         textView.setText(myRoomcode);
 
+
         ArrayList<HashMap<String, String>> zoznamHM  = null;
         try {
             zoznamHM = dm.dajZaznamy(myRoomcode);
@@ -75,6 +76,7 @@ public class ListInventarVMiestnosti extends ListActivity
 
                     statusET = (TextView) view.findViewById(R.id.statusET);
                     datumET = (TextView) view.findViewById(R.id.datumET);
+                   // serialnrET = (TextView) view.findViewById(R.id.serialnrET);
 
                     String sKnihaId = itembarcodeET.getText().toString();
 

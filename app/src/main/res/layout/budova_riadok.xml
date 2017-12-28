@@ -9,8 +9,7 @@
 
     <TextView
         android:id="@+id/diviziaET"
-        style="@style/MyListText"
-        android:text="xx"
+        style="@style/ListView_RowStyle"
         />
 
 </LinearLayout>

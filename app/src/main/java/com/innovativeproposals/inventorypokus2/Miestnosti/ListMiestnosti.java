@@ -7,6 +7,8 @@ package com.innovativeproposals.inventorypokus2.Miestnosti;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class ListMiestnosti extends ListActivity
+public class ListMiestnosti extends AppCompatActivity
 {
     Intent intent;
 
@@ -44,7 +46,12 @@ public class ListMiestnosti extends ListActivity
 
         setContentView(R.layout.miestnosti);
 
-       // TextView textView = findViewById(R.id.poschodieET);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(extras.getString("description"));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // TextView textView = findViewById(R.id.poschodieET);
        // textView.setText(myDivizia);
 
 
@@ -57,7 +64,7 @@ public class ListMiestnosti extends ListActivity
 
         if(zoznamHM.size()!=0)
         {
-            ListView lw = getListView();
+            ListView lw = (ListView)findViewById(R.id.list_miestnosti);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 //kliknutie na polozku zoznamu
@@ -75,6 +82,7 @@ public class ListMiestnosti extends ListActivity
                     Intent theIndent = new Intent(getApplication(),
                             ListInventarVMiestnosti.class);
                     theIndent.putExtra("roomcode", sKnihaId);
+                    theIndent.putExtra("roomdescription", roomdescriptionEF.getText());
                     startActivity(theIndent);
                 }
             });
@@ -84,7 +92,7 @@ public class ListMiestnosti extends ListActivity
                     //      R.id.diviziaET,R.id.poschodieET,R.id.kodDiviziaET});
                     new String[] { "roomcode","roomdescription"}, new int[] {R.id.roomcodeET,R.id.roomdescriptionET});
 
-            setListAdapter(adapter);
+            lw.setAdapter(adapter);
         }
     }
 }
