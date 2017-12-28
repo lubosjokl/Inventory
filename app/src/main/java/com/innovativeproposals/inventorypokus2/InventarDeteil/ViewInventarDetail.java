@@ -49,8 +49,8 @@ public class ViewInventarDetail extends ListActivity
 
         setContentView(R.layout.inventar_vmiestnosti);
 
-        TextView textView = findViewById(R.id.miestnostiET);
-        textView.setText(myRoomcode);
+    //    TextView textView = findViewById(R.id.miestnostiET);
+    //    textView.setText(myRoomcode);
 
         ArrayList<HashMap<String, String>> zoznamHM  = null;
         try {
@@ -76,18 +76,18 @@ public class ViewInventarDetail extends ListActivity
 
                     String sKnihaId = itembarcodeET.getText().toString();
 
-                    Intent theIndent = new Intent(getApplication(),
+           /*         Intent theIndent = new Intent(getApplication(),
                             ListMiestnosti.class);
                     theIndent.putExtra("kododdelenia", sKnihaId);
-                    startActivity(theIndent);
+                    startActivity(theIndent);*/
                 }
             });
-            ListAdapter adapter = new SimpleAdapter( ListInventarVMiestnosti.this,
+      /*      ListAdapter adapter = new SimpleAdapter( ListInventarVMiestnosti.this,
                     zoznamHM, R.layout.inventar_vmiestnosti_riadok,
                     new String[] { "itembarcode","itemdescription","status","datum"}, new int[] {R.id.itembarcodeET,R.id.itemdescriptionET,
                     R.id.statusET,R.id.datumET});
 
-            setListAdapter(adapter);
+            setListAdapter(adapter);*/
         }
     }
 }

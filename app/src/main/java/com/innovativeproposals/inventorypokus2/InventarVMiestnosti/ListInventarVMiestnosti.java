@@ -51,8 +51,8 @@ public class ListInventarVMiestnosti extends ListActivity
 
         setContentView(R.layout.inventar_vmiestnosti);
 
-        TextView textView = findViewById(R.id.miestnostiET);
-        textView.setText(myRoomcode);
+      //  TextView textView = findViewById(R.id.miestnostiET);
+      //  textView.setText(myRoomcode);
 
 
         ArrayList<HashMap<String, String>> zoznamHM  = null;
