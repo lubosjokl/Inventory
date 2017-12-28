@@ -1,7 +1,7 @@
-package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
+package com.innovativeproposals.inventorypokus2.InventarDeteil;
 
 /**
- * Created by Lubos on 27.12.17.
+ * Created by Lubos on 28.12.17.
  */
 
 import android.app.ListActivity;
@@ -14,15 +14,13 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-import com.innovativeproposals.inventorypokus2.Miestnosti.ListMiestnosti;
 import com.innovativeproposals.inventorypokus2.R;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class ListInventarVMiestnosti extends ListActivity
+public class ViewInventarDetail extends ListActivity
 {
     Intent intent;
 
@@ -37,7 +35,7 @@ public class ListInventarVMiestnosti extends ListActivity
 
     //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
-    DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this); // pri kopirovani do inej triedy zmen
+    DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen
 
     protected void onCreate(Bundle savedInstanceState)
     {
