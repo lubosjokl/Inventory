@@ -13,4 +13,11 @@
     <string name="zoznam_poschodi">Zoznam poschodí</string>
     <string name="zoznam_miestnosti">Zoznam miestností</string>
     <string name="inventar_vmiestnosti">Inventár v miestnosti</string>
+    <string name="last_change">Posledná zmena</string>
+    <string name="inventory_typ">Typ inventára</string>
+    <string name="notice">Poznámka</string>
+    <string name="serialnr">Sériové číslo</string>
+    <string name="description">Názov inventára</string>
+    <string name="classified">Zaradený</string>
+    <string name="discard">Vyradený</string>
 </resources>

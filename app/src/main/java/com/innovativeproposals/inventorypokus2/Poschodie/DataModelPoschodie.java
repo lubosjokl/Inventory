@@ -15,11 +15,7 @@ import java.util.HashMap;
  */
 
 /*
-SELECT [Id]
-        ,[divizia]
-        ,[oddelenie]
-        ,[kododdelenia]
-        FROM [oddelenie]*/
+SELECT [Id]        ,[divizia]        ,[oddelenie]        ,[kododdelenia]        FROM [oddelenie]*/
 
 public class DataModelPoschodie  extends SQLiteOpenHelper {
     protected static final String DB_DATABAZA = "inventory";
@@ -59,6 +55,7 @@ public class DataModelPoschodie  extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> alVysledky;
 
         alVysledky = new ArrayList<HashMap<String, String>>();
+
         String sSQL = "SELECT Id, divizia, oddelenie, kododdelenia FROM " + DB_TABULKA + " WHERE divizia='"+myDivizia+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);

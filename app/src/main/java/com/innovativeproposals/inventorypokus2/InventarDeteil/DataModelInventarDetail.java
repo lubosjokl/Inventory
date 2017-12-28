@@ -1,7 +1,7 @@
-package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
+package com.innovativeproposals.inventorypokus2.InventarDeteil;
 
 /**
- * Created by Lubos on 27.12.17.
+ * Created by Lubos on 28.12.17.
  */
 
 import android.content.Context;
@@ -13,13 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-/*
-SELECT 	,[itembarcode]		,[itemdescription]	,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]		serialnr
-	FROM [majetok]
-
- */
-
-public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
+public class DataModelInventarDetail extends SQLiteOpenHelper {
     protected static final String DB_DATABAZA = "inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "majetok";
@@ -40,7 +34,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public DataModelInventarVMiestnosti(Context ctx)
+    public DataModelInventarDetail(Context ctx)
     {
         super(ctx, DB_DATABAZA, null, DB_VERZIA);
     }
@@ -53,11 +47,15 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
         /*
 
+
         toto treba volat aj s obrazkom a naplnit class, kde obrazok bude blob, zvysok su string
         Ale neviem ako to naplnit do maphash, kedze ta vyzaduje string - string, pripadne zmen na string-list?
 
         String sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription,aa.status,aa.datum,bb.obrazok,aa.datumREAL FROM majetok aa left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " +
                 "WHERE aa.roomcodenew = '"+myPoschodieKod+"' order by aa.datumREAL asc";
+
+        kuk sem
+        https://junjunguo.com/blog/android-sqlite-image-view-b/
 
         */
         String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '"+myPoschodieKod+"'";
@@ -86,5 +84,6 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         return alVysledky;
     }
 }
+
 
 

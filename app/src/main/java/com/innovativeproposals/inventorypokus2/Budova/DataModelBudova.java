@@ -32,7 +32,7 @@ public class DataModelBudova extends SQLiteOpenHelper {
     // zaklad
     @Override
     public void onCreate(SQLiteDatabase db) {
-      /*         db.execSQL("CREATE TABLE " + DB_TABULKA
+          /*    db.execSQL("CREATE TABLE " + DB_TABULKA
                 + " (" + ATR_ID     + " INTEGER PRIMARY KEY,"
                 + ATR_DIVIZIA  + " TEXT"
 
