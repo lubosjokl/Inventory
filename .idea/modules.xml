@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\Lubos\AndroidStudioProjects\InventoryPokus2\Inventory.iml" filepath="C:\Users\Lubos\AndroidStudioProjects\InventoryPokus2\Inventory.iml" />
-      <module fileurl="file://$PROJECT_DIR$/InventoryPokus2.iml" filepath="$PROJECT_DIR$/InventoryPokus2.iml" />
-      <module fileurl="file://D:\Dokumenty\_AndroidProjects\Inventory\InventoryPokus2.iml" filepath="D:\Dokumenty\_AndroidProjects\Inventory\InventoryPokus2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Inventory.iml" filepath="$PROJECT_DIR$/Inventory.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

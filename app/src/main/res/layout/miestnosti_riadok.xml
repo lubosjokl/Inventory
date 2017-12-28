@@ -11,12 +11,12 @@
 
         <TextView
             android:id="@+id/roomcodeET"
-            style="@style/MyListText"
+            style="@style/ListView_RowStyle"
             android:text="kod" />
 
         <TextView
             android:id="@+id/roomdescriptionET"
-            style="@style/MyListText"
+            style="@style/ListView_RowStyle"
             android:text="Miestnost" />
 
 

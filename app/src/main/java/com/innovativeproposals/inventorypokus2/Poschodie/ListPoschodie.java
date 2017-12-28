@@ -3,7 +3,10 @@ package com.innovativeproposals.inventorypokus2.Poschodie;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -25,8 +28,7 @@ import java.util.HashMap;
 /*
 SELECT [Id]         ,[divizia]        ,[oddelenie]        ,[kododdelenia]        FROM [oddelenie] */
 
-public class ListPoschodie extends ListActivity
-{
+public class ListPoschodie extends AppCompatActivity {
     Intent intent;
     TextView poschodieID;
     TextView diviziaET;
@@ -35,56 +37,59 @@ public class ListPoschodie extends ListActivity
 
     DataModelPoschodie dm = new DataModelPoschodie(this); // pri kopirovani do inej triedy zmen
 
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String myDivizia = "";
 
+
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            myDivizia= extras.getString("diviziaET");
+        if (extras != null) {
+            myDivizia = extras.getString("diviziaET");
         }
 
+        Integer leng = myDivizia == null ? myDivizia.length() : 0;
         setContentView(R.layout.poschodie);
 
-        TextView textView = findViewById(R.id.poschodieET);
-        textView.setText(myDivizia);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(myDivizia);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        TextView textView = findViewById(R.id.poschodieET);
+//        textView.setText(myDivizia);
 
 
-        ArrayList<HashMap<String, String>> zoznamHM  = null;
+        ArrayList<HashMap<String, String>> zoznamHM = null;
         try {
             zoznamHM = dm.dajZaznamy(myDivizia);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
-        if(zoznamHM.size()!=0)
-        {
-            ListView lw = getListView();
-            lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
+        if (zoznamHM.size() != 0) {
+            ListView lw = (ListView) findViewById(R.id.list_poschodie);
+            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 //kliknutie na polozku zoznamu
                 public void onItemClick(AdapterView<?> parent,
-                                        View view, int position, long id)
-                {
-                  //  poschodieID = (TextView) view.findViewById(R.id.poschodieID);
+                                        View view, int position, long id) {
+                    //  poschodieID = (TextView) view.findViewById(R.id.poschodieID);
                     diviziaET = (TextView) view.findViewById(R.id.diviziaET);
                     poschodieET = (TextView) view.findViewById(R.id.poschodieET);
                     KodOddeleniaET = (TextView) view.findViewById(R.id.kodOddeleniaET);
 
                     String sKnihaId = KodOddeleniaET.getText().toString();
 
-                    Intent theIndent = new Intent(getApplication(),
-                            ListMiestnosti.class);
+                    Intent theIndent = new Intent(getApplication(), ListMiestnosti.class);
                     theIndent.putExtra("kododdelenia", sKnihaId);
+                    theIndent.putExtra("description", poschodieET.getText());
                     startActivity(theIndent);
                 }
             });
-            ListAdapter adapter = new SimpleAdapter( ListPoschodie.this,
+            ListAdapter adapter = new SimpleAdapter(ListPoschodie.this,
                     zoznamHM, R.layout.poschodie_riadok,
-                            new String[] { "divizia","oddelenie","kododdelenia"}, new int[] {R.id.diviziaET,R.id.poschodieET,R.id.kodOddeleniaET});
+                    new String[]{"divizia", "oddelenie", "kododdelenia"}, new int[]{R.id.diviziaET, R.id.poschodieET, R.id.kodOddeleniaET});
 
-                    setListAdapter(adapter);
+            lw.setAdapter(adapter);
         }
     }
 }

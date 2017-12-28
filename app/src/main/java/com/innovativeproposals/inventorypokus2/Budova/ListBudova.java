@@ -3,6 +3,7 @@ package com.innovativeproposals.inventorypokus2.Budova;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +22,7 @@ import java.util.HashMap;
  * Created by Lubos on 26.12.17.
  */
 
-public class ListBudova extends ListActivity
+public class ListBudova extends AppCompatActivity
 {
     Intent intent;
     TextView diviziaId;
@@ -35,13 +36,16 @@ public class ListBudova extends ListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.budova);
 
-        // final String test = "test";
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         ArrayList<HashMap<String, String>> zoznamHM =dm.dajZaznamy();
 
         if(zoznamHM.size()!=0)
         {
-            ListView lw = getListView();
+            ListView lw = (ListView) findViewById(R.id.list_budovy);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 //kliknutie na polozku zoznamu
@@ -76,7 +80,7 @@ public class ListBudova extends ListActivity
                     new String[] { "divizia"}, new int[] {R.id.diviziaET});
 
 
-            setListAdapter(adapter);
+            lw.setAdapter(adapter);
         }
     }
 }
