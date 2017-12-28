@@ -35,6 +35,7 @@ public class ListBudova extends ListActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.budova);
 
+        final String test = "test";
 
         ArrayList<HashMap<String, String>> zoznamHM =dm.dajZaznamy();
 
