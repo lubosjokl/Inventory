@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Inventúra majetku</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="zoznam_budov">Zoznam budov</string>
+    <string name="inventory">Inventúra</string>
+    <string name="zoznam_poschodi">Zoznam poschodí</string>
+    <string name="zoznam_miestnosti">Zoznam miestností</string>
+    <string name="inventar_vmiestnosti">Inventár v miestnosti</string>
+</resources>
