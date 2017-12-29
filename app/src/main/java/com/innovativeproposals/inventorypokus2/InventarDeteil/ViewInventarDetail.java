@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,6 +43,17 @@ public class ViewInventarDetail extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -59,7 +71,8 @@ public class ViewInventarDetail extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Spinner spinner = findViewById(R.id.spinner_InventoryType);
+        Spinner spinner_InventoryType = findViewById(R.id.spinner_InventoryType);
+        Spinner spinner_Responsible = findViewById(R.id.spinner_responsible);
         List<String> spinnerList = new ArrayList<String>();
         spinnerList.add("Polozka 1");
         spinnerList.add("Polozka 2");
@@ -67,7 +80,8 @@ public class ViewInventarDetail extends AppCompatActivity
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerList);
         adapter .setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        spinner.setAdapter(adapter);
+        spinner_InventoryType.setAdapter(adapter);
+        spinner_Responsible.setAdapter(adapter);
 
 //        TextView textView = findViewById(R.id.barcodeET);
 //        textView.setText(myBarcode);

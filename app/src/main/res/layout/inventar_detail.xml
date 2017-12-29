@@ -24,6 +24,7 @@
 
             <ImageView
                 android:id="@+id/detailView_Image"
+                android:transitionName="detailView_Image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -209,26 +210,39 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/lbl_Responsible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/description_responsible"
-                app:layout_constraintTop_toBottomOf="@+id/layout_added_discarded" />
 
-            <Button
-                android:id="@+id/responsible"
+
+            <LinearLayout
+                android:id="@+id/layout_Responsible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description_responsible"
-                app:layout_constraintTop_toBottomOf="@id/lbl_Responsible" />
+                android:orientation="vertical"
+                android:background="@drawable/border_bottom"
+                android:padding="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_added_discarded">
+
+                <TextView
+                    android:id="@+id/lbl_Responsible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description_responsible"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinner_responsible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="TextView"
-                app:layout_constraintTop_toBottomOf="@+id/responsible" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_Responsible" />
 
 
         </android.support.constraint.ConstraintLayout>
