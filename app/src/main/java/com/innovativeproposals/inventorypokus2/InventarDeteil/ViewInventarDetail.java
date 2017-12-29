@@ -5,15 +5,22 @@ package com.innovativeproposals.inventorypokus2.InventarDeteil;
  */
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
+
+import java.io.ByteArrayInputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -58,10 +65,12 @@ public class ViewInventarDetail extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         String myBarcode = "";
+        Inventar inventar = null;
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             myBarcode= extras.getString("barcode");
+            inventar = getIntent().getParcelableExtra("inventar_object");
         }
 
         setContentView(R.layout.inventar_detail);
@@ -70,6 +79,15 @@ public class ViewInventarDetail extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
+        ImageView myImage = findViewById(R.id.detailView_Image);
+
+        if(inventar.getImage() != null && inventar.getImage().length > 1) {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(inventar.getImage());
+            Bitmap theImage = BitmapFactory.decodeStream(imageStream);
+            myImage.setImageBitmap(theImage);
+        }
 
         Spinner spinner_InventoryType = findViewById(R.id.spinner_InventoryType);
         Spinner spinner_Responsible = findViewById(R.id.spinner_responsible);

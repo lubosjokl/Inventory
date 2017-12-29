@@ -8,9 +8,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+
+import com.innovativeproposals.inventorypokus2.Models.Inventar;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /*
@@ -40,12 +44,47 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public DataModelInventarVMiestnosti(Context ctx)
-    {
+    public DataModelInventarVMiestnosti(Context ctx) {
         super(ctx, DB_DATABAZA, null, DB_VERZIA);
     }
 
     // doplnujuce funkcie
+    public List<Inventar> dajNoveZaznamy(String myPoschodieKod) throws URISyntaxException {
+        ArrayList<Inventar> results = new ArrayList<>();
+
+
+        String sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumDispose, aa.serialnr, bb.obrazok FROM majetok aa " +
+                "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.datumREAL asc";
+
+
+//        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '"+myPoschodieKod+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]
+                Inventar newItem = new Inventar();
+                newItem.setId(cursor.getInt(0));
+                newItem.setItemBarcode(cursor.getString(1));
+                newItem.setItemDescription(cursor.getString(2));
+                newItem.setRommCode(cursor.getString(3));
+                newItem.setStatus(cursor.getString(4));
+                newItem.setDatum(cursor.getString(5));
+                newItem.setDatum_discarded(cursor.getString(6));
+                newItem.setSerialNr(cursor.getString(7));
+                newItem.setImage(cursor.getBlob(8));
+                ;
+
+                results.add(newItem);
+
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+
+        return results;
+    }
+
     public ArrayList<HashMap<String, String>> dajZaznamy(String myPoschodieKod) throws URISyntaxException {
         ArrayList<HashMap<String, String>> alVysledky;
 
@@ -60,15 +99,13 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
                 "WHERE aa.roomcodenew = '"+myPoschodieKod+"' order by aa.datumREAL asc";
 
         */
-        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '"+myPoschodieKod+"'";
+        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '" + myPoschodieKod + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
         //kurzor na prvy zaznam
-        if (cursor.moveToFirst())
-        {
-            do
-            {
+        if (cursor.moveToFirst()) {
+            do {
                 //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]
                 HashMap<String, String> hm = new HashMap<String, String>();
                 hm.put("id", cursor.getString(0));

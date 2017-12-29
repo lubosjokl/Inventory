@@ -51,9 +51,6 @@ public class ListMiestnosti extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // TextView textView = findViewById(R.id.poschodieET);
-       // textView.setText(myDivizia);
-
 
         ArrayList<HashMap<String, String>> zoznamHM  = null;
         try {
