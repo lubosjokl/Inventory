@@ -20,4 +20,6 @@
     <string name="description">Názov inventára</string>
     <string name="classified">Zaradený</string>
     <string name="discard">Vyradený</string>
+    <string name="responsible">Zodpovedný</string>
+    <string name="price">Cena</string>
 </resources>

@@ -7,6 +7,8 @@ package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.Miestnosti.ListMiestnosti;
 import com.innovativeproposals.inventorypokus2.R;
 
@@ -22,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class ListInventarVMiestnosti extends ListActivity
+public class ListInventarVMiestnosti extends AppCompatActivity
 {
     Intent intent;
 
@@ -51,6 +54,12 @@ public class ListInventarVMiestnosti extends ListActivity
 
         setContentView(R.layout.inventar_vmiestnosti);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
       //  TextView textView = findViewById(R.id.miestnostiET);
       //  textView.setText(myRoomcode);
 
@@ -64,7 +73,7 @@ public class ListInventarVMiestnosti extends ListActivity
 
         if(zoznamHM.size()!=0)
         {
-            ListView lw = getListView();
+            ListView lw = (ListView)findViewById(R.id.list_inventar_v_miestnosti);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 //kliknutie na polozku zoznamu
@@ -81,8 +90,8 @@ public class ListInventarVMiestnosti extends ListActivity
                     String sKnihaId = itembarcodeET.getText().toString();
 
                     Intent theIndent = new Intent(getApplication(),
-                            ListMiestnosti.class);
-                    theIndent.putExtra("kododdelenia", sKnihaId);
+                            ViewInventarDetail.class);
+                    theIndent.putExtra("barcode", sKnihaId);
                     startActivity(theIndent);
                 }
             });
@@ -91,7 +100,7 @@ public class ListInventarVMiestnosti extends ListActivity
                     new String[] { "itembarcode","itemdescription","status","datum"}, new int[] {R.id.itembarcodeET,R.id.itemdescriptionET,
                     R.id.statusET,R.id.datumET});
 
-            setListAdapter(adapter);
+            lw.setAdapter(adapter);
         }
     }
 }

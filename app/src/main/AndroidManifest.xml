@@ -37,6 +37,7 @@
         <activity
             android:name=".InventarVMiestnosti.ListInventarVMiestnosti"
             android:parentActivityName=".Miestnosti.ListMiestnosti" />
+        <activity android:name=".InventarDeteil.ViewInventarDetail"/>
     </application>
 
 </manifest>
