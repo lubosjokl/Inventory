@@ -22,4 +22,5 @@
     <string name="description_discarded">Vyradený</string>
     <string name="description_responsible">Zodpovedný</string>
     <string name="price">Cena</string>
+    <string name="activity_InventarDetail">Detail Polozky</string>
 </resources>

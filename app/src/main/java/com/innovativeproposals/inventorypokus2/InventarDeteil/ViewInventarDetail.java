@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +33,14 @@ public class ViewInventarDetail extends AppCompatActivity
     //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
     DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.inventar_detail_menu, menu);
+        return true;
+    }
 
     protected void onCreate(Bundle savedInstanceState)
     {
