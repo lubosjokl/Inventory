@@ -15,7 +15,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,8 +35,12 @@
 
         <activity
             android:name=".InventarVMiestnosti.ListInventarVMiestnosti"
+            android:launchMode="singleTop"
             android:parentActivityName=".Miestnosti.ListMiestnosti" />
-        <activity android:name=".InventarDeteil.ViewInventarDetail"/>
+
+        <activity
+            android:name=".InventarDeteil.ViewInventarDetail"
+            android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
     </application>
 
 </manifest>

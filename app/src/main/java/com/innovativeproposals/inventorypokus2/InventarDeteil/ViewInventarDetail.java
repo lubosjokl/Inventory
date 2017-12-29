@@ -7,11 +7,15 @@ package com.innovativeproposals.inventorypokus2.InventarDeteil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.innovativeproposals.inventorypokus2.R;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class ViewInventarDetail extends AppCompatActivity
 {
@@ -41,8 +45,23 @@ public class ViewInventarDetail extends AppCompatActivity
 
         setContentView(R.layout.inventar_detail);
 
-        TextView textView = findViewById(R.id.barcodeET);
-        textView.setText(myBarcode);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Spinner spinner = findViewById(R.id.spinner_InventoryType);
+        List<String> spinnerList = new ArrayList<String>();
+        spinnerList.add("Polozka 1");
+        spinnerList.add("Polozka 2");
+        spinnerList.add("Polozka 3");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerList);
+        adapter .setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        spinner.setAdapter(adapter);
+
+//        TextView textView = findViewById(R.id.barcodeET);
+//        textView.setText(myBarcode);
 
         ArrayList zoznamHM  = null;
         try {
