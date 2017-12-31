@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Inventúra majetku</string>
+    <string name="app_name">Inventúra</string>
 
     <string name="activity_zoznam_budov">Zoznam Budov</string>
     <string name="activity_zoznam_poschodie">Zoznam Poschodi</string>
@@ -24,4 +24,8 @@
     <string name="price">Cena</string>
     <string name="activity_InventarDetail">Detail Polozky</string>
     <string name="activity_settings">Nastavenie</string>
+    <string name="ScanOrType">Naskenujte alebo zadajte kód inventára</string>
+    <string name="info">Info</string>
+    <string name="scann_barcode_first">Najprv nasnimajte barcode</string>
+    <string name="barcode_doesnt_exist">Neexistujuci barcode</string>
 </resources>

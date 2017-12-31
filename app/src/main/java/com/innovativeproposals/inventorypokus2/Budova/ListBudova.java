@@ -52,9 +52,8 @@ public class ListBudova extends AppCompatActivity
                 public void onItemClick(AdapterView<?> parent,
                                         View view, int position, long id)
                 {
-                //    diviziaId = (TextView) view.findViewById(R.id.divizaId);
+
                     diviziaET = (TextView) view.findViewById(R.id.diviziaET);
-                  //  kodDiviziaET = (TextView) view.findViewById(R.id.kodDiviziaET);
 
                     String sParameter = diviziaET.getText().toString();
                     Intent theIndent = new Intent(getApplication(),

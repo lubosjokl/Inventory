@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -64,12 +65,12 @@ public class ViewInventarDetail extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        String myBarcode = "";
+        String isValue = null;
         Inventar inventar = null;
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            myBarcode= extras.getString("barcode");
+          //  myBarcode= extras.getString("barcode"); // toto uz netreba
             inventar = getIntent().getParcelableExtra("inventar_object");
         }
 
@@ -79,8 +80,6 @@ public class ViewInventarDetail extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
         ImageView myImage = findViewById(R.id.detailView_Image);
 
         if(inventar.getImage() != null && inventar.getImage().length > 1) {
@@ -89,85 +88,81 @@ public class ViewInventarDetail extends AppCompatActivity
             myImage.setImageBitmap(theImage);
         }
 
+        TextView barcode = findViewById(R.id.barcodeET);
+        barcode.setText(inventar.getItemBarcode());
+
+        isValue = inventar.getItemDescription();
+        TextView description = findViewById(R.id.descriptionET);
+        if(isValue!=null)
+            description.setText(isValue);
+        else
+            description.setText("");
+
+        isValue = inventar.getDatum();
+        TextView lastInventory = findViewById(R.id.lastInventory);
+        if(isValue!=null)
+            lastInventory.setText(isValue);
+
+
+        isValue = inventar.getPoznamka();
+        TextView notice = findViewById(R.id.notice);
+        if(isValue!=null)
+            notice.setText(isValue);
+
+
+        isValue = inventar.getSerialNr();
+        TextView txt_SerialNr = findViewById(R.id.txt_SerialNr);
+        if(isValue!=null)
+            txt_SerialNr.setText(isValue);
+
+        isValue = inventar.getDatum_added();
+        TextView txt_Added = findViewById(R.id.txt_Added);
+        if(isValue!=null)
+            txt_Added.setText(isValue);
+
+        isValue = inventar.getDatum_discarded();
+        TextView txt_Discarded = findViewById(R.id.txt_Discarded);
+        if(isValue!=null)
+            txt_Discarded.setText(isValue);
+
+        isValue = inventar.getPrice();
+        TextView priceET = findViewById(R.id.priceET);
+        if(isValue!=null) {
+            String abc = "Cena: ";
+            abc = "Cena :" + isValue + " EUR";
+            //abc = TextUtils.join("Cena: ", isValue);
+            priceET.setText(abc);
+
+        }
+
+
+/*
+
+        dest.writeString(rommCode);
+        dest.writeString(status);
+        dest.writeString(zodpovednaOsoba);
+
+ */
+
+        String tempSpinnerTyp = "neznamy";
+        isValue = inventar.getTypeMajetku();
+        if(isValue!=null)
+            tempSpinnerTyp = isValue;
+
         Spinner spinner_InventoryType = findViewById(R.id.spinner_InventoryType);
         Spinner spinner_Responsible = findViewById(R.id.spinner_responsible);
-        List<String> spinnerList = new ArrayList<String>();
-        spinnerList.add("Polozka 1");
+        List<String> spinnerList = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
+        spinnerList.add(tempSpinnerTyp);
         spinnerList.add("Polozka 2");
         spinnerList.add("Polozka 3");
+
+        // pridaj dalsi spinner na zodpovednu osobu
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerList);
         adapter .setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinner_InventoryType.setAdapter(adapter);
         spinner_Responsible.setAdapter(adapter);
 
-//        TextView textView = findViewById(R.id.barcodeET);
-//        textView.setText(myBarcode);
 
-        ArrayList zoznamHM  = null;
-        try {
-            zoznamHM = dm.dajZaznamy(myBarcode);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        // data nacitaj z classu
-        if(zoznamHM.size()!=0)
-        {
-
-
-
-
-            /*
-                            hm.put("id", cursor.getString(0));
-                hm.put("itembarcode", cursor.getString(1));
-                hm.put("itemdescription", cursor.getString(2));
-                hm.put("roomcodenew", cursor.getString(3));
-                hm.put("status", cursor.getString(4));
-                hm.put("datum", cursor.getString(5));
-                hm.put("datumDispose", cursor.getString(6));
-                hm.put("datumREAL", cursor.getString(7));
-                hm.put("serialnr", cursor.getString(8));
-                hm.put("zodpovednaosoba", cursor.getString(9));
-                hm.put("datumzaradenia", cursor.getString(10));
-                hm.put("extranotice", cursor.getString(11));
-                hm.put("typmajetku", cursor.getString(12));
-
-             */
-
-
-            //EditText editText1 = findViewById(R.id.descriptionET);
-            //editText1.setText(zoznamHM.hashCode());
-
-
-
-       /*     ListView lw = getListView();
-            lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                //kliknutie na polozku zoznamu
-                public void onItemClick(AdapterView<?> parent,
-                                        View view, int position, long id)
-                {
-                    itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
-                    itemdescriptionET = (TextView) view.findViewById(R.id.itemdescriptionET);
-
-                    statusET = (TextView) view.findViewById(R.id.statusET);
-                    datumET = (TextView) view.findViewById(R.id.datumET);
-
-                    String sKnihaId = itembarcodeET.getText().toString();
-
-                    Intent theIndent = new Intent(getApplication(),
-                            ListMiestnosti.class);
-                    theIndent.putExtra("kododdelenia", sKnihaId);
-                    startActivity(theIndent);
-                }
-            });
-            ListAdapter adapter = new SimpleAdapter( ListInventarVMiestnosti.this,
-                    zoznamHM, R.layout.inventar_vmiestnosti_riadok,
-                    new String[] { "itembarcode","itemdescription","status","datum"}, new int[] {R.id.itembarcodeET,R.id.itemdescriptionET,
-                    R.id.statusET,R.id.datumET});
-
-            setListAdapter(adapter);*/
-        }
     }
 }

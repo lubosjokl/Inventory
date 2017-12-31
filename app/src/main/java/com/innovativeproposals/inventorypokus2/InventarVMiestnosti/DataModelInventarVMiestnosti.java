@@ -49,22 +49,32 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
     }
 
     // doplnujuce funkcie
-    public List<Inventar> dajNoveZaznamy(String myPoschodieKod) throws URISyntaxException {
+    public List<Inventar> dajNoveZaznamy(String myPoschodieKod, String myBarCode) throws URISyntaxException {
+
         ArrayList<Inventar> results = new ArrayList<>();
+        String sSQL = null;
 
 
-        String sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumDispose, aa.serialnr, bb.obrazok FROM majetok aa " +
-                "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.datumREAL asc";
+        if(myPoschodieKod != "" && myBarCode==""){
+            sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +
+                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.datumREAL asc";
+        }
+
+        if(myBarCode !="" && myPoschodieKod == ""){
+            sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba, " +
+                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.datumREAL asc";
+        }
 
 
-//        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '"+myPoschodieKod+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
         //kurzor na prvy zaznam
         if (cursor.moveToFirst()) {
             do {
-                //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]
+
                 Inventar newItem = new Inventar();
                 newItem.setId(cursor.getInt(0));
                 newItem.setItemBarcode(cursor.getString(1));
@@ -72,10 +82,14 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
                 newItem.setRommCode(cursor.getString(3));
                 newItem.setStatus(cursor.getString(4));
                 newItem.setDatum(cursor.getString(5));
-                newItem.setDatum_discarded(cursor.getString(6));
+                newItem.setDatum_added(cursor.getString(6));
                 newItem.setSerialNr(cursor.getString(7));
                 newItem.setImage(cursor.getBlob(8));
-                ;
+                newItem.setDatum_discarded(cursor.getString(9));
+                newItem.setZodpovednaOsoba(cursor.getString(10));
+                newItem.setTypeMajetku(cursor.getString(11));
+                newItem.setPrice(cursor.getString(12));
+                newItem.setPoznamka(cursor.getString(13));
 
                 results.add(newItem);
 
@@ -85,43 +99,6 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         return results;
     }
 
-    public ArrayList<HashMap<String, String>> dajZaznamy(String myPoschodieKod) throws URISyntaxException {
-        ArrayList<HashMap<String, String>> alVysledky;
-
-        alVysledky = new ArrayList<HashMap<String, String>>();
-
-        /*
-
-        toto treba volat aj s obrazkom a naplnit class, kde obrazok bude blob, zvysok su string
-        Ale neviem ako to naplnit do maphash, kedze ta vyzaduje string - string, pripadne zmen na string-list?
-
-        String sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription,aa.status,aa.datum,bb.obrazok,aa.datumREAL FROM majetok aa left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " +
-                "WHERE aa.roomcodenew = '"+myPoschodieKod+"' order by aa.datumREAL asc";
-
-        */
-        String sSQL = "SELECT Id, itembarcode, itemdescription, roomcodenew, status, datum, datumDispose,datumREAL, serialnr FROM " + DB_TABULKA + " WHERE roomcodenew = '" + myPoschodieKod + "'";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sSQL, null);
-
-        //kurzor na prvy zaznam
-        if (cursor.moveToFirst()) {
-            do {
-                //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]
-                HashMap<String, String> hm = new HashMap<String, String>();
-                hm.put("id", cursor.getString(0));
-                hm.put("itembarcode", cursor.getString(1));
-                hm.put("itemdescription", cursor.getString(2));
-                hm.put("roomcodenew", cursor.getString(3));
-                hm.put("status", cursor.getString(4));
-                hm.put("datum", cursor.getString(5));
-                hm.put("datumDispose", cursor.getString(6));
-                hm.put("datumREAL", cursor.getString(7));
-                hm.put("serialnr", cursor.getString(8));
-                alVysledky.add(hm);
-            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
-        }
-        return alVysledky;
-    }
 }
 
 

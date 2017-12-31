@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcfcfc"
-    tools:context="com.innovativeproposals.inventorypokus2.Budova.ListBudova">
+    tools:context="com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -60,8 +60,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="barcode"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintLeft_toRightOf="parent"
-                app:layout_constraintRight_toLeftOf="parent" />
+                app:layout_constraintRight_toLeftOf="parent"
+                tools:layout_editor_absoluteY="8dp" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -120,7 +122,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/price"
+                android:id="@+id/priceET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
@@ -132,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                app:layout_constraintTop_toBottomOf="@id/price">
+                app:layout_constraintTop_toBottomOf="@id/priceET">
 
                 <EditText
                     android:id="@+id/notice"
@@ -211,13 +213,12 @@
             </LinearLayout>
 
 
-
             <LinearLayout
                 android:id="@+id/layout_Responsible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/border_bottom"
+                android:orientation="vertical"
                 android:padding="4dp"
                 app:layout_constraintTop_toBottomOf="@+id/layout_added_discarded">
 
@@ -225,8 +226,7 @@
                     android:id="@+id/lbl_Responsible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/description_responsible"
-                    />
+                    android:text="@string/description_responsible" />
 
                 <Spinner
                     android:id="@+id/spinner_responsible"

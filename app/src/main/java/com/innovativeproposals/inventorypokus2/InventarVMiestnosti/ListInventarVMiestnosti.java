@@ -45,15 +45,11 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
     TextView statusET;
     TextView datumET;
-    TextView datumDisposeET;
-    TextView datumREALET;
     List<Inventar> zoznamHM = null;
-    //TextView serialnrET;
-
-    //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this); // pri kopirovani do inej triedy zmen
 
+    //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +67,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        List<Inventar> zoznamHM = null;
         try {
-            zoznamHM = dm.dajNoveZaznamy(myRoomcode);
+            zoznamHM = dm.dajNoveZaznamy(myRoomcode,"");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -81,6 +76,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         if (zoznamHM.size() != 0) {
             ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 //kliknutie na polozku zoznamu
                 public void onItemClick(AdapterView<?> parent,
                                         View view, int position, long id) {
@@ -89,7 +85,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
                     statusET = (TextView) view.findViewById(R.id.statusET);
                     datumET = (TextView) view.findViewById(R.id.datumET);
-                    // serialnrET = (TextView) view.findViewById(R.id.serialnrET);
 
                     String sKnihaId = itembarcodeET.getText().toString();
 
@@ -102,18 +97,11 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
                     View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            ListInventarVMiestnosti.this,
-                            imageView,
-                            "detailView_Image");
+                            ListInventarVMiestnosti.this, imageView,"detailView_Image");
                     startActivity(theIndent, options.toBundle());
                 }
             });
             CustomListInventoryAdapter adapterNew = new CustomListInventoryAdapter(this,R.layout.inventar_vmiestnosti_riadok, zoznamHM);
-
-//            ListAdapter adapter = new SimpleAdapter(ListInventarVMiestnosti.this,
-//                    zoznamHM, R.layout.inventar_vmiestnosti_riadok,
-//                    new String[]{"itembarcode", "itemdescription", "status", "datum"}, new int[]{R.id.itembarcodeET, R.id.itemdescriptionET,
-//                    R.id.statusET, R.id.datumET});
 
             lw.setAdapter(adapterNew);
         }

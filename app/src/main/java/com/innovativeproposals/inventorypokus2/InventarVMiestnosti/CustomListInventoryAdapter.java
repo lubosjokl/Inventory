@@ -67,7 +67,7 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
             image.setImageBitmap(theImage);
         }
         return row;
-//        return super.getView(position, convertView, parent);
+
     }
 
     @Override

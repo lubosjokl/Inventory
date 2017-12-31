@@ -21,6 +21,7 @@ public class Inventar implements Parcelable {
     private String poznamka;
     private String typeMajetku;
     private byte[] image;
+    private String price;
 
     public int getId() {
         return Id;
@@ -127,6 +128,15 @@ public class Inventar implements Parcelable {
         this.image = image;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -138,14 +148,15 @@ public class Inventar implements Parcelable {
         dest.writeString(itemBarcode);
         dest.writeString(itemDescription);
         dest.writeString(rommCode);
-//        dest.writeString(status);
-//        dest.writeString(datum);
-//        dest.writeString(datum_added);
-//        dest.writeString(datum_discarded);
-//        dest.writeString(serialNr);
-//        dest.writeString(zodpovednaOsoba);
-//        dest.writeString(poznamka);
-//        dest.writeString(typeMajetku);
+        dest.writeString(status);
+        dest.writeString(datum);
+        dest.writeString(datum_added);
+        dest.writeString(datum_discarded);
+        dest.writeString(serialNr);
+        dest.writeString(zodpovednaOsoba);
+        dest.writeString(poznamka);
+        dest.writeString(typeMajetku);
+        dest.writeString(price);
         dest.writeByteArray(image);
     }
 
@@ -171,11 +182,20 @@ public class Inventar implements Parcelable {
         this.itemBarcode = in.readString();
         this.itemDescription = in.readString();
         this.rommCode = in.readString();
-
-
-//        this.itemDescription = in.readString();
-//        this.itemBarcode = in.readString();
-//        this.rommCode = in.readString();
+        this.status = in.readString();
+        this.datum = in.readString();
+        this.datum_added = in.readString();
+        this.datum_discarded = in.readString();
+        this.serialNr = in.readString();
+        this.zodpovednaOsoba = in.readString();
+        this.poznamka = in.readString();
+        this.typeMajetku = in.readString();
+        this.price = in.readString();
         this.image = in.createByteArray();
     }
+
 }
+
+
+
+

@@ -2,13 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.innovativeproposals.inventorypokus2">
 
+    <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/inventory"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <uses-library android:name="com.symbol.emdk" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -39,6 +44,9 @@
             android:name=".InventarDeteil.ViewInventarDetail"
             android:label="@string/activity_InventarDetail"
             android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
+        <activity
+            android:name=".InfoActivity"
+             />
 
         <activity android:name=".SettingsActivity"
             android:label="@string/activity_settings"

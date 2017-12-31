@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this,ListBudova.class);
             startActivity(intent);
 
+        } else if (id == R.id.nav_info) {
+            Intent intent = new Intent(this,InfoActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this,SettingsActivity.class);
             startActivity(intent);
