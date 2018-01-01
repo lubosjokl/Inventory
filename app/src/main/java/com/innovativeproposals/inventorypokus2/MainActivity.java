@@ -1,6 +1,7 @@
 package com.innovativeproposals.inventorypokus2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.innovativeproposals.inventorypokus2.Budova.ListBudova;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // AppCompatActivity
 
@@ -41,6 +55,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        ImplementChart();
     }
 
     @Override
@@ -75,15 +91,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_inventory) {
-            Intent intent = new Intent(this,ListBudova.class);
+            Intent intent = new Intent(this, ListBudova.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_info) {
-            Intent intent = new Intent(this,InfoActivity.class);
+            Intent intent = new Intent(this, InfoActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this,SettingsActivity.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
@@ -98,5 +114,29 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    //https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/PieChartActivity.java#L272
+    private void ImplementChart() {
+        PieChart chart = (PieChart) findViewById(R.id.chart);
+        chart.setDescription(null);
+
+
+
+        ArrayList<PieEntry> entries = new ArrayList();
+        entries.add(new PieEntry(250, getString(R.string.chart_processed)));
+        entries.add(new PieEntry(900, getString(R.string.chart_opened)));
+
+        PieDataSet dataSet = new PieDataSet(entries, getString(R.string.chart_items));
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+
+
+        PieData data = new PieData(dataSet);
+        data.setValueTextSize(11f);
+        data.setValueTextColor(Color.WHITE);
+        chart.setData(data);
+        chart.animateY(1000);
+        chart.invalidate();
+    }
 
 }

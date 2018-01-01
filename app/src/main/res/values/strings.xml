@@ -32,4 +32,10 @@
     <string name="scann_barcode_first">Najprv nasnimajte barcode</string>
     <string name="barcode_doesnt_exist">Neexistujuci barcode</string>
     <string name="Price">Cena :</string>
+
+
+    <!--Chart-->
+    <string name="chart_processed">Spracovane</string>
+    <string name="chart_opened">Nespracovane</string>
+    <string name="chart_items">Polozky</string>
 </resources>
