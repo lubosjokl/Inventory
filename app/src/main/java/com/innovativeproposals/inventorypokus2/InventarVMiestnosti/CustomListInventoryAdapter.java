@@ -33,7 +33,6 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         this.data = data;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -65,6 +64,8 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(inventar.getImage());
             Bitmap theImage = BitmapFactory.decodeStream(imageStream);
             image.setImageBitmap(theImage);
+        } else {
+            image.setImageBitmap(null);
         }
         return row;
 

@@ -10,9 +10,13 @@
     android:layout_centerVertical="false">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+        android:id="@+id/appBarLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -28,37 +32,35 @@
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="284dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="52dp"
         android:gravity="center"
         android:text="@string/ScanOrType"
-        app:layout_constraintBottom_toTopOf="@+id/textViewData"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/scannET"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="97dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
         android:text="barcode"
-        app:layout_constraintBottom_toTopOf="@+id/btOK"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <Button
         android:id="@+id/buttonStartScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="64dp"
         android:text="Start"
         app:layout_constraintStart_toStartOf="@+id/scannET"
         app:layout_constraintTop_toBottomOf="@+id/scannET" />
@@ -67,12 +69,12 @@
         android:id="@+id/buttonStopScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginStart="69dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="64dp"
         android:text="Stop"
-        app:layout_constraintEnd_toEndOf="@+id/scannET"
-        app:layout_constraintStart_toEndOf="@+id/buttonStartScan"
+
+
+        app:layout_constraintStart_toStartOf="@+id/btOK"
         app:layout_constraintTop_toBottomOf="@+id/scannET" />
 
 
@@ -86,22 +88,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scannET" />
-
-    <TextView
-        android:id="@+id/textViewData"
-        android:layout_width="242dp"
-        android:layout_height="19dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="68dp"
-        android:gravity="bottom"
-        android:maxLines="100"
-        android:scrollHorizontally="false"
-        android:scrollbars="vertical"
-        android:text="nasnimany Barcode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btOK" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonStartScan"
+        app:layout_constraintVertical_bias="1.0" />
 
 
     <TextView

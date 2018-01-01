@@ -48,6 +48,29 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         super(ctx, DB_DATABAZA, null, DB_VERZIA);
     }
 
+    public String dajNazovMiestnosti(String myRoomCode) {
+
+        String result = null;
+        String sSQL = "SELECT roomdescription  FROM kancelaria  " +
+                    "WHERE roomcode = '" + myRoomCode +"'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+
+                result = cursor.getString(0);
+
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+
+        return result;
+    }
+
+
+
     // doplnujuce funkcie
     public List<Inventar> dajNoveZaznamy(String myPoschodieKod, String myBarCode) throws URISyntaxException {
 

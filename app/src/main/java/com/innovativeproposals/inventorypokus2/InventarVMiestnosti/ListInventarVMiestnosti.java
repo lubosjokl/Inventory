@@ -4,36 +4,21 @@ package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
  * Created by Lubos on 27.12.17.
  */
 
-import android.app.ActivityOptions;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail;
-import com.innovativeproposals.inventorypokus2.Miestnosti.ListMiestnosti;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -63,7 +48,10 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         setContentView(R.layout.inventar_vmiestnosti);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(myRoomcode);
+
+        String kancel = dm.dajNazovMiestnosti(myRoomcode);
+
+        toolbar.setTitle(kancel);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -70,7 +70,6 @@ public class ViewInventarDetail extends AppCompatActivity
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-          //  myBarcode= extras.getString("barcode"); // toto uz netreba
             inventar = getIntent().getParcelableExtra("inventar_object");
         }
 
@@ -78,6 +77,7 @@ public class ViewInventarDetail extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //toolbar.setTitle("test");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ImageView myImage = findViewById(R.id.detailView_Image);
@@ -95,8 +95,6 @@ public class ViewInventarDetail extends AppCompatActivity
         TextView description = findViewById(R.id.descriptionET);
         if(isValue!=null)
             description.setText(isValue);
-        else
-            description.setText("");
 
         isValue = inventar.getDatum();
         TextView lastInventory = findViewById(R.id.lastInventory);
@@ -128,13 +126,9 @@ public class ViewInventarDetail extends AppCompatActivity
         isValue = inventar.getPrice();
         TextView priceET = findViewById(R.id.priceET);
         if(isValue!=null) {
-            String abc = "Cena: ";
-            abc = "Cena :" + isValue + " EUR";
-            //abc = TextUtils.join("Cena: ", isValue);
-            priceET.setText(abc);
-
+            //String abc = "Cena :" + isValue + " EUR";
+            priceET.setText(getString(R.string.Price) + isValue + " EUR");
         }
-
 
 /*
 

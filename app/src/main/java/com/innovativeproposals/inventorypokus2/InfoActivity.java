@@ -5,22 +5,16 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -50,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
-
 public class InfoActivity extends AppCompatActivity implements EMDKListener,
        StatusListener, DataListener, BarcodeManager.ScannerConnectionListener, OnCheckedChangeListener {
 
@@ -61,27 +53,23 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private EMDKManager emdkManager = null;
     private BarcodeManager barcodeManager = null;
     private Scanner scanner = null;
-    //  private Spinner spinnerScannerDevices = null;
     private String statusString = "";
     private boolean bContinuousMode = false;
     private List<ScannerInfo> deviceList = null;
-    private int defaultIndex = 0; // Keep the default scanner
     private String[] triggerStrings = {"HARD", "SOFT"};
     private Spinner spinnerTriggers = null;
     private int triggerIndex = 0;
+    private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
-    //private CheckBox checkBoxContinuous = null;
     private int dataLength = 0;
-    private TextView textViewData = null;
+   // private TextView textViewData = null;
     private EditText scannET = null;
     private Button buttonStartScan = null;
 
     private TextView textViewStatus = null;
-    private Handler mHandler = null;
     String barcodeString = "";
     List<Inventar> zoznamHM = null;
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this);
-
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -90,46 +78,37 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         //    restoreState(savedInstanceState);
 
         super.onCreate(savedInstanceState);
-        String myBarcode = "";
-        Inventar inventar = null;
 
-
-        setContentView(R.layout.info);
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Info");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        scannET = (EditText) findViewById(R.id.scannET);
-        textViewData = (TextView) findViewById(R.id.textViewData);
-        textViewStatus = (TextView) findViewById(R.id.textViewStatus);
-        buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
+        deviceList = new ArrayList<ScannerInfo>();
 
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
             textViewStatus.setText("Status: " + "EMDKManager object request failed!");
         }
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        setDefaultOrientation();
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); // funguje?
+      //  setDefaultOrientation();  // pouzivat pri dvoch layoutoch
+
+
+      //  String myBarcode = "";
+      //  Inventar inventar = null;
+
+        setContentView(R.layout.info);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Info");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        scannET = (EditText) findViewById(R.id.scannET);
+       // textViewData = (TextView) findViewById(R.id.textViewData);
+        textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+        buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
+
+        // scannET.setText(""); // vycistit pri vytvoreni
+
 
         addStartScanButtonListener();
-        //this.startScan();
-        //buttonStartScan.setOnClickListner(this);
-
-
-        //startScan(); // povolim skenovanie hw buttonom, nefunguje
-
-        /*Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-        myBarcode= extras.getString("barcode");
-        inventar = getIntent().getParcelableExtra("inventar_object");*/
-
-
-        //textViewData.setSelected(true);  naco je toto?
-
+        //startScan(); // povolenie skenera nefunguje
 
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
 
@@ -175,6 +154,10 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     private void doShowDetailCall() throws URISyntaxException {
 
+        if(barcodeString == "" && scannET.getText().toString()!="") {
+            barcodeString = scannET.getText().toString();
+        }
+
         if(barcodeString=="") {
             Toast.makeText(getApplicationContext(), R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
             return;
@@ -187,20 +170,13 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             return;
         }
 
-        String sKnihaId = barcodeString;
+        //String sKnihaId = barcodeString;
         Inventar inventar = zoznamHM.get(0);
-
+        barcodeString = "";
+       // scannET.setText(""); // tuna to padne, presunul som na onResume
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
-        //Intent theIndent = new Intent(getApplication(), ViewInventarDetail.class);
-        theIndent.putExtra("barcode", sKnihaId);
+        //theIndent.putExtra("barcode", sKnihaId);
         theIndent.putExtra("inventar_object", inventar);
-
-        /*View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                ListInventarVMiestnosti.this,
-                imageView,
-                "detailView_Image"); */
-        //startActivity(theIndent, options.toBundle());
 
         startActivity(theIndent);
 
@@ -288,11 +264,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             for (ScanDataCollection.ScanData data : scanData) {
 
                 String dataString = data.getData();
-
                 new AsyncDataUpdate().execute(dataString);
-
-                scannET.setText(dataString);
-                textViewData.setText(dataString);
 
             }
 
@@ -640,6 +612,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             initScanner();
             setTrigger();
             setDecoders();
+            scannET.setText(""); // vycistit pri navrate z detailu
         }
     }
 
@@ -707,7 +680,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             barcodeString = result;
 
             scannET.setText(result);
-            textViewData.setText(result);
+       //     textViewData.setText(result);
             return;
 
 
