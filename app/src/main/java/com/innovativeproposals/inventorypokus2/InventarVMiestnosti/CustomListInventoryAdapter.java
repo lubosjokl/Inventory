@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,17 @@ import java.util.List;
 public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
     Context context;
     int layoutResourceId;
-    List<Inventar> data = new ArrayList<Inventar>();
+    List<Inventar> original_data = new ArrayList<Inventar>();
+    List<Inventar> filtered_list = new ArrayList<Inventar>();
+
 
     public CustomListInventoryAdapter(@NonNull Context context, int resource, @NonNull List<Inventar> data) {
         super(context, resource, data);
 
         this.layoutResourceId = resource;
         this.context = context;
-        this.data = data;
+        this.original_data = data;
+        this.filtered_list.addAll(data);
     }
 
     @NonNull
@@ -54,11 +58,14 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         itemStatus = row.findViewById(R.id.statusET);
         itemDatum = row.findViewById(R.id.datumET);
 
-        Inventar inventar = data.get(position);
+        Inventar inventar = filtered_list.get(position);
         itemBarcode.setText(inventar.getItemBarcode());
         itemDescription.setText(inventar.getItemDescription());
         itemStatus.setText(inventar.getStatus());
         itemDatum.setText(inventar.getDatum());
+
+        //ulozenie ID-cka do riadku; ale mozeme sem ulozit aj cely objekt inventara (toto moze byy overkill pri vacsom obsahu dat)
+        row.setTag(inventar.getId());
 
         if(inventar.getImage() != null && inventar.getImage().length > 1) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(inventar.getImage());
@@ -73,6 +80,42 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
 
     @Override
     public int getCount() {
-        return data.size();
+        return filtered_list.size();
+    }
+
+    public void filter(final String searchText){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                // Clear the filter list
+                filtered_list.clear();
+
+                // If there is no search value, then add all original list items to filter list
+                if (TextUtils.isEmpty(searchText)) {
+
+                    filtered_list.addAll(original_data);
+
+                } else {
+                    // Iterate in the original List and add it to filter list...
+                    for (Inventar item : original_data) {
+                        if (item.getItemDescription().toLowerCase().contains(searchText.toLowerCase())) {
+                            // Adding Matched items
+                            filtered_list.add(item);
+                        }
+                    }
+                }
+
+                // Set on UI Thread
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Notify the List that the DataSet has changed...
+                        notifyDataSetChanged();
+                    }
+                });
+
+            }
+        }).start();
     }
 }

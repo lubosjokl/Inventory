@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.innovativeproposals.inventorypokus2">
 
+    <!--Toto odkomentuj-->
     <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
 
     <application
@@ -12,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!--Toto odkomentuj-->
         <uses-library android:name="com.symbol.emdk" />
 
         <activity
@@ -39,18 +41,24 @@
         <activity
             android:name=".InventarVMiestnosti.ListInventarVMiestnosti"
             android:launchMode="singleTop"
-            android:parentActivityName=".Miestnosti.ListMiestnosti" />
+            android:parentActivityName=".Miestnosti.ListMiestnosti">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.SEARCH"/>-->
+            <!--</intent-filter>-->
+            <!--<meta-data-->
+                <!--android:name="android.app.searchable"-->
+                <!--android:resource="@xml/searchable" />-->
+        </activity>
         <activity
             android:name=".InventarDeteil.ViewInventarDetail"
             android:label="@string/activity_InventarDetail"
             android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
-        <activity
-            android:name=".InfoActivity"
-             />
+        <activity android:name=".InfoActivity" />
 
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:label="@string/activity_settings"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
