@@ -9,26 +9,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.innovativeproposals.inventorypokus2.Budova.ListBudova;
+import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 
-// AppCompatActivity
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     TextView diviziaId;
     TextView diviziaET;
 
+    DbUtils dm = new DbUtils(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,21 +110,22 @@ public class MainActivity extends AppCompatActivity
 
 
     //https://github.com/PhilJay/MPAndroidChart/blob/master/MPChartExample/src/com/xxmassdeveloper/mpchartexample/PieChartActivity.java#L272
-    private void ImplementChart() {
+    private void ImplementChart()  {
         PieChart chart = (PieChart) findViewById(R.id.chart);
         chart.setDescription(null);
 
-
-
         ArrayList<PieEntry> entries = new ArrayList();
-        entries.add(new PieEntry(250, getString(R.string.chart_processed)));
-        entries.add(new PieEntry(900, getString(R.string.chart_opened)));
+
+        int celkomInventarov = dm.dajCelkovyPocetInventara();
+        int spracovane = dm.dajPocetSpracovanehoInventara();
+
+        entries.add(new PieEntry(spracovane, getString(R.string.chart_processed))); // hodnoty dorob dynamicke
+        entries.add(new PieEntry(celkomInventarov, getString(R.string.chart_opened)));
 
         PieDataSet dataSet = new PieDataSet(entries, getString(R.string.chart_items));
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-
 
         PieData data = new PieData(dataSet);
         data.setValueTextSize(11f);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcfcfc"
-    tools:context="com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail">
+    tools:context="com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="barcode"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp"
                 app:layout_constraintLeft_toRightOf="parent"
                 app:layout_constraintRight_toLeftOf="parent"
                 tools:layout_editor_absoluteY="8dp" />
@@ -75,9 +76,10 @@
 
             <TextView
                 android:id="@+id/lastInventory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="103dp"
+                android:layout_height="22dp"
                 android:text="time"
+                android:textAppearance="@style/spinnerDropDownItemStyle"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -126,6 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_InventoryType" />
 
@@ -188,7 +192,8 @@
                         android:id="@+id/txt_Added"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.11.2017" />
+                        android:text="11.11.2017"
+                        android:textAppearance="@style/spinnerDropDownItemStyle" />
 
                 </LinearLayout>
 
@@ -207,7 +212,8 @@
                         android:id="@+id/txt_Discarded"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="11.11.2017" />
+                        android:text="11.11.2017"
+                        android:textAppearance="@style/spinnerDropDownItemStyle" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -242,7 +248,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="TextView"
-                app:layout_constraintTop_toBottomOf="@+id/layout_Responsible" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/layout_Responsible"
+                tools:layout_editor_absoluteX="8dp" />
 
 
         </android.support.constraint.ConstraintLayout>

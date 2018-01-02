@@ -1,4 +1,4 @@
-package com.innovativeproposals.inventorypokus2.InventarDeteil;
+package com.innovativeproposals.inventorypokus2.InventarDetail;
 
 /**
  * Created by Lubos on 28.12.17.
@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,9 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         db.execSQL(query);
         onCreate(db);
     }
+
+
+
 
     public DataModelInventarDetail(Context ctx)
     {
@@ -74,6 +78,95 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         }
         return alVysledky;
     }
+    public String dajNazovLokality(String myRoomCode) {
+
+       // String result = null;
+        String myDivision = null;
+        String myOddelenie = null;
+        String Zvysok = null;
+        String myLocation = "miestnosť nie je určená";
+
+        int kde = myRoomCode.indexOf("-");
+        if(kde > 0) {
+            myDivision = myRoomCode.substring(0,kde);
+          //  myDivision = myDivision + "%";
+            Zvysok = myRoomCode.substring(kde+1,myRoomCode.length());
+        }
+
+        kde = Zvysok.indexOf("-");
+        if(kde > 0) {
+          //  myOddelenie = myDivision;
+            myOddelenie = myDivision + "-";
+            myOddelenie = myOddelenie + Zvysok.substring(0,kde);
+        }
+
+        // budova
+        String sSQL = "SELECT divizia FROM divizia WHERE KodDivizie =  '" +  myDivision +"'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        if (cursor.moveToFirst()) {         //kurzor na prvy zaznam
+            do {
+                myLocation = cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+
+        // oddelenie
+        sSQL = "SELECT oddelenie FROM oddelenie WHERE kododdelenia = '" + myOddelenie +  "'";
+
+        cursor = db.rawQuery(sSQL, null);
+        if (cursor.moveToFirst()) {
+            do {
+                myLocation = myLocation + "-" + cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+
+        // kancelaria
+        sSQL ="SELECT roomdescription FROM kancelaria WHERE roomcode = '" + myRoomCode +  "'";
+        cursor = db.rawQuery(sSQL, null);
+        if (cursor.moveToFirst()) {
+            do {
+                myLocation = myLocation + "-" + cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        return myLocation;
+    }
+
+    public ArrayList<String> dajTypyMajetku() throws URISyntaxException {
+
+        ArrayList<String> results = new ArrayList<>();
+        String sSQL = "SELECT popis  FROM typmajetku order by popis ASC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results.add(cursor.getString(0));
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        return results;
+    }
+
+    public ArrayList<String> dajZodpovedneOsoby() throws URISyntaxException {
+
+        ArrayList<String> results = new ArrayList<>();
+        String sSQL = "SELECT meno  FROM osoba order by meno ASC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results.add(cursor.getString(0));
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        return results;
+    }
+
 }
 
 

@@ -2,7 +2,6 @@ package com.innovativeproposals.inventorypokus2;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail;
+import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.InventarVMiestnosti.DataModelInventarVMiestnosti;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 

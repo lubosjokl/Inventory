@@ -69,8 +69,6 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         return result;
     }
 
-
-
     // doplnujuce funkcie
     public List<Inventar> dajNoveZaznamy(String myPoschodieKod, String myBarCode) throws URISyntaxException {
 
@@ -81,13 +79,13 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         if(myPoschodieKod != "" && myBarCode==""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
-                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.datumREAL asc";
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.itembarcode asc";
         }
 
         if(myBarCode !="" && myPoschodieKod == ""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba, " +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
-                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.datumREAL asc";
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.itembarcode asc";
         }
 
 

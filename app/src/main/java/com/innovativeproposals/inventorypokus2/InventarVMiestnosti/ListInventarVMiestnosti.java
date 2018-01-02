@@ -4,17 +4,13 @@ package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
  * Created by Lubos on 27.12.17.
  */
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.app.SearchManager;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.innovativeproposals.inventorypokus2.InventarDeteil.ViewInventarDetail;
+import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
 

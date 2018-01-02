@@ -1,4 +1,4 @@
-package com.innovativeproposals.inventorypokus2.InventarDeteil;
+package com.innovativeproposals.inventorypokus2.InventarDetail;
 
 /**
  * Created by Lubos on 28.12.17.
@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -24,7 +23,6 @@ import com.innovativeproposals.inventorypokus2.R;
 import java.io.ByteArrayInputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ViewInventarDetail extends AppCompatActivity
@@ -98,10 +96,16 @@ public class ViewInventarDetail extends AppCompatActivity
 
         isValue = inventar.getDatum();
         TextView lastInventory = findViewById(R.id.lastInventory);
-        if(isValue!=null)
-            lastInventory.setText(isValue);
+        if(isValue!=null && isValue.length()>0) {
+            // tento datum je string, retazec zobrazim po medzeru, cize bez casu, ktory tam vsak nemusi byt
+            int kde = isValue.indexOf(" ");
+            if(kde > 0) {
+                isValue = isValue.substring(0, kde);
+                lastInventory.setText(isValue);
+            } else
+                lastInventory.setText(isValue);
 
-
+        }
         isValue = inventar.getPoznamka();
         TextView notice = findViewById(R.id.notice);
         if(isValue!=null)
@@ -115,13 +119,25 @@ public class ViewInventarDetail extends AppCompatActivity
 
         isValue = inventar.getDatum_added();
         TextView txt_Added = findViewById(R.id.txt_Added);
-        if(isValue!=null)
-            txt_Added.setText(isValue);
+        if(isValue!=null && isValue.length()>0) {
+            // tento datum je string, retazec zobrazim po medzeru, cize bez casu
+            int kde = isValue.indexOf(" ");
+            if(kde > 0) {
+                isValue = isValue.substring(0, kde);
+                txt_Added.setText(isValue);
+            }
+        } else
+            txt_Added.setText(null);
 
         isValue = inventar.getDatum_discarded();
         TextView txt_Discarded = findViewById(R.id.txt_Discarded);
-        if(isValue!=null)
+        if(isValue!=null && isValue.length()>0) {
+            // tento datum je string, retazec zobrazim po medzeru, cize bez casu
+            int kde = isValue.indexOf(" ");
+            isValue = isValue.substring(0, kde);
             txt_Discarded.setText(isValue);
+        } else
+            txt_Discarded.setText(null);
 
         isValue = inventar.getPrice();
         TextView priceET = findViewById(R.id.priceET);
@@ -130,32 +146,58 @@ public class ViewInventarDetail extends AppCompatActivity
             priceET.setText(getString(R.string.Price) + isValue + " EUR");
         }
 
-/*
-
-        dest.writeString(rommCode);
-        dest.writeString(status);
-        dest.writeString(zodpovednaOsoba);
-
- */
-
-        String tempSpinnerTyp = "neznamy";
+        String myLokacia = null;
+        TextView location = findViewById(R.id.location);
+        isValue = inventar.getRommCode();
+        if(isValue!=null) {
+            myLokacia = dm.dajNazovLokality(isValue);
+            location.setText(myLokacia);
+        }
+        // spinner na typy majetku
+        String tempSpinnerTyp = null;
         isValue = inventar.getTypeMajetku();
         if(isValue!=null)
             tempSpinnerTyp = isValue;
 
         Spinner spinner_InventoryType = findViewById(R.id.spinner_InventoryType);
+        List<String> spinnerListTypyMajetku = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
+
+        try {
+            spinnerListTypyMajetku = dm.dajTypyMajetku();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+
+        ArrayAdapter<String> adapterTypyMajetku = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerListTypyMajetku);
+        adapterTypyMajetku .setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        spinner_InventoryType.setAdapter(adapterTypyMajetku);
+        // nastav spinner ak ma hodnotu
+        if(tempSpinnerTyp != null)
+            spinner_InventoryType.setSelection(adapterTypyMajetku.getPosition(tempSpinnerTyp));
+
+        // spinner na zodpovednu osobu
+        String tempZodpovednaOsoba = null;
+        isValue = inventar.getZodpovednaOsoba();
+        if(isValue!=null)
+            tempZodpovednaOsoba = isValue;
+
         Spinner spinner_Responsible = findViewById(R.id.spinner_responsible);
-        List<String> spinnerList = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
-        spinnerList.add(tempSpinnerTyp);
-        spinnerList.add("Polozka 2");
-        spinnerList.add("Polozka 3");
+        List<String> spinnerZodpovedneOsoby = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
 
-        // pridaj dalsi spinner na zodpovednu osobu
+        try {
+            spinnerZodpovedneOsoby = dm.dajZodpovedneOsoby();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerList);
-        adapter .setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        spinner_InventoryType.setAdapter(adapter);
-        spinner_Responsible.setAdapter(adapter);
+        ArrayAdapter<String> adapterZodpovedneOsoby = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerZodpovedneOsoby);
+        adapterZodpovedneOsoby .setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        spinner_Responsible.setAdapter(adapterZodpovedneOsoby);
+        // nastav spinner ak ma hodnotu
+        if(tempZodpovednaOsoba != null)
+            spinner_Responsible.setSelection(adapterZodpovedneOsoby.getPosition(tempZodpovednaOsoba));
+
 
 
     }
