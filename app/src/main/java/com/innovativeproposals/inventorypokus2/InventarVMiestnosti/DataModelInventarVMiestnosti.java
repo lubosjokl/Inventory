@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 
@@ -74,7 +75,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
         ArrayList<Inventar> results = new ArrayList<>();
         String sSQL = null;
-
+        Log.d("skenujem","Datovy Model 1");
 
         if(myPoschodieKod != "" && myBarCode==""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +

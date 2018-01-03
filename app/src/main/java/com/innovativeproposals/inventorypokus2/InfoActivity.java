@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
@@ -66,7 +69,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private Button buttonStartScan = null;
 
     private TextView textViewStatus = null;
-    String barcodeString = "";
+    String barcodeString = null;
     List<Inventar> zoznamHM = null;
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this);
 
@@ -93,10 +96,12 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
       //  Inventar inventar = null;
 
         setContentView(R.layout.info);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Info");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // resetActionBar();
+
 
         scannET = (EditText) findViewById(R.id.scannET);
        // textViewData = (TextView) findViewById(R.id.textViewData);
@@ -105,12 +110,9 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         // scannET.setText(""); // vycistit pri vytvoreni
 
-
         addStartScanButtonListener();
         //startScan(); // povolenie skenera nefunguje
-
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
-
     }
 
     private void addStartScanButtonListener() {
@@ -153,28 +155,36 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     private void doShowDetailCall() throws URISyntaxException {
 
-        if(barcodeString == "" && scannET.getText().toString()!="") {
+        Log.d("xxxx0:",barcodeString);
+
+        if(barcodeString.equals(""))  {
             barcodeString = scannET.getText().toString();
         }
 
+        if(barcodeString.equals("barcode")) {
+            Toast.makeText(this, R.string.barcode_doesnt_read_properly, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if(barcodeString=="") {
-            Toast.makeText(getApplicationContext(), R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
             return;
         }
 
         zoznamHM = dm.dajNoveZaznamy("", barcodeString); //xx
 
+        Log.d("skenujem","Show 3");
         if(zoznamHM.size()==0) {
-            Toast.makeText(getApplicationContext(), R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
             return;
         }
 
-        //String sKnihaId = barcodeString;
+        Log.d("skenujem","Show 4");
         Inventar inventar = zoznamHM.get(0);
+
         barcodeString = "";
-       // scannET.setText(""); // tuna to padne, presunul som na onResume
+        // scannET.setText(""); // tuna to padne, presunul som na onResume
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
-        //theIndent.putExtra("barcode", sKnihaId);
         theIndent.putExtra("inventar_object", inventar);
 
         startActivity(theIndent);
@@ -263,15 +273,20 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             for (ScanDataCollection.ScanData data : scanData) {
 
                 String dataString = data.getData();
+                barcodeString = dataString;
                 new AsyncDataUpdate().execute(dataString);
 
             }
 
             try {
-                doShowDetailCall();
+                //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
+                Log.d("skenujem","1");
+                doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
+                Log.d("skenujem","2");
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
@@ -675,8 +690,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 */
 
             //  textViewData.append(result+"\n");
-
-            barcodeString = result;
 
             scannET.setText(result);
        //     textViewData.setText(result);

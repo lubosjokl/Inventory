@@ -41,11 +41,11 @@ public class ViewInventarDetail extends AppCompatActivity
 
     DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen
 
-
+/* - tu nepotrebujeme volat nastavenie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.inventar_detail_menu, menu);
+       // getMenuInflater().inflate(R.menu.inventar_detail_menu, menu);
         return true;
     }
 
@@ -59,7 +59,7 @@ public class ViewInventarDetail extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,6 @@ public class ViewInventarDetail extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //toolbar.setTitle("test");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ImageView myImage = findViewById(R.id.detailView_Image);

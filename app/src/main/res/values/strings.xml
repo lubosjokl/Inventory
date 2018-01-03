@@ -38,4 +38,9 @@
     <string name="chart_processed">Spracovane</string>
     <string name="chart_opened">Nespracovane</string>
     <string name="chart_items">Polozky</string>
+    <string name="settings">Nastavenie</string>
+    <string name="setting">Nastavenie hodnôt</string>
+    <string name="preference_description">Inventúra majetku</string>
+    <string name="daysOfInventory">Počet dní inventúry</string>
+    <string name="barcode_doesnt_read_properly">Barcode sa nenacital spravne</string>
 </resources>

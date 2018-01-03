@@ -53,7 +53,9 @@
             android:name=".InventarDetail.ViewInventarDetail"
             android:label="@string/activity_InventarDetail"
             android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
-        <activity android:name=".InfoActivity" />
+        <activity android:name=".InfoActivity"
+            android:parentActivityName=".MainActivity"
+            />
 
         <activity
             android:name=".SettingsActivity"
