@@ -4,9 +4,13 @@ package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
  * Created by Lubos on 27.12.17.
  */
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -39,6 +43,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this); // pri kopirovani do inej triedy zmen
     CustomListInventoryAdapter customListAdapter;
+
+    public final static String INTENT_INVENTORY = "inventar";
 
     //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
@@ -81,20 +87,21 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 //        return super.onCreateOptionsMenu(menu);
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//
-//        handleIntent(intent);
-//    }
 
-//    private void handleIntent(Intent intent) {
-//
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//            //use the query to search your data somehow
-//            Log.i("User Search string", "Search for: " + query);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode != 1) return;
+
+        if(resultCode == Activity.RESULT_OK){
+            Inventar returnedObject = data.getParcelableExtra(this.INTENT_INVENTORY);
+            Inventar inventar = findInventarById(returnedObject.getId());
+
+            if(inventar != null) {
+                inventar.Copy(returnedObject);
+                customListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +136,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 //kliknutie na polozku zoznamu
+                @SuppressLint("RestrictedApi")
                 public void onItemClick(AdapterView<?> parent,
                                         View view, int position, long id) {
                     itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
@@ -145,12 +153,14 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
                     Intent theIndent = new Intent(getApplication(),
                             ViewInventarDetail.class);
                     theIndent.putExtra("barcode", sKnihaId);
-                    theIndent.putExtra("inventar_object", inventar);
+                    theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
 
                     View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                             ListInventarVMiestnosti.this, imageView, "detailView_Image");
-                    startActivity(theIndent, options.toBundle());
+
+
+                    startActivityForResult(theIndent, 1,options.toBundle());
                 }
             });
             customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);

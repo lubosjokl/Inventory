@@ -177,6 +177,7 @@ public class Inventar implements Parcelable {
     public Inventar() {
     }
 
+
     public Inventar(Parcel in) {
         this.Id = in.readInt();
         this.itemBarcode = in.readString();
@@ -194,6 +195,23 @@ public class Inventar implements Parcelable {
         this.image = in.createByteArray();
     }
 
+    //Use this for cloning values
+    public void Copy(Inventar clone) {
+        this.Id = clone.Id;
+        this.itemBarcode = clone.itemBarcode;
+        this.itemDescription = clone.itemDescription;
+        this.rommCode = clone.rommCode;
+        this.status = clone.status;
+        this.datum = clone.datum;
+        this.datum_added = clone.datum_added;
+        this.datum_discarded = clone.datum_discarded;
+        this.serialNr = clone.serialNr;
+        this.zodpovednaOsoba = clone.zodpovednaOsoba;
+        this.poznamka = clone.poznamka;
+        this.typeMajetku = clone.typeMajetku;
+        this.price = clone.price;
+        this.image = clone.image;
+    }
 }
 
 

@@ -4,6 +4,7 @@
 
     <!--Toto odkomentuj-->
     <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
 
     <application
         android:allowBackup="true"
