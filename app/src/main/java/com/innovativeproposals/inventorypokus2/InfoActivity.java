@@ -36,6 +36,7 @@ import com.symbol.emdk.barcode.ScannerException;
 import com.symbol.emdk.barcode.ScannerInfo;
 import com.symbol.emdk.barcode.ScannerResults;
 import com.symbol.emdk.barcode.StatusData;
+
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class InfoActivity extends AppCompatActivity implements EMDKListener,
-       StatusListener, DataListener, BarcodeManager.ScannerConnectionListener, OnCheckedChangeListener {
+        StatusListener, DataListener, BarcodeManager.ScannerConnectionListener, OnCheckedChangeListener {
 
     // pridanie skenovania
     // http://techdocs.zebra.com/emdk-for-android/6-6/tutorial/tutAdvancedScanningAPI/
@@ -55,6 +56,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private Scanner scanner = null;
     private String statusString = "";
     private boolean bContinuousMode = false;
+    private boolean mScannerEnabled = false;
     private List<ScannerInfo> deviceList = null;
     private String[] triggerStrings = {"HARD", "SOFT"};
     private Spinner spinnerTriggers = null;
@@ -62,7 +64,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
     private int dataLength = 0;
-   // private TextView textViewData = null;
+    // private TextView textViewData = null;
     private EditText scannET = null;
     private Button buttonStartScan = null;
 
@@ -87,23 +89,23 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             textViewStatus.setText("Status: " + "EMDKManager object request failed!");
         }
 
-       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); // funguje?
-      //  setDefaultOrientation();  // pouzivat pri dvoch layoutoch
+        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); // funguje?
+        //  setDefaultOrientation();  // pouzivat pri dvoch layoutoch
 
 
-      //  String myBarcode = "";
-      //  Inventar inventar = null;
+        //  String myBarcode = "";
+        //  Inventar inventar = null;
 
         setContentView(R.layout.info);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       // resetActionBar();
+        // resetActionBar();
 
 
         scannET = (EditText) findViewById(R.id.scannET);
-       // textViewData = (TextView) findViewById(R.id.textViewData);
+        // textViewData = (TextView) findViewById(R.id.textViewData);
         textViewStatus = (TextView) findViewById(R.id.textViewStatus);
         buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
 
@@ -112,6 +114,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         addStartScanButtonListener();
         //startScan(); // povolenie skenera nefunguje
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
+        startScannerRead(); // volanie skenera
     }
 
     private void addStartScanButtonListener() {
@@ -155,28 +158,28 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private void doShowDetailCall() throws URISyntaxException {
 
         // TODO : skener sa musi dat aktivovat programovo, treba vyvolat onClick , alebo priamo zavolat startScan();
-        if(barcodeString.equals(""))  {
+        if (barcodeString.equals("")) {
             barcodeString = scannET.getText().toString();
         }
 
-        if(barcodeString.equals("barcode")) {
+        if (barcodeString.equals("barcode")) {
             Toast.makeText(this, R.string.barcode_doesnt_read_properly, Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(barcodeString=="") {
+        if (barcodeString == "") {
             Toast.makeText(this, R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
             return;
         }
 
         zoznamHM = dm.dajNoveZaznamy("", barcodeString); //xx
 
-        if(zoznamHM.size()==0) {
+        if (zoznamHM.size() == 0) {
             Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
             return;
         }
 
-        Log.d("skenujem","Show 4");
+        Log.d("skenujem", "Show 4");
         Inventar inventar = zoznamHM.get(0);
 
         barcodeString = "";
@@ -245,6 +248,13 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         // Set default scanner
         //  spinnerScannerDevices.setSelection(defaultIndex);
 
+
+        // Initialize scanner
+        initScanner();
+        setTrigger();
+        setDecoders();
+
+        startScan();
     }
 
     @Override
@@ -279,9 +289,9 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
             try {
                 //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
-                Log.d("skenujem","1");
+                Log.d("skenujem", "1");
                 doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
-                Log.d("skenujem","2");
+                Log.d("skenujem", "2");
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -330,6 +340,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 statusString = statusData.getFriendlyName() + " is disabled.";
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(true);
+                enableScanner(); // viedensky priklad
                 break;
             case ERROR:
                 statusString = "An error has occurred.";
@@ -340,6 +351,23 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 break;
         }
     }
+
+    public void enableScanner() {
+        if (!mScannerEnabled) {
+            mScannerEnabled = true;
+            //initScanner();
+
+            if (scanner != null) {
+                try {
+                    scanner.enable();
+                } catch (ScannerException e) {
+                    // mELogListener.onLogE(TAG, "enableScanner; Status: " + e.getMessage(), e);
+                    //textViewStatus.setText("Status: " + e.getMessage());
+                }
+            }
+        }
+    }
+
 
     private void enumerateScannerDevices() {
 
@@ -558,6 +586,45 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
     }
 
+    // z viedenskeho prikladu
+    //@Override
+    public void startScannerRead() {
+        if (mScannerEnabled) {
+            if (scanner == null) {
+                initScanner();
+            }
+            if (scanner != null) {
+                try {
+                    if (scanner.isEnabled()) {
+                        if (!scanner.isReadPending()) {
+                            if (barcodeManager != null) {//**
+                                scanner.read();
+                            }
+                        }
+                    } else {
+                        //  mELogListener.onLogE(TAG, "startScannerRead; Status: Scanner is not enabled");
+                        Log.d("scanner", "startScannerRead; Status: Scanner is not enabled");
+                    }
+                } catch (ScannerException e) {
+                    Log.d("scanner", "startScannerRead; Status: " + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    //@Override
+    public void stopScannerRead() {
+        if (mScannerEnabled) {
+            if (scanner != null) {
+                try {
+                    scanner.cancelRead();
+                } catch (ScannerException e) {
+                    Log.d("scanner", "stopScannerRead; Status: " + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -603,30 +670,36 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     protected void onResume() {
         super.onResume();
         // The application is in foreground
-
-        // Acquire the barcode manager resources
-        if (emdkManager != null) {
-            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
-
-            // Add connection listener
-            if (barcodeManager != null) {
-                barcodeManager.addConnectionListener(this);
-            }
-
-            // Enumerate scanner devices
-            enumerateScannerDevices();
-
-            // Set selected scanner
-           // spinnerScannerDevices.setSelection(scannerIndex);
-
-            // Initialize scanner
-            initScanner();
-            setTrigger();
-            setDecoders();
-            scannET.setText(""); // vycistit pri navrate z detailu
-        }
+//
+//        // Acquire the barcode manager resources
+//        if (emdkManager != null) {
+//            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+//
+//            // Add connection listener
+//            if (barcodeManager != null) {
+//                barcodeManager.addConnectionListener(this);
+//            }
+//
+//            // Enumerate scanner devices
+//            enumerateScannerDevices();
+//
+//            // Set selected scanner
+//            // spinnerScannerDevices.setSelection(scannerIndex);
+//
+//            // Initialize scanner
+//            initScanner();
+//            setTrigger();
+//            setDecoders();
+//            scannET.setText(""); // vycistit pri navrate z detailu
+//        }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Called when the activity is becoming visible to the user.
+        //startScan(); // aktivuj hw tlacidlo skeneru
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -689,7 +762,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             //  textViewData.append(result+"\n");
 
             scannET.setText(result);
-       //     textViewData.setText(result);
+            //     textViewData.setText(result);
             return;
 
 

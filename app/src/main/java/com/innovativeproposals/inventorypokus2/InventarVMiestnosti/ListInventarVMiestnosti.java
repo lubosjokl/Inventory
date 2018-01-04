@@ -8,12 +8,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
@@ -21,19 +23,34 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.innovativeproposals.inventorypokus2.InfoActivity;
 import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
+import com.symbol.emdk.EMDKManager;
+import com.symbol.emdk.EMDKResults;
+import com.symbol.emdk.barcode.BarcodeManager;
+import com.symbol.emdk.barcode.ScanDataCollection;
+import com.symbol.emdk.barcode.Scanner;
+import com.symbol.emdk.barcode.ScannerConfig;
+import com.symbol.emdk.barcode.ScannerException;
+import com.symbol.emdk.barcode.ScannerInfo;
+import com.symbol.emdk.barcode.ScannerResults;
+import com.symbol.emdk.barcode.StatusData;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
-public class ListInventarVMiestnosti extends AppCompatActivity {
+public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKManager.EMDKListener,
+        Scanner.StatusListener, Scanner.DataListener, BarcodeManager.ScannerConnectionListener, CompoundButton.OnCheckedChangeListener {
     Intent intent;
-
+    private String myRoomcode;
     TextView itembarcodeET;
     TextView itemdescriptionET;
 
@@ -43,6 +60,20 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this); // pri kopirovani do inej triedy zmen
     CustomListInventoryAdapter customListAdapter;
+
+    //Zebra
+    private EMDKManager emdkManager = null;
+    private BarcodeManager barcodeManager = null;
+    private Scanner scanner = null;
+    private String statusString = "";
+    private boolean bContinuousMode = false;
+    private boolean mScannerEnabled = false;
+    private List<ScannerInfo> deviceList = null;
+    private String[] triggerStrings = {"HARD", "SOFT"};
+    private Spinner spinnerTriggers = null;
+    private int triggerIndex = 0;
+    private int defaultIndex = 0; // Keep the default scanner
+    private int scannerIndex = 0; // Keep the selected scanner
 
     public final static String INTENT_INVENTORY = "inventar";
 
@@ -54,18 +85,19 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         inflater.inflate(R.menu.search_menu, menu);
 
 
-        MenuItem myActionMenuItem = menu.findItem( R.id.search);
+        MenuItem myActionMenuItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) myActionMenuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Toast like print
-                if( ! searchView.isIconified()) {
+                if (!searchView.isIconified()) {
                     searchView.setIconified(true);
                 }
                 myActionMenuItem.collapseActionView();
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String s) {
                 //tu sa odohrava event, kde sa zmenil search text
@@ -90,19 +122,21 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode != 1) return;
+        if (requestCode != 1) return;
 
-        if(resultCode == Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
             Inventar returnedObject = data.getParcelableExtra(this.INTENT_INVENTORY);
             Inventar inventar = findInventarById(returnedObject.getId());
 
-            if(inventar != null) {
+            if (inventar != null) {
                 inventar.Copy(returnedObject);
                 customListAdapter.notifyDataSetChanged();
             } else {
+                // TODO ked sa vrati clovek z detailu s novou polozkou, tak ju treba pridat do zoznamu vsetkych poloziek
 
-                // pre novy inventar vytvor objekt a napln ho roomcode a itembarcode TODO
-
+                //Tu vy
+                customListAdapter.original_data.add(returnedObject);
+                customListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -112,7 +146,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         //enable search within activity
 //        handleIntent(getIntent());
 
-        String myRoomcode = "";
+        myRoomcode = "";
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -120,6 +154,15 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         }
 
         setContentView(R.layout.inventar_vmiestnosti);
+
+        deviceList = new ArrayList<ScannerInfo>();
+
+        EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
+        if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
+//            textViewStatus.setText("Status: " + "EMDKManager object request failed!");
+            Log.i("warning", "EMDK failed: ");
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -163,7 +206,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                             ListInventarVMiestnosti.this, imageView, "detailView_Image");
 
-                    startActivityForResult(theIndent, 1,options.toBundle());
+                    startActivityForResult(theIndent, 1, options.toBundle());
                 }
             });
             customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
@@ -172,14 +215,469 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
         }
     }
 
-    private Inventar findInventarById(Integer itemId){
+    private Inventar findInventarById(Integer itemId) {
         for (Inventar item : zoznamHM) {
-            if(item.getId() == itemId)
+            if (item.getId() == itemId)
                 return item;
         }
 
         //toto by sa nikdy nemalo stat
         return null;
     }
+
+    private Inventar findInventarByBarcode(String barcode) {
+        for (Inventar item : zoznamHM) {
+            if (item.getItemBarcode() == barcode)
+                return item;
+        }
+
+        //toto by sa nikdy nemalo stat
+        return null;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        setDecoders();
+    }
+
+    @Override
+    public void onOpened(EMDKManager emdkManager) {
+//        textViewStatus.setText("Status: " + "EMDK open success!");
+
+        this.emdkManager = emdkManager;
+
+        // Acquire the barcode manager resources
+        barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+
+        // Add connection listener
+        if (barcodeManager != null) {
+            barcodeManager.addConnectionListener(this);
+        }
+
+        // Enumerate scanner devices
+        enumerateScannerDevices();
+
+        // Set default scanner
+        //  spinnerScannerDevices.setSelection(defaultIndex);
+
+
+        // Initialize scanner
+        initScanner();
+        setTrigger();
+        setDecoders();
+
+        startScan();
+    }
+
+    @Override
+    public void onClosed() {
+        if (emdkManager != null) {
+
+            // Remove connection listener
+            if (barcodeManager != null) {
+                barcodeManager.removeConnectionListener(this);
+                barcodeManager = null;
+            }
+
+            // Release all the resources
+            emdkManager.release();
+            emdkManager = null;
+        }
+//        textViewStatus.setText("Status: " + "EMDK closed unexpectedly! Please close and restart the application.");
+    }
+
+    @Override
+    public void onConnectionChange(ScannerInfo scannerInfo, BarcodeManager.ConnectionState connectionState) {
+        String status;
+        String scannerName = "";
+
+        String statusExtScanner = connectionState.toString();
+        String scannerNameExtScanner = scannerInfo.getFriendlyName();
+
+        if (deviceList.size() != 0) {
+            scannerName = deviceList.get(scannerIndex).getFriendlyName();
+        }
+
+        if (scannerName.equalsIgnoreCase(scannerNameExtScanner)) {
+
+            switch (connectionState) {
+                case CONNECTED:
+                    deInitScanner();
+                    initScanner();
+                    setTrigger();
+                    setDecoders();
+                    break;
+                case DISCONNECTED:
+                    deInitScanner();
+                    new AsyncUiControlUpdate().execute(true);
+                    break;
+            }
+
+            status = scannerNameExtScanner + ":" + statusExtScanner;
+            new AsyncStatusUpdate().execute(status);
+        } else {
+            status = statusString + " " + scannerNameExtScanner + ":" + statusExtScanner;
+            new AsyncStatusUpdate().execute(status);
+        }
+    }
+
+    @Override
+    public void onData(ScanDataCollection scanDataCollection) {
+        if ((scanDataCollection != null) && (scanDataCollection.getResult() == ScannerResults.SUCCESS)) {
+            ArrayList<ScanDataCollection.ScanData> scanData = scanDataCollection.getScanData();
+            for (ScanDataCollection.ScanData data : scanData) {
+
+                String dataString = data.getData();
+//                barcodeString = dataString;
+                Log.i("Scanned value:", dataString);
+                new AsyncDataUpdate().execute(dataString);
+
+                Inventar scannedItem = findInventarByBarcode(dataString);
+                if (scannedItem == null) {
+                    scannedItem = new Inventar();
+                    scannedItem.setItemBarcode(dataString);
+                    scannedItem.setRommCode(myRoomcode);
+                }
+
+
+                Intent theIndent = new Intent(getApplication(),
+                        ViewInventarDetail.class);
+                theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, scannedItem);
+
+//                View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
+//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+//                        ListInventarVMiestnosti.this, imageView, "detailView_Image");
+
+                startActivityForResult(theIndent, 1);
+            }
+
+            return;
+
+
+//            try {
+//                //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
+//                Log.d("skenujem", "1");
+//                doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
+//                Log.d("skenujem", "2");
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+
+        }
+    }
+
+    @Override
+    public void onStatus(StatusData statusData) {
+        StatusData.ScannerStates state = statusData.getState();
+        switch (state) {
+            case IDLE:
+                statusString = statusData.getFriendlyName() + " is enabled and idle...";
+                new AsyncStatusUpdate().execute(statusString);
+                if (bContinuousMode) {
+                    try {
+                        // An attempt to use the scanner continuously and rapidly (with a delay < 100 ms between scans)
+                        // may cause the scanner to pause momentarily before resuming the scanning.
+                        // Hence add some delay (>= 100ms) before submitting the next read.
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        scanner.read();
+                    } catch (ScannerException e) {
+                        statusString = e.getMessage();
+                        new AsyncStatusUpdate().execute(statusString);
+                    }
+                }
+                new AsyncUiControlUpdate().execute(true);
+                break;
+            case WAITING:
+                statusString = "Scanner is waiting for trigger press...";
+                new AsyncStatusUpdate().execute(statusString);
+                new AsyncUiControlUpdate().execute(false);
+                break;
+            case SCANNING:
+                statusString = "Scanning...";
+                new AsyncStatusUpdate().execute(statusString);
+                new AsyncUiControlUpdate().execute(false);
+                break;
+            case DISABLED:
+                statusString = statusData.getFriendlyName() + " is disabled.";
+                new AsyncStatusUpdate().execute(statusString);
+                new AsyncUiControlUpdate().execute(true);
+//                enableScanner(); // viedensky priklad
+                break;
+            case ERROR:
+                statusString = "An error has occurred.";
+                new AsyncStatusUpdate().execute(statusString);
+                new AsyncUiControlUpdate().execute(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void deInitScanner() {
+
+        if (scanner != null) {
+
+            try {
+
+                scanner.cancelRead();
+                scanner.disable();
+
+            } catch (ScannerException e) {
+
+//                textViewStatus.setText("Status: " + e.getMessage());
+            }
+            scanner.removeDataListener(this);
+            scanner.removeStatusListener(this);
+            try {
+                scanner.release();
+            } catch (ScannerException e) {
+
+//                textViewStatus.setText("Status: " + e.getMessage());
+            }
+
+            scanner = null;
+        }
+    }
+
+
+    private void startScan() {
+
+        if (scanner == null) {
+            initScanner();
+        }
+
+        if (scanner != null) {
+            try {
+
+                if (scanner.isEnabled()) {
+                    // Submit a new read.
+                    scanner.read();
+                    bContinuousMode = true; // false = skenujem len raz
+
+                 /*   if (checkBoxContinuous.isChecked())
+                        bContinuousMode = true;
+                    else
+                        bContinuousMode = false;*/
+
+                    new AsyncUiControlUpdate().execute(false);
+                } else {
+//                    textViewStatus.setText("Status: Scanner is not enabled");
+                }
+
+            } catch (ScannerException e) {
+
+//                textViewStatus.setText("Status: " + e.getMessage());
+            }
+        }
+
+    }
+
+    private void enumerateScannerDevices() {
+
+        if (barcodeManager != null) {
+
+            List<String> friendlyNameList = new ArrayList<String>();
+            int spinnerIndex = 0;
+
+            deviceList = barcodeManager.getSupportedDevicesInfo();
+
+            if ((deviceList != null) && (deviceList.size() != 0)) {
+
+                Iterator<ScannerInfo> it = deviceList.iterator();
+                while (it.hasNext()) {
+                    ScannerInfo scnInfo = it.next();
+                    friendlyNameList.add(scnInfo.getFriendlyName());
+                    if (scnInfo.isDefaultScanner()) {
+                        defaultIndex = spinnerIndex;
+                    }
+                    ++spinnerIndex;
+                }
+            } else {
+//                textViewStatus.setText("Status: " + "Failed to get the list of supported scanner devices! Please close and restart the application.");
+            }
+
+            //   ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(InfoActivity.this, android.R.layout.simple_spinner_item, friendlyNameList);
+            //   spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            //   spinnerScannerDevices.setAdapter(spinnerAdapter);
+        }
+    }
+
+    private void setTrigger() {
+
+        if (scanner == null) {
+            initScanner();
+        }
+
+        if (scanner != null) {
+            switch (triggerIndex) {
+                case 0: // Selected "HARD"
+                    scanner.triggerType = Scanner.TriggerType.HARD;
+                    break;
+                case 1: // Selected "SOFT"
+                    scanner.triggerType = Scanner.TriggerType.SOFT_ALWAYS;
+                    break;
+            }
+        }
+    }
+
+    private void setDecoders() {
+
+        if (scanner == null) {
+            initScanner();
+        }
+
+        if ((scanner != null) && (scanner.isEnabled())) {
+            try {
+
+                ScannerConfig config = scanner.getConfig();
+
+                // config.decoderParams.ean8.enabled = true;
+                config.decoderParams.ean13.enabled = true;
+                //  config.decoderParams.code39.enabled = true;
+                config.decoderParams.code128.enabled = true;
+
+                /*
+                // Set EAN8
+                if(checkBoxEAN8.isChecked())
+                    config.decoderParams.ean8.enabled = true;
+                else
+                    config.decoderParams.ean8.enabled = false;
+
+                // Set EAN13
+                if(checkBoxEAN13.isChecked())
+                    config.decoderParams.ean13.enabled = true;
+                else
+                    config.decoderParams.ean13.enabled = false;
+
+                // Set Code39
+                if(checkBoxCode39.isChecked())
+                    config.decoderParams.code39.enabled = true;
+                else
+                    config.decoderParams.code39.enabled = false;
+
+                //Set Code128
+                if(checkBoxCode128.isChecked())
+                    config.decoderParams.code128.enabled = true;
+                else
+                    config.decoderParams.code128.enabled = false;
+                    */
+
+                scanner.setConfig(config);
+
+            } catch (ScannerException e) {
+
+//                textViewStatus.setText("Status: " + e.getMessage());
+            }
+        }
+    }
+
+
+    private void initScanner() {
+
+        if (scanner == null) {
+
+            if ((deviceList != null) && (deviceList.size() != 0)) {
+                scanner = barcodeManager.getDevice(deviceList.get(scannerIndex));
+            } else {
+//                textViewStatus.setText("Status: " + "Failed to get the specified scanner device! Please close and restart the application.");
+                return;
+            }
+
+            if (scanner != null) {
+
+                scanner.addDataListener(this);
+                scanner.addStatusListener(this);
+
+                try {
+                    scanner.enable();
+                } catch (ScannerException e) {
+
+//                    textViewStatus.setText("Status: " + e.getMessage());
+                }
+            } else {
+//                textViewStatus.setText("Status: " + "Failed to initialize the scanner device.");
+            }
+        }
+    }
+
+    private class AsyncDataUpdate extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            return params[0];
+        }
+
+        protected void onPostExecute(String result) {
+
+           /* if (result != null) {
+                if(dataLength ++ > 100) { //Clear the cache after 100 scans
+                    textViewData.setText("");
+                    dataLength = 0;
+                }
+                */
+
+            //  textViewData.append(result+"\n");
+
+//            scannET.setText(result);
+            //     textViewData.setText(result);
+            return;
+
+
+            // scrolovanie v textView
+          /*      ((View) findViewById(R.id.scrollView1)).post(new Runnable()
+                {
+                    public void run()
+                    {
+                        ((ScrollView) findViewById(R.id.scrollView1)).fullScroll(View.FOCUS_DOWN);
+                    }
+                });*/
+
+        }
+    }
+
+
+    private class AsyncStatusUpdate extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+//            textViewStatus.setText("Status: " + result);
+        }
+    }
+
+    private class AsyncUiControlUpdate extends AsyncTask<Boolean, Void, Boolean> {
+
+
+        @Override
+        protected void onPostExecute(Boolean bEnable) {
+
+            //    checkBoxEAN8.setEnabled(bEnable);
+            //    checkBoxEAN13.setEnabled(bEnable);
+            //    checkBoxCode39.setEnabled(bEnable);
+            //    checkBoxCode128.setEnabled(bEnable);
+            //   spinnerScannerDevices.setEnabled(bEnable);
+            //   spinnerTriggers.setEnabled(bEnable);
+        }
+
+        @Override
+        protected Boolean doInBackground(Boolean... arg0) {
+
+            return arg0[0];
+        }
+    }
+
 }
 
