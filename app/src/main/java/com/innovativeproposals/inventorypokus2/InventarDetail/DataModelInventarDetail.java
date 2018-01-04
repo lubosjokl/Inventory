@@ -4,13 +4,20 @@ package com.innovativeproposals.inventorypokus2.InventarDetail;
  * Created by Lubos on 28.12.17.
  */
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
+import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import java.net.URISyntaxException;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -34,9 +41,6 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         db.execSQL(query);
         onCreate(db);
     }
-
-
-
 
     public DataModelInventarDetail(Context ctx)
     {
@@ -166,6 +170,132 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         }
         return results;
     }
+
+    public long ulozObrazok(Inventar myInventar) {
+
+        boolean existuje = false;
+        long vysledok = 0;
+        //String obrazokSql = "INSERT INTO MajetokObrazky (obrazok, itembarcode) VALUES (" + myInventar.getImage() +",'"+ myInventar.getItemBarcode()+"')";
+        String obrazokSql = "INSERT INTO MajetokObrazky ( obrazok, itembarcode) VALUES ( ? ,? )";
+
+        String sSQL = "SELECT id  FROM MajetokObrazky where itembarcode = '" + myInventar.getItemBarcode()+ "'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                existuje = true;
+                obrazokSql = "UPDATE MajetokObrazky SET obrazok = ?  WHERE itembarcode = ?";
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+
+        try
+        {
+
+            // https://stackoverflow.com/questions/7331310/how-to-store-image-as-blob-in-sqlite-how-to-retrieve-it
+        SQLiteStatement insertStmt      =   db.compileStatement(obrazokSql);
+        insertStmt.clearBindings();
+       // insertStmt.bindString(1, Integer.toString(this.accId));
+            insertStmt.bindBlob(1, myInventar.getImage());
+            insertStmt.bindString(2,myInventar.getItemBarcode());
+
+            Log.d("update","Query: "+insertStmt.toString());
+        insertStmt.executeInsert();
+
+        db.close();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return vysledok;
+    }
+
+    public int aktualizujZaznam(Inventar myInventar)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int aa = 0; // nepouzite
+
+        Date currentDate = new Date(System.currentTimeMillis());
+
+        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+       String ts =  format1.format(currentDate);
+
+        // https://stackoverflow.com/questions/20349454/sqlite-not-updating-rows
+
+        String updateSql = "UPDATE majetok "
+            + " SET itemdescription = '" + myInventar.getItemDescription() +"' "
+                + ", status =  " + myInventar.getStatus()
+                + ", roomcodenew =  '" + myInventar.getRommCode() +"' "
+                + ", serialnr =  '" + myInventar.getSerialNr() +"' "
+                + ", zodpovednaosoba =  '" + myInventar.getZodpovednaOsoba() +"' "
+                + ", typmajetku =  '" + myInventar.getTypeMajetku() +"' "
+                + ", extranotice =  '" + myInventar.getPoznamka() +"' "
+                + ", datum =  '" + ts +"' "
+            + " WHERE Id = "+ myInventar.getId();
+
+        Log.d("update","Query: "+updateSql);
+
+        try
+        {
+           // https://stackoverflow.com/questions/16383471/java-lang-illegalargumentexception-empty-bindargs
+            db.execSQL(updateSql); //Here it should be execSQL instead of rawQuery
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+/*
+
+        int time = (int) (System.currentTimeMillis());
+        Timestamp tsTemp = new Timestamp(time);
+        String ts =  tsTemp.toString();
+
+        ContentValues myContentValues = new ContentValues();
+        myContentValues.put("Id",myInventar.getId());
+        myContentValues.put("itemdescription",myInventar.getItemDescription());
+        myContentValues.put("roomcodenew",myInventar.getRommCode());
+        myContentValues.put("status","10");
+        myContentValues.put("datum",ts);
+        myContentValues.put("serialnr",myInventar.getSerialNr());
+        myContentValues.put("zodpovednaosoba",myInventar.getZodpovednaOsoba());
+        myContentValues.put("typmajetku",myInventar.getTypeMajetku());
+        myContentValues.put("extranotice",myInventar.getPoznamka());
+        int aa = 0;
+
+        try{
+            aa =   db.update("majetok", myContentValues, "Id = ?" + xx , null );
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        } */
+
+        return aa;
+
+    }
+
+    /*
+    public long vlozZaznam(HashMap<String, String> atributy)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues val = new ContentValues();
+        val.put(ATR_AUTOR, atributy.get(ATR_AUTOR));
+        val.put(ATR_KNIHA, atributy.get(ATR_KNIHA));
+        val.put(ATR_DATUM, atributy.get(ATR_DATUM));
+        val.put(ATR_HODNOTENIE, atributy.get(ATR_HODNOTENIE));
+
+        long id = db.insert(DB_TABULKA, null, val);
+        db.close();
+        return id;
+    }
+*/
+
 
 }
 

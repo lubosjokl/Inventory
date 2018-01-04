@@ -99,6 +99,10 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
             if(inventar != null) {
                 inventar.Copy(returnedObject);
                 customListAdapter.notifyDataSetChanged();
+            } else {
+
+                // pre novy inventar vytvor objekt a napln ho roomcode a itembarcode TODO
+
             }
         }
     }
@@ -158,7 +162,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity {
                     View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                             ListInventarVMiestnosti.this, imageView, "detailView_Image");
-
 
                     startActivityForResult(theIndent, 1,options.toBundle());
                 }

@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // zakazanie zmeny orientacie
+        // https://stackoverflow.com/questions/20021803/disable-and-enable-orientation-changes-in-an-activity-in-android-programatically
+
         ImplementChart();
     }
 

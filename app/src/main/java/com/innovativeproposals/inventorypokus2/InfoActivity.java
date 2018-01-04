@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -72,6 +70,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     String barcodeString = null;
     List<Inventar> zoznamHM = null;
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this);
+    //public final static String INTENT_INVENTORY = "inventar";
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -155,8 +154,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     private void doShowDetailCall() throws URISyntaxException {
 
-        Log.d("xxxx0:",barcodeString);
-
+        // TODO : skener sa musi dat aktivovat programovo, treba vyvolat onClick , alebo priamo zavolat startScan();
         if(barcodeString.equals(""))  {
             barcodeString = scannET.getText().toString();
         }
@@ -173,7 +171,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         zoznamHM = dm.dajNoveZaznamy("", barcodeString); //xx
 
-        Log.d("skenujem","Show 3");
         if(zoznamHM.size()==0) {
             Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
             return;
@@ -185,6 +182,8 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         barcodeString = "";
         // scannET.setText(""); // tuna to padne, presunul som na onResume
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
+
+
         theIndent.putExtra("inventar_object", inventar);
 
         startActivity(theIndent);
@@ -576,9 +575,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         if (emdkManager != null) {
             emdkManager.release();
             emdkManager = null;
-
         }
-
     }
 
     @Override

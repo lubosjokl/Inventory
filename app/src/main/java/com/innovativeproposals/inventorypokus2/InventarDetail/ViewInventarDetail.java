@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,14 +78,21 @@ public class ViewInventarDetail extends AppCompatActivity {
                 inventar.setTypeMajetku(spinner_inventoryType.getSelectedItem().toString());
                 inventar.setPoznamka(txt_Notice.getText().toString());
                 inventar.setSerialNr(txt_SerialNr.getText().toString());
+                inventar.setStatus("10");
                 inventar.setZodpovednaOsoba(spinner_responsible.getSelectedItem().toString());
                 inventar.setImage(getImageBytesFromImageView());
 
                 //tu uloz nove data do databazy
 
+                long ako = dm.aktualizujZaznam(inventar);
+
+                if(inventar.getImage() != null)
+                    ako = dm.ulozObrazok(inventar);
+
                 //ukonci aktualnu aktivitu
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
+                // TODO pri navrate neaktualizuje datum, alebo to treba urobit reloadnutim Listu
                 setResult(Activity.RESULT_OK, returnIntent);
                 this.finish();
                 return true;
@@ -95,6 +103,10 @@ public class ViewInventarDetail extends AppCompatActivity {
     private byte[] getImageBytesFromImageView() {
         try {
             BitmapDrawable drawable = (BitmapDrawable) detailView_Image.getDrawable();
+
+            if(drawable==null)
+                return null; // neexistuje obrazok
+
             Bitmap bitmap = drawable.getBitmap();
             ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -102,11 +114,13 @@ public class ViewInventarDetail extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
             return output.toByteArray();
         } catch (Exception ex) {
+            Log.d("error",ex.toString());
             return null;
         }
     }
 
     private void locateControls() {
+
         itemdescriptionET = findViewById(R.id.descriptionET);
         spinner_inventoryType = findViewById(R.id.spinner_InventoryType);
         txt_Notice = findViewById(R.id.notice);
@@ -117,12 +131,18 @@ public class ViewInventarDetail extends AppCompatActivity {
     }
 
     @Override
+    // foto
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data); // vraj treba
+
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Log.d("CameraDemo", "Pic saved");
             detailView_Image.setImageBitmap(photo);
         }
     }
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +154,12 @@ public class ViewInventarDetail extends AppCompatActivity {
             inventar = getIntent().getParcelableExtra(ListInventarVMiestnosti.INTENT_INVENTORY);
         }
 
+        // toto mi tu nechaj, alebo uprav odoslanie info z InfoActivity
+        if(inventar==null) {
+
+            inventar = getIntent().getParcelableExtra("inventar_object");
+        }
+
         setContentView(R.layout.inventar_detail);
         locateControls();
 
@@ -141,8 +167,11 @@ public class ViewInventarDetail extends AppCompatActivity {
         fab_takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // foto
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                //startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
             }
         });
 
@@ -266,6 +295,20 @@ public class ViewInventarDetail extends AppCompatActivity {
         if (tempZodpovednaOsoba != null)
             spinner_responsible.setSelection(adapterZodpovedneOsoby.getPosition(tempZodpovednaOsoba));
 
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
