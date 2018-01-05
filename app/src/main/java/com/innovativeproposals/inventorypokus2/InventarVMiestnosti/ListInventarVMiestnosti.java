@@ -10,8 +10,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.BundleCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -26,7 +24,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.innovativeproposals.inventorypokus2.InfoActivity;
 import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
@@ -49,6 +46,7 @@ import java.util.List;
 
 public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKManager.EMDKListener,
         Scanner.StatusListener, Scanner.DataListener, BarcodeManager.ScannerConnectionListener, CompoundButton.OnCheckedChangeListener {
+
     Intent intent;
     private String myRoomcode;
     TextView itembarcodeET;
@@ -83,7 +81,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
-
 
         MenuItem myActionMenuItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) myActionMenuItem.getActionView();
@@ -125,6 +122,23 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         if (requestCode != 1) return;
 
         if (resultCode == Activity.RESULT_OK) {
+
+
+            //nove - skus znovu nacitat zaznamy
+            try {
+
+                zoznamHM = null;
+                zoznamHM = dm.dajNoveZaznamy(myRoomcode, ""); // array naplni spravne
+//                customListAdapter.clear();
+                customListAdapter.original_data = zoznamHM;
+                customListAdapter.filtered_list = zoznamHM;
+
+                customListAdapter.notifyDataSetChanged();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+/*          original
             Inventar returnedObject = data.getParcelableExtra(this.INTENT_INVENTORY);
             Inventar inventar = findInventarById(returnedObject.getId());
 
@@ -134,10 +148,9 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             } else {
                 // TODO ked sa vrati clovek z detailu s novou polozkou, tak ju treba pridat do zoznamu vsetkych poloziek
 
-                //Tu vy
                 customListAdapter.original_data.add(returnedObject);
                 customListAdapter.notifyDataSetChanged();
-            }
+            }*/
         }
     }
 
@@ -159,10 +172,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
-//            textViewStatus.setText("Status: " + "EMDKManager object request failed!");
             Log.i("warning", "EMDK failed: ");
         }
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -192,14 +203,57 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                     statusET = (TextView) view.findViewById(R.id.statusET);
                     datumET = (TextView) view.findViewById(R.id.datumET);
 
-                    String sKnihaId = itembarcodeET.getText().toString();
+                    int inventarID = (int) view.getTag();
+                    Inventar inventar = findInventarById(inventarID);
+
+                    Intent theIndent = new Intent(getApplication(),
+                            ViewInventarDetail.class);
+
+                    theIndent.putExtra("roomcode",myRoomcode);
+                    theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
+
+                    View imageView = view.findViewById(R.id.detailView_Image);
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                            ListInventarVMiestnosti.this, imageView, "detailView_Image");
+
+                    startActivityForResult(theIndent, 1, options.toBundle()); // TODO 1
+                }
+            });
+            customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
+
+            lw.setAdapter(customListAdapter);
+        }
+    }
+
+   /* void naplnAdapter() {
+        try {
+            zoznamHM = dm.dajNoveZaznamy(myRoomcode, "");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        if (zoznamHM.size() != 0) {
+            ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
+            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                //kliknutie na polozku zoznamu
+                @SuppressLint("RestrictedApi")
+                public void onItemClick(AdapterView<?> parent,
+                                        View view, int position, long id) {
+                    itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
+                    itemdescriptionET = (TextView) view.findViewById(R.id.itemdescriptionET);
+
+                    statusET = (TextView) view.findViewById(R.id.statusET);
+                    datumET = (TextView) view.findViewById(R.id.datumET);
+
+                    // String sKnihaId = itembarcodeET.getText().toString();
 
                     int inventarID = (int) view.getTag();
                     Inventar inventar = findInventarById(inventarID);
 
                     Intent theIndent = new Intent(getApplication(),
                             ViewInventarDetail.class);
-                    theIndent.putExtra("barcode", sKnihaId);
+                    //theIndent.putExtra("barcode", sKnihaId);
                     theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
 
                     View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
@@ -213,7 +267,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
             lw.setAdapter(customListAdapter);
         }
-    }
+    } */
+
 
     private Inventar findInventarById(Integer itemId) {
         for (Inventar item : zoznamHM) {
@@ -259,7 +314,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
         // Set default scanner
         //  spinnerScannerDevices.setSelection(defaultIndex);
-
 
         // Initialize scanner
         initScanner();
@@ -323,46 +377,53 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
     @Override
     public void onData(ScanDataCollection scanDataCollection) {
+
+
         if ((scanDataCollection != null) && (scanDataCollection.getResult() == ScannerResults.SUCCESS)) {
             ArrayList<ScanDataCollection.ScanData> scanData = scanDataCollection.getScanData();
             for (ScanDataCollection.ScanData data : scanData) {
 
                 String dataString = data.getData();
-//                barcodeString = dataString;
+                Inventar scannedItem;
+
                 Log.i("Scanned value:", dataString);
                 new AsyncDataUpdate().execute(dataString);
 
-                Inventar scannedItem = findInventarByBarcode(dataString);
-                if (scannedItem == null) {
-                    scannedItem = new Inventar();
-                    scannedItem.setItemBarcode(dataString);
-                    scannedItem.setRommCode(myRoomcode);
+
+                try {
+                    zoznamHM = dm.dajNoveZaznamy("", dataString); //xx
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
                 }
 
 
-                Intent theIndent = new Intent(getApplication(),
-                        ViewInventarDetail.class);
-                theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, scannedItem);
+                Log.d("skenujem", "Show 4");
+                if (zoznamHM.size() > 0)
+                    scannedItem = zoznamHM.get(0);
 
-//                View imageView = view.findViewById(R.id.detailView_Image); // ma natvrdo v layoute devinovany src
-//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-//                        ListInventarVMiestnosti.this, imageView, "detailView_Image");
+                else {
 
-                startActivityForResult(theIndent, 1);
+                    // vytvor novy inventar
+                    scannedItem = new Inventar();
+                    scannedItem.setRommCode(myRoomcode);
+                    scannedItem.setItemBarcode(dataString);
+                }
+
+                Intent theIndent = new Intent(this, ViewInventarDetail.class);
+                //  Bundle extras = new Bundle();
+                theIndent.putExtra("inventar_object", scannedItem);
+                theIndent.putExtra("roomcode", myRoomcode);
+
+                //theIndent.putExtra("roomcode", myRoomcode);
+                // TODO treba poslat do detailu aj rommcode a pri zapise prepisat s myRoomcode
+
+                Log.d("skenujem", "Show 5");
+               // startActivity(theIndent);
+                 startActivityForResult(theIndent, 1);
+
             }
 
             return;
-
-
-//            try {
-//                //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
-//                Log.d("skenujem", "1");
-//                doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
-//                Log.d("skenujem", "2");
-//            } catch (URISyntaxException e) {
-//                e.printStackTrace();
-//            }
-
         }
     }
 
@@ -577,7 +638,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         }
     }
 
-
     private void initScanner() {
 
         if (scanner == null) {
@@ -642,7 +702,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         }
     }
 
-
     private class AsyncStatusUpdate extends AsyncTask<String, Void, String> {
 
         @Override
@@ -678,6 +737,86 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             return arg0[0];
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // De-initialize scanner
+        deInitScanner();
+
+        // Remove connection listener
+        if (barcodeManager != null) {
+            barcodeManager.removeConnectionListener(this);
+            barcodeManager = null;
+        }
+
+        // Release all the resources
+        if (emdkManager != null) {
+            emdkManager.release();
+            emdkManager = null;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // The application is in background
+
+        // De-initialize scanner
+        deInitScanner();
+
+        // Remove connection listener
+        if (barcodeManager != null) {
+            barcodeManager.removeConnectionListener(this);
+            barcodeManager = null;
+            deviceList = null;
+        }
+
+        // Release the barcode manager resources
+        if (emdkManager != null) {
+            emdkManager.release(EMDKManager.FEATURE_TYPE.BARCODE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // nacitaj z databazy
+
+        // The application is in foreground
+//
+//        // Acquire the barcode manager resources
+//        if (emdkManager != null) {
+//            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+//
+//            // Add connection listener
+//            if (barcodeManager != null) {
+//                barcodeManager.addConnectionListener(this);
+//            }
+//
+//            // Enumerate scanner devices
+//            enumerateScannerDevices();
+//
+//            // Set selected scanner
+//            // spinnerScannerDevices.setSelection(scannerIndex);
+//
+//            // Initialize scanner
+//            initScanner();
+//            setTrigger();
+//            setDecoders();
+//            scannET.setText(""); // vycistit pri navrate z detailu
+//        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Called when the activity is becoming visible to the user.
+        //startScan(); // aktivuj hw tlacidlo skeneru
+    }
+
 
 }
 

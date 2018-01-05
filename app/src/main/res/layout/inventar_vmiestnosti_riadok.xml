@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:paddingTop="5dip"
+
     android:layout_height="match_parent">
 
     <ImageView
@@ -41,6 +42,7 @@
 
         <TextView
             android:id="@+id/statusET"
+            android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="status" />

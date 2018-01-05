@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewInventarDetail extends AppCompatActivity {
+
     private static final int CAMERA_REQUEST = 1;
 
     Intent intent;
@@ -42,10 +42,10 @@ public class ViewInventarDetail extends AppCompatActivity {
 
     TextView itembarcodeET;
     TextView itemdescriptionET;
-    TextView statusET;
+   // TextView statusET;
     TextView datumET;
     TextView datumDisposeET;
-    TextView datumREALET;
+    String origRoomCode= null;
     Spinner spinner_inventoryType;
     Spinner spinner_responsible;
     EditText txt_Notice;
@@ -82,9 +82,18 @@ public class ViewInventarDetail extends AppCompatActivity {
                 inventar.setZodpovednaOsoba(spinner_responsible.getSelectedItem().toString());
                 inventar.setImage(getImageBytesFromImageView());
 
+                String xx = origRoomCode;
+                // aku ma hodnotu
+                // pri inventarizacii noveho inventara
+                // pri inventarizacii stareho
+                // pri info
+
+                inventar.setRommCode(origRoomCode);
+
+
                 //tu uloz nove data do databazy
 
-                long ako = dm.aktualizujZaznam(inventar);
+                long ako = dm.ulozInventar(inventar);
 
                 if(inventar.getImage() != null)
                     ako = dm.ulozObrazok(inventar);
@@ -143,21 +152,25 @@ public class ViewInventarDetail extends AppCompatActivity {
         }
     }
 
-
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        String isValue = null;
+        String isValue = "";
         inventar = null;
+        origRoomCode= "";
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             inventar = getIntent().getParcelableExtra(ListInventarVMiestnosti.INTENT_INVENTORY);
+            origRoomCode = extras.getString("roomcode");
         }
 
         // toto mi tu nechaj, alebo uprav odoslanie info z InfoActivity
         if(inventar==null) {
-
+            // tadialto ide aj pri novom barcode
             inventar = getIntent().getParcelableExtra("inventar_object");
+
         }
 
         setContentView(R.layout.inventar_detail);
@@ -169,9 +182,7 @@ public class ViewInventarDetail extends AppCompatActivity {
             public void onClick(View view) {
                 // foto
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                //startActivityForResult(cameraIntent, TAKE_PHOTO_CODE);
             }
         });
 

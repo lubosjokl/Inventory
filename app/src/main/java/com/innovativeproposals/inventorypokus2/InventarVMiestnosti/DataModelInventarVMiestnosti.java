@@ -71,22 +71,22 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
     }
 
     // doplnujuce funkcie
-    public List<Inventar> dajNoveZaznamy(String myPoschodieKod, String myBarCode) throws URISyntaxException {
+    public List<Inventar> dajNoveZaznamy(String myKancelariaKod, String myBarCode) throws URISyntaxException {
 
         ArrayList<Inventar> results = new ArrayList<>();
         String sSQL = null;
         Log.d("skenujem","Datovy Model 1");
 
-        if(myPoschodieKod != "" && myBarCode==""){
+        if(myKancelariaKod != "" && myBarCode==""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +
-                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
-                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myPoschodieKod + "' order by aa.itembarcode asc";
+                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myKancelariaKod + "' order by aa.datumREAL asc";
         }
 
-        if(myBarCode !="" && myPoschodieKod == ""){
+        if(myBarCode !="" && myKancelariaKod == ""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba, " +
-                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice FROM majetok aa " +
-                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.itembarcode asc";
+                    "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
+                    "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.datumREAL asc";
         }
 
 
@@ -112,6 +112,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
                 newItem.setTypeMajetku(cursor.getString(11));
                 newItem.setPrice(cursor.getString(12));
                 newItem.setPoznamka(cursor.getString(13));
+                newItem.setDatumReal((cursor.getLong(14)));
 
                 results.add(newItem);
 

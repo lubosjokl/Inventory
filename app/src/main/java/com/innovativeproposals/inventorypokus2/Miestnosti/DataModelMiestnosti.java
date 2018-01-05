@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 
+import com.innovativeproposals.inventorypokus2.Models.DbUtils;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
     public static final String ATR_ID = "_id";
     public static final String ATR_ROOMCODE = "roomcode";
     public static final String ATR_ROOMDESCRIPTION = "roomdescription";
+    public static final String ATR_POSTUPSPRACOVANIA = "PostupSpracovania";
 
 
     // zaklad
@@ -62,6 +65,8 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
+        String retazec = null;
+
         //kurzor na prvy zaznam
         if (cursor.moveToFirst())
         {
@@ -72,6 +77,15 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
                 //  hm.put(ATR_DIVIZIA, cursor.getString(1));
                 hm.put(ATR_ROOMCODE, cursor.getString(1));
                 hm.put(ATR_ROOMDESCRIPTION, cursor.getString(2));
+
+
+                int celkomInventarov = dajCelkovyPocetInventara(cursor.getString(1));
+                int spracovanychInventarov = dajPocetSpracovanehoInventara(cursor.getString(1));
+
+                retazec = Integer.toString(spracovanychInventarov)+"/"+Integer.toString(celkomInventarov);
+                hm.put(ATR_POSTUPSPRACOVANIA, retazec);
+
+
                 alVysledky.add(hm);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
@@ -96,6 +110,49 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
         }
         return hm;
     }
+
+    public Integer dajCelkovyPocetInventara(String myRoomCode) {
+
+        Integer results = 0;
+        String sSQL = null;
+        if(myRoomCode=="")
+            sSQL = "SELECT count(*)  FROM majetok";
+        else
+            sSQL = "SELECT count(*)  FROM majetok where roomcodenew = '"+myRoomCode+"'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results = cursor.getInt(0);
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        return results;
+    }
+
+    public Integer dajPocetSpracovanehoInventara(String myRoomCode) {
+
+        Integer results = 0;
+        String sSQL = null;
+        if(myRoomCode=="")
+            sSQL = "SELECT count(*) FROM majetok where status = 10 ";
+        else
+            sSQL = "SELECT count(*) FROM majetok where status = 10 and roomcodenew = '"+myRoomCode+"'";;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results = cursor.getInt(0);
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        return results;
+    }
+
 
 
 }

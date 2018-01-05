@@ -22,6 +22,7 @@
     <TextView
         android:id="@+id/kodOddeleniaET"
         style="@style/ListView_RowStyle"
+        android:textColor="@color/colorWhite"
         android:text="Kod"
         />
     </TableRow>

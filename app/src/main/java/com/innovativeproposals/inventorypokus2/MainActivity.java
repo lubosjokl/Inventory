@@ -20,7 +20,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.innovativeproposals.inventorypokus2.Budova.ListBudova;
 import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
         ArrayList<PieEntry> entries = new ArrayList();
 
-        int celkomInventarov = dm.dajCelkovyPocetInventara();
+        int celkomInventarov = dm.dajCelkovyPocetInventara("");
         int spracovane = dm.dajPocetSpracovanehoInventara();
 
         entries.add(new PieEntry(spracovane, getString(R.string.chart_processed))); // hodnoty dorob dynamicke

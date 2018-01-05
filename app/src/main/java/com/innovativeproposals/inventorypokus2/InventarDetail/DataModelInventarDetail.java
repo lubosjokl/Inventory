@@ -175,7 +175,6 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
         boolean existuje = false;
         long vysledok = 0;
-        //String obrazokSql = "INSERT INTO MajetokObrazky (obrazok, itembarcode) VALUES (" + myInventar.getImage() +",'"+ myInventar.getItemBarcode()+"')";
         String obrazokSql = "INSERT INTO MajetokObrazky ( obrazok, itembarcode) VALUES ( ? ,? )";
 
         String sSQL = "SELECT id  FROM MajetokObrazky where itembarcode = '" + myInventar.getItemBarcode()+ "'";
@@ -192,7 +191,6 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
         try
         {
-
             // https://stackoverflow.com/questions/7331310/how-to-store-image-as-blob-in-sqlite-how-to-retrieve-it
         SQLiteStatement insertStmt      =   db.compileStatement(obrazokSql);
         insertStmt.clearBindings();
@@ -211,23 +209,68 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-
         return vysledok;
     }
 
-    public int aktualizujZaznam(Inventar myInventar)
+    public int ulozInventar(Inventar myInventar)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         int aa = 0; // nepouzite
+        String mySql = null;
+        boolean isNew = false;
+
+        if(myInventar.getId()==0)
+            isNew = true;
 
         Date currentDate = new Date(System.currentTimeMillis());
 
         SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-       String ts =  format1.format(currentDate);
+        String ts =  format1.format(currentDate);
+        long millis = System.currentTimeMillis();
+        long realDatum = millis/1000;
+
+        try {
+
+        if(isNew == true)
+            mySql = "INSERT INTO majetok ( itemdescription, status, roomcodenew, serialnr, zodpovednaosoba, typmajetku, extranotice, datum, datumREAL, itembarcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+        else
+            mySql = "UPDATE majetok set itemdescription=?, status=?, roomcodenew=?,serialnr=?,zodpovednaosoba=?,typmajetku=?,extranotice=?,datum=?, datumREAL=? where Id = ? ";
+
+        SQLiteStatement insertStmt      =   db.compileStatement(mySql);
+        insertStmt.clearBindings();
+        // insertStmt.bindString(1, Integer.toString(this.accId));
+        insertStmt.bindString(1,myInventar.getItemDescription());
+        insertStmt.bindString(2,"10");
+        insertStmt.bindString(3,myInventar.getRommCode());
+        insertStmt.bindString(4,myInventar.getSerialNr());
+        insertStmt.bindString(5,myInventar.getZodpovednaOsoba());
+        insertStmt.bindString(6,myInventar.getTypeMajetku());
+        insertStmt.bindString(7,myInventar.getPoznamka());
+        insertStmt.bindString(8,ts);
+        insertStmt.bindLong(9,realDatum);
+        if(isNew) {
+            insertStmt.bindString(10, myInventar.getItemBarcode());
+//            insertStmt.executeInsert();
+        }
+        else {
+            // update
+            insertStmt.bindString(10, Integer.toString(myInventar.getId()));
+         //   insertStmt.executeUpdateDelete();
+        }
+
+            Log.d("update", "Query: " + insertStmt.toString());
+            insertStmt.executeInsert();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         // https://stackoverflow.com/questions/20349454/sqlite-not-updating-rows
-
-        String updateSql = "UPDATE majetok "
+/*
+        mySql = "UPDATE majetok "
             + " SET itemdescription = '" + myInventar.getItemDescription() +"' "
                 + ", status =  " + myInventar.getStatus()
                 + ", roomcodenew =  '" + myInventar.getRommCode() +"' "
@@ -238,18 +281,18 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
                 + ", datum =  '" + ts +"' "
             + " WHERE Id = "+ myInventar.getId();
 
-        Log.d("update","Query: "+updateSql);
+        Log.d("update","Query: "+mySql);
 
         try
         {
            // https://stackoverflow.com/questions/16383471/java-lang-illegalargumentexception-empty-bindargs
-            db.execSQL(updateSql); //Here it should be execSQL instead of rawQuery
+            db.execSQL(mySql); //Here it should be execSQL instead of rawQuery
 
         }
         catch (Exception e)
         {
             e.printStackTrace();
-        }
+        }*/
 
 /*
 

@@ -22,6 +22,7 @@ public class Inventar implements Parcelable {
     private String typeMajetku;
     private byte[] image;
     private String price;
+    private Long datumReal;
 
     public int getId() {
         return Id;
@@ -136,6 +137,14 @@ public class Inventar implements Parcelable {
         this.price = price;
     }
 
+    public Long getDatumReal() {
+        return datumReal;
+    }
+
+    public void setDatumReal(Long datumReal) {
+        this.datumReal = datumReal;
+    }
+
 
     @Override
     public int describeContents() {
@@ -158,6 +167,7 @@ public class Inventar implements Parcelable {
         dest.writeString(typeMajetku);
         dest.writeString(price);
         dest.writeByteArray(image);
+        dest.writeLong(datumReal);
     }
 
     public static final Parcelable.Creator<Inventar> CREATOR = new Parcelable.Creator<Inventar>() {
@@ -193,6 +203,7 @@ public class Inventar implements Parcelable {
         this.typeMajetku = in.readString();
         this.price = in.readString();
         this.image = in.createByteArray();
+        this.datumReal = in.readLong();
     }
 
     //Use this for cloning values
@@ -211,7 +222,9 @@ public class Inventar implements Parcelable {
         this.typeMajetku = clone.typeMajetku;
         this.price = clone.price;
         this.image = clone.image;
+        this.datumReal=clone.datumReal;
     }
+
 }
 
 

@@ -6,9 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.database.Cursor;
 
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 
 /**
@@ -43,10 +41,14 @@ public class DbUtils extends SQLiteOpenHelper {
 
 // doplnujuce funkcie
 
-    public Integer dajCelkovyPocetInventara() {
+    public Integer dajCelkovyPocetInventara(String myRoomCode) {
 
         Integer results = 0;
-        String sSQL = "SELECT count(*)  FROM majetok";
+        String sSQL = null;
+        if(myRoomCode=="")
+            sSQL = "SELECT count(*)  FROM majetok";
+        else
+            sSQL = "SELECT count(*)  FROM majetok where roomcodenew = '"+myRoomCode+"'";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);

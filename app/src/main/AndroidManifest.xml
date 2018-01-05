@@ -63,6 +63,8 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
         <activity android:name=".InfoActivity"
+            android:label="@string/info"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
             />
 

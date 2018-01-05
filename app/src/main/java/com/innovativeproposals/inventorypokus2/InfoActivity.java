@@ -114,7 +114,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         addStartScanButtonListener();
         //startScan(); // povolenie skenera nefunguje
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
-        startScannerRead(); // volanie skenera
+        // xx startScannerRead(); // volanie skenera
     }
 
     private void addStartScanButtonListener() {
@@ -158,6 +158,12 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private void doShowDetailCall() throws URISyntaxException {
 
         // TODO : skener sa musi dat aktivovat programovo, treba vyvolat onClick , alebo priamo zavolat startScan();
+
+        if (barcodeString == null) {
+            barcodeString = scannET.getText().toString();
+        }
+
+
         if (barcodeString.equals("")) {
             barcodeString = scannET.getText().toString();
         }
@@ -167,7 +173,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             return;
         }
 
-        if (barcodeString == "") {
+        if (barcodeString.equals("")) {
             Toast.makeText(this, R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
             return;
         }
@@ -182,13 +188,10 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         Log.d("skenujem", "Show 4");
         Inventar inventar = zoznamHM.get(0);
 
-        barcodeString = "";
+        barcodeString = ""; // xx
         // scannET.setText(""); // tuna to padne, presunul som na onResume
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
-
-
         theIndent.putExtra("inventar_object", inventar);
-
         startActivity(theIndent);
 
     }
@@ -669,6 +672,9 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     @Override
     protected void onResume() {
         super.onResume();
+
+        scannET.setText(""); // vycistit pri navrate z detailu
+
         // The application is in foreground
 //
 //        // Acquire the barcode manager resources

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Inventur</string>
+
+    <string name="activity_zoznam_budov">Gebäude</string>
+    <string name="activity_zoznam_poschodie">Stockwerke</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="search_hint">Suchen nach barcode</string>
+
+    <string name="search_title">Suchen</string>
+    <string name="action_settings">Einstelungen</string>
+    <string name="zoznam_budov">Liste der Gebäude</string>
+    <string name="inventory">Inventur</string>
+    <string name="zoznam_poschodi">Liste der Stockwerken</string>
+    <string name="zoznam_miestnosti">Liste der Zimmern</string>
+    <string name="inventar_vmiestnosti">Inventar im Zimmer</string>
+    <string name="last_change">Letzte Änderung</string>
+    <string name="description_inventory_type">Inventarstype</string>
+    <string name="description_notice">Bezeichnung</string>
+    <string name="description_serialnr">Serien Nr.</string>
+    <string name="description_inventoryName">Inventar-Name</string>
+    <string name="description_added">Eingeordnet</string>
+    <string name="description_discarded">Ausgeschaltet</string>
+    <string name="description_responsible">Zugewiesen</string>
+    <string name="price">Preis</string>
+    <string name="activity_InventarDetail">Inventarsdetail</string>
+    <string name="activity_settings">Einstellungen</string>
+    <string name="ScanOrType">Skennieren oder tippen das Barcode</string>
+    <string name="info">Auskunft</string>
+    <string name="scann_barcode_first">Zuerst Barcode scannieren</string>
+    <string name="barcode_doesnt_exist">Barcode existiert nicht</string>
+    <string name="Price">Preis : </string>
+
+
+    <!--Chart-->
+    <string name="chart_processed">Inventarisierte</string>
+    <string name="chart_opened">Nicht inventarisierte</string>
+    <string name="chart_items">Positionen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="setting">Einstellungen</string>
+    <string name="preference_description">Inventur</string>
+    <string name="daysOfInventory">Anzahl Tages der Inventur</string>
+    <string name="barcode_doesnt_read_properly">Barcode wurde nicht richtig gelesen</string>
+    <string name="komunikacia">Kommunikation</string>
+</resources>

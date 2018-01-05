@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -63,6 +64,12 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         itemDescription.setText(inventar.getItemDescription());
         itemStatus.setText(inventar.getStatus());
         itemDatum.setText(inventar.getDatum());
+
+        // ak status = 10 tak zmen farbu na zelenu // status bol null, row
+        if(inventar.getStatus() != null)
+            row.setBackgroundColor(Color.rgb(237,255,216)); //android:background="#DCEDC8"
+        else
+            row.setBackgroundColor(Color.WHITE); //android:background="#DCEDC8"
 
         //ulozenie ID-cka do riadku; ale mozeme sem ulozit aj cely objekt inventara (toto moze byy overkill pri vacsom obsahu dat)
         row.setTag(inventar.getId());
