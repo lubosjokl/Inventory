@@ -10,12 +10,6 @@
         android:padding="5dip">
 
         <TextView
-            android:id="@+id/roomcodeET"
-            style="@style/ListView_RowStyle"
-            android:textColor="@color/colorWhite"
-            android:text="kod" />
-
-        <TextView
             android:id="@+id/roomdescriptionET"
             style="@style/ListView_RowStyle"
             android:text="Miestnost" />
@@ -24,6 +18,13 @@
             android:id="@+id/postupET"
             style="@style/ListView_RowStyle"
             android:text="Postup" />
+
+        <TextView
+            android:id="@+id/roomcodeET"
+            style="@style/ListView_RowStyle"
+            android:textColor="@color/colorWhite"
+            android:text="kod" />
+
 
 
     </TableRow>

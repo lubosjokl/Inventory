@@ -36,7 +36,7 @@
 
     <!--Chart-->
     <string name="chart_processed">Spracovane</string>
-    <string name="chart_opened">Nespracovane</string>
+    <string name="chart_opened">Spolu</string>
     <string name="chart_items">Polozky</string>
     <string name="settings">Nastavenie</string>
     <string name="setting">Nastavenie hodnôt</string>
@@ -44,4 +44,5 @@
     <string name="daysOfInventory">Počet dní inventúry</string>
     <string name="barcode_doesnt_read_properly">Barcode sa nenacital spravne</string>
     <string name="komunikacia">Komunikácia</string>
+    <string name="meno_musi_byt_vyplnene">Meno musi byt vyplnene</string>
 </resources>

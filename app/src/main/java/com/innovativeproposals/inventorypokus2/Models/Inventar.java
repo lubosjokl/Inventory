@@ -167,7 +167,8 @@ public class Inventar implements Parcelable {
         dest.writeString(typeMajetku);
         dest.writeString(price);
         dest.writeByteArray(image);
-        dest.writeLong(datumReal);
+        if(datumReal!= null)
+            dest.writeLong(datumReal); // TODO - tu to padne pri zalozeni noveho inventara
     }
 
     public static final Parcelable.Creator<Inventar> CREATOR = new Parcelable.Creator<Inventar>() {

@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.innovativeproposals.inventorypokus2.InventarVMiestnosti.ListInventarVMiestnosti;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
@@ -73,6 +74,23 @@ public class ViewInventarDetail extends AppCompatActivity {
                 return true;
 
             case R.id.menu_item_save:
+
+                try {
+                    Object aa = itemdescriptionET.getText();
+                    String xx = "" + itemdescriptionET.getText();
+                    if (xx.equals("")) {
+                        Toast.makeText(this, R.string.meno_musi_byt_vyplnene, Toast.LENGTH_LONG).show();
+                        return false;
+
+                    }
+                }
+                catch (Exception e) {
+                    Toast.makeText(this, R.string.meno_musi_byt_vyplnene, Toast.LENGTH_LONG).show();
+                    return false;
+
+                }
+
+
                 //serializuj data spat
                 inventar.setItemDescription(itemdescriptionET.getText().toString());
                 inventar.setTypeMajetku(spinner_inventoryType.getSelectedItem().toString());
@@ -82,21 +100,20 @@ public class ViewInventarDetail extends AppCompatActivity {
                 inventar.setZodpovednaOsoba(spinner_responsible.getSelectedItem().toString());
                 inventar.setImage(getImageBytesFromImageView());
 
-                String xx = origRoomCode;
-                // aku ma hodnotu
-                // pri inventarizacii noveho inventara
-                // pri inventarizacii stareho
-                // pri info
+                // Test variantov: aku ma hodnotu origRoomCode ?
+                // pri inventarizacii noveho inventara = kod miestnosti v kotrj robim inventarizaciu
+                // pri inventarizacii existujuceho inventara = kod miestnosti v kotrj robim inventarizaciu
+                // pri info = kod miestnosti skenovaneho inventara
 
-                inventar.setRommCode(origRoomCode);
+                inventar.setRommCode(origRoomCode); // vo vsetkych pripadoch ju mozem prepisat
 
 
                 //tu uloz nove data do databazy
 
-                long ako = dm.ulozInventar(inventar);
+                dm.ulozInventar(inventar);
 
                 if(inventar.getImage() != null)
-                    ako = dm.ulozObrazok(inventar);
+                    dm.ulozObrazok(inventar);
 
                 //ukonci aktualnu aktivitu
                 Intent returnIntent = new Intent();
@@ -158,20 +175,30 @@ public class ViewInventarDetail extends AppCompatActivity {
         String isValue = "";
         inventar = null;
         origRoomCode= "";
+        String newBarcode = "";
 
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             inventar = getIntent().getParcelableExtra(ListInventarVMiestnosti.INTENT_INVENTORY);
             origRoomCode = extras.getString("roomcode");
+            newBarcode = extras.getString("barcode");
+
         }
 
         // toto mi tu nechaj, alebo uprav odoslanie info z InfoActivity
         if(inventar==null) {
-            // tadialto ide aj pri novom barcode
-            inventar = getIntent().getParcelableExtra("inventar_object");
 
+            inventar = getIntent().getParcelableExtra("inventar_object");
         }
+
+        // toto je urobene z nudze pre novy naskenovany inventar
+        if(inventar==null) {
+            inventar = new Inventar();
+            inventar.setRommCode(origRoomCode);
+            inventar.setItemBarcode(newBarcode);
+        }
+
 
         setContentView(R.layout.inventar_detail);
         locateControls();

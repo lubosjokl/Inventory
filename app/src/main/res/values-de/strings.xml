@@ -33,10 +33,9 @@
     <string name="barcode_doesnt_exist">Barcode existiert nicht</string>
     <string name="Price">Preis : </string>
 
-
     <!--Chart-->
     <string name="chart_processed">Inventarisierte</string>
-    <string name="chart_opened">Nicht inventarisierte</string>
+    <string name="chart_opened">Zusammen</string>
     <string name="chart_items">Positionen</string>
     <string name="settings">Einstellungen</string>
     <string name="setting">Einstellungen</string>
@@ -44,4 +43,5 @@
     <string name="daysOfInventory">Anzahl Tages der Inventur</string>
     <string name="barcode_doesnt_read_properly">Barcode wurde nicht richtig gelesen</string>
     <string name="komunikacia">Kommunikation</string>
+    <string name="meno_musi_byt_vyplnene">Name darf nicht leer sein</string>
 </resources>

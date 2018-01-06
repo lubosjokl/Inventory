@@ -109,12 +109,11 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         textViewStatus = (TextView) findViewById(R.id.textViewStatus);
         buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
 
-        // scannET.setText(""); // vycistit pri vytvoreni
 
         addStartScanButtonListener();
         //startScan(); // povolenie skenera nefunguje
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
-        // xx startScannerRead(); // volanie skenera
+
     }
 
     private void addStartScanButtonListener() {
@@ -157,12 +156,11 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     private void doShowDetailCall() throws URISyntaxException {
 
-        // TODO : skener sa musi dat aktivovat programovo, treba vyvolat onClick , alebo priamo zavolat startScan();
+        // TODO : skener sa aktivuje programovo v onOpened
 
         if (barcodeString == null) {
             barcodeString = scannET.getText().toString();
         }
-
 
         if (barcodeString.equals("")) {
             barcodeString = scannET.getText().toString();
@@ -191,6 +189,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         barcodeString = ""; // xx
         // scannET.setText(""); // tuna to padne, presunul som na onResume
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
+        theIndent.putExtra("roomcode",inventar.getRommCode());
         theIndent.putExtra("inventar_object", inventar);
         startActivity(theIndent);
 
@@ -233,6 +232,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     @Override
     public void onOpened(EMDKManager emdkManager) {
+
         textViewStatus.setText("Status: " + "EMDK open success!");
 
         this.emdkManager = emdkManager;
@@ -343,7 +343,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 statusString = statusData.getFriendlyName() + " is disabled.";
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(true);
-                enableScanner(); // viedensky priklad
+             //   enableScanner(); // viedensky priklad
                 break;
             case ERROR:
                 statusString = "An error has occurred.";
@@ -591,6 +591,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     // z viedenskeho prikladu
     //@Override
+    /*
     public void startScannerRead() {
         if (mScannerEnabled) {
             if (scanner == null) {
@@ -627,7 +628,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             }
         }
     }
-
+*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -675,29 +676,29 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         scannET.setText(""); // vycistit pri navrate z detailu
 
-        // The application is in foreground
-//
-//        // Acquire the barcode manager resources
-//        if (emdkManager != null) {
-//            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
-//
-//            // Add connection listener
-//            if (barcodeManager != null) {
-//                barcodeManager.addConnectionListener(this);
-//            }
-//
-//            // Enumerate scanner devices
-//            enumerateScannerDevices();
-//
-//            // Set selected scanner
-//            // spinnerScannerDevices.setSelection(scannerIndex);
-//
-//            // Initialize scanner
-//            initScanner();
-//            setTrigger();
-//            setDecoders();
-//            scannET.setText(""); // vycistit pri navrate z detailu
-//        }
+        // Toto tu musi byt, inak nam po navrate z detailu nefunguje spravne skener
+
+        if (emdkManager != null) {
+            barcodeManager = (BarcodeManager) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.BARCODE);
+
+            // Add connection listener
+            if (barcodeManager != null) {
+                barcodeManager.addConnectionListener(this);
+            }
+
+            // Enumerate scanner devices
+            enumerateScannerDevices();
+
+            // Set selected scanner
+            // spinnerScannerDevices.setSelection(scannerIndex);
+
+            // Initialize scanner
+            initScanner();
+            setTrigger();
+            setDecoders();
+            startScan();
+            scannET.setText(""); // vycistit pri navrate z detailu
+        }
     }
 
     @Override
