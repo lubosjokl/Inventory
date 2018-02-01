@@ -44,4 +44,5 @@
     <string name="barcode_doesnt_read_properly">Barcode wurde nicht richtig gelesen</string>
     <string name="komunikacia">Kommunikation</string>
     <string name="meno_musi_byt_vyplnene">Name darf nicht leer sein</string>
+    <string name="start_btn_label">Start</string>
 </resources>

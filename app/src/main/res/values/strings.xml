@@ -45,4 +45,5 @@
     <string name="barcode_doesnt_read_properly">Barcode sa nenacital spravne</string>
     <string name="komunikacia">Komunikácia</string>
     <string name="meno_musi_byt_vyplnene">Meno musi byt vyplnene</string>
+    <string name="start_btn_label">Štart</string>
 </resources>
