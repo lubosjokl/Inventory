@@ -24,11 +24,11 @@
 
             <ImageView
                 android:id="@+id/detailView_Image"
-                android:transitionName="detailView_Image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                 />
+                android:transitionName="detailView_Image"
+                android:contentDescription="obrazok" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -39,7 +39,6 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
-
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -47,46 +46,48 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_parent_layout">
 
+            <!-- barcode -->
             <TextView
                 android:id="@+id/barcodeET"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="barcode"
+                android:text="@string/barcode"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toRightOf="parent"
-                app:layout_constraintRight_toLeftOf="parent"
-                tools:layout_editor_absoluteY="8dp" />
-
+                android:textSize="18sp" />
+            <!-- datum poslednej inventury -->
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textViewlastInventory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/last_change"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/barcodeET" />
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/barcodeET"
+                android:text="@string/last_change" />
 
             <TextView
                 android:id="@+id/lastInventory"
-                android:layout_width="103dp"
-                android:layout_height="22dp"
-                android:textAppearance="@style/spinnerDropDownItemStyle"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewlastInventory"
+                android:text="01.01.1970"
+                android:textAppearance="@style/spinnerDropDownItemStyle" />
 
+            <!-- nazov inventara -->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textLayout_NazovInventara"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/lastInventory">
+                android:layout_below="@id/lastInventory"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
                 <EditText
                     android:id="@+id/descriptionET"
@@ -95,49 +96,42 @@
                     android:ems="10"
                     android:hint="@string/description_inventoryName"
                     android:inputType="textPersonName" />
-
             </android.support.design.widget.TextInputLayout>
 
+            <!-- typ inventara -->
             <TextView
                 android:id="@+id/lbl_InventoryType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textLayout_NazovInventara"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="@string/description_inventory_type"
-                app:layout_constraintTop_toBottomOf="@id/textLayout_NazovInventara" />
+                android:text="@string/description_inventory_type" />
 
-            <RelativeLayout
-                android:id="@+id/layout_InventoryType"
+            <Spinner
+                android:id="@+id/spinner_InventoryType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom"
-                android:padding="4dp"
-                app:layout_constraintTop_toBottomOf="@id/lbl_InventoryType">
+                android:layout_below="@id/lbl_InventoryType"
+                android:spinnerMode="dropdown" />
 
-                <Spinner
-                    android:id="@+id/spinner_InventoryType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />
-
-            </RelativeLayout>
-
+            <!-- cena inventara -->
             <TextView
                 android:id="@+id/priceET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/spinner_InventoryType"
                 android:text="@string/price"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_InventoryType" />
+                android:textSize="18sp" />
 
+            <!-- poznamka -->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textLayout_Notice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                app:layout_constraintTop_toBottomOf="@id/priceET">
+                android:layout_below="@id/priceET"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
 
                 <EditText
                     android:id="@+id/notice"
@@ -148,12 +142,12 @@
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
-
+            <!-- seriove cislo -->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textLayout_SerialNr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/textLayout_Notice">
+                android:layout_below="@id/textLayout_Notice">
 
                 <EditText
                     android:id="@+id/txt_SerialNr"
@@ -162,84 +156,71 @@
                     android:ems="10"
                     android:hint="@string/description_serialnr"
                     android:inputType="textPersonName" />
-
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <!-- co je toto?
+
                 android:id="@+id/layout_added_discarded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textLayout_SerialNr">
+ -->
 
-                <!--Added-->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:orientation="vertical">
+            <!-- Zaradeny, vyradeny text -->
 
-                    <TextView
-                        android:id="@+id/lbl_Added"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/description_added" />
+            <TextView
+                android:id="@+id/lbl_Discarded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textLayout_SerialNr"
+                android:layout_alignParentEnd="true"
+                android:text="@string/description_discarded" />
 
-                    <TextView
-                        android:id="@+id/txt_Added"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="11.11.2017"
-                        android:textAppearance="@style/spinnerDropDownItemStyle" />
+            <TextView
+                android:id="@+id/lbl_Added"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_below="@id/textLayout_SerialNr"
+                android:layout_toStartOf="@id/lbl_Discarded"
+                android:text="@string/description_added" />
 
-                </LinearLayout>
+            <!-- Zaradeny, vyradeny hodnoty -->
+            <TextView
+                android:id="@+id/txt_Discarded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11.11.2017"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/lbl_Added"
+                android:textAppearance="@style/spinnerDropDownItemStyle" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_Added"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11.11.2017"
+                android:layout_below="@id/lbl_Added"
+                android:layout_toStartOf="@id/txt_Discarded"
+                android:textAppearance="@style/spinnerDropDownItemStyle" />
 
-                    <TextView
-                        android:id="@+id/lbl_Discarded"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/description_discarded" />
+            <!-- Zodpovedny -->
+            <TextView
+                android:id="@+id/lbl_Responsible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_Added"
+                android:text="@string/description_responsible" />
 
-                    <TextView
-                        android:id="@+id/txt_Discarded"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="11.11.2017"
-                        android:textAppearance="@style/spinnerDropDownItemStyle" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/layout_Responsible"
+            <Spinner
+                android:id="@+id/spinner_responsible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_bottom"
-                android:orientation="vertical"
-                android:padding="4dp"
-                app:layout_constraintTop_toBottomOf="@+id/layout_added_discarded">
+                android:layout_below="@id/lbl_Responsible"
+                android:spinnerMode="dropdown" />
 
-                <TextView
-                    android:id="@+id/lbl_Responsible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/description_responsible" />
-
-                <Spinner
-                    android:id="@+id/spinner_responsible"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />
-
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/location"
@@ -249,13 +230,12 @@
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/layout_Responsible"
-                tools:layout_editor_absoluteX="8dp" />
+                android:layout_below="@id/spinner_responsible"/>
 
-
-        </android.support.constraint.ConstraintLayout>
+        </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
+    <!-- fotenie -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_inventar_detail_take_picture"
         android:layout_width="wrap_content"

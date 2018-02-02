@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhiteBlue">#E3F2FD</color>
     <color name="colorWhite">@android:color/white</color>
+    <color name="blue">#9cf</color>
+    <color name="purple">#c9f</color>
 </resources>

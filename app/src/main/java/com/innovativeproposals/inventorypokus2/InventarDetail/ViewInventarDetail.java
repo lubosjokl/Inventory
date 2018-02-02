@@ -90,7 +90,6 @@ public class ViewInventarDetail extends AppCompatActivity {
 
                 }
 
-
                 //serializuj data spat
                 inventar.setItemDescription(itemdescriptionET.getText().toString());
                 inventar.setTypeMajetku(spinner_inventoryType.getSelectedItem().toString());
@@ -119,7 +118,8 @@ public class ViewInventarDetail extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
                 // TODO pri navrate neaktualizuje datum, alebo to treba urobit reloadnutim Listu
-                setResult(Activity.RESULT_OK, returnIntent);
+                // TODO pri editacii lubovolneho pola, napr. seriove cislo sa zablokuje touch screen
+                //                setResult(Activity.RESULT_OK, returnIntent);
                 this.finish();
                 return true;
         }

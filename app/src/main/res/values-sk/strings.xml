@@ -33,7 +33,6 @@
     <string name="barcode_doesnt_exist">Neexistujuci barcode</string>
     <string name="Price">Cena : </string>
 
-
     <!--Chart-->
     <string name="chart_processed">Spracovane</string>
     <string name="chart_opened">Spolu</string>
@@ -45,5 +44,22 @@
     <string name="barcode_doesnt_read_properly">Barcode sa nenacital spravne</string>
     <string name="komunikacia">Komunikácia</string>
     <string name="meno_musi_byt_vyplnene">Meno musi byt vyplnene</string>
+
+    <!--Scanner -->
     <string name="start_btn_label">Štart</string>
+    <string name="stop">Stop</string>
+    <string name="status">Status :</string>
+    <string name="scannerIsWaitingForTrigger">Skener je pripravený na skenovanie...</string>
+    <string name="AnErrorISOccured">Vyskytla sa chyba.</string>
+    <string name="isDisabled">je zakázaný.</string>
+    <string name="scanning">Skenujem...</string>
+    <string name="scannerIsNotEnabled">Status: Skener nie je prístupný</string>
+    <string name="FailedToGetScannerDevice">Vyskytla sa chyba počas prístupu na skener! Reštartujte aplikáciu.</string>
+    <string name="FailedToInitializeScannerDevice">Chyba pri inicializácii skeneru.</string>
+    <string name="isEnabledAndIdle">je povolený a nečinný...</string>
+    <string name="EMDKclosedUnexpectedlz">EMDK sa neočakávane ukončil! Reštartujte aplikáciu.</string>
+    <string name="EMDK_OpenSuccess">EMDK bol úspešne aktivovaný!</string>
+
+
+
 </resources>

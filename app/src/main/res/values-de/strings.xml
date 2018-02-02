@@ -44,5 +44,21 @@
     <string name="barcode_doesnt_read_properly">Barcode wurde nicht richtig gelesen</string>
     <string name="komunikacia">Kommunikation</string>
     <string name="meno_musi_byt_vyplnene">Name darf nicht leer sein</string>
+
+    <!--Scanner -->
     <string name="start_btn_label">Start</string>
+    <string name="stop">Stop</string>
+    <string name="status">Status :</string>
+    <string name="scannerIsWaitingForTrigger">Scanner wartet auf Scann...</string>
+    <string name="AnErrorISOccured">Fehler ist passiert.</string>
+    <string name="isDisabled">ist verboten.</string>
+    <string name="scanning">Scanning...</string>
+    <string name="scannerIsNotEnabled">Status: Scanner ist nicht erlaubt</string>
+    <string name="FailedToGetScannerDevice">Fehler bei Scannerszugriff! Bitte Applikation schliessen und wieder starten.</string>
+    <string name="FailedToInitializeScannerDevice">Fehler bei der Scannerinizialisierung.</string>
+    <string name="isEnabledAndIdle">ist erlaubt und untätig...</string>
+    <string name="EMDKclosedUnexpectedlz">EMDK wurde geschlossen! Bitte Applikation schliessen und wieder starten.</string>
+    <string name="EMDK_OpenSuccess">EMDK richtig gestartet!</string>
+
+
 </resources>

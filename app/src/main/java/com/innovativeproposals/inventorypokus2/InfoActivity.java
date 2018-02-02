@@ -101,43 +101,30 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // resetActionBar();
-
 
         scannET = (EditText) findViewById(R.id.scannET);
-        // textViewData = (TextView) findViewById(R.id.textViewData);
         textViewStatus = (TextView) findViewById(R.id.textViewStatus);
-        buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
-
+         buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
 
         addStartScanButtonListener();
-        //startScan(); // povolenie skenera nefunguje
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
-
     }
 
     private void addStartScanButtonListener() {
-
         Button btnStartScan = (Button) findViewById(R.id.buttonStartScan);
         btnStartScan.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
-
                 startScan();
             }
         });
     }
 
     private void addStopScanButtonListener() {
-
         Button btnStopScan = (Button) findViewById(R.id.buttonStopScan);
-
         btnStopScan.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
                 stopScan();
             }
         });
@@ -151,7 +138,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 e.printStackTrace();
             }
         });
-
     }
 
     private void doShowDetailCall() throws URISyntaxException {
@@ -233,7 +219,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     @Override
     public void onOpened(EMDKManager emdkManager) {
 
-        textViewStatus.setText("Status: " + "EMDK open success!");
+        textViewStatus.setText("Status: " + getString(R.string.EMDK_OpenSuccess));
 
         this.emdkManager = emdkManager;
 
@@ -274,7 +260,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             emdkManager.release();
             emdkManager = null;
         }
-        textViewStatus.setText("Status: " + "EMDK closed unexpectedly! Please close and restart the application.");
+        textViewStatus.setText("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
     }
 
     @Override
@@ -308,7 +294,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         StatusData.ScannerStates state = statusData.getState();
         switch (state) {
             case IDLE:
-                statusString = statusData.getFriendlyName() + " is enabled and idle...";
+                statusString = statusData.getFriendlyName() + getString(R.string.isEnabledAndIdle);
                 new AsyncStatusUpdate().execute(statusString);
                 if (bContinuousMode) {
                     try {
@@ -330,23 +316,23 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 new AsyncUiControlUpdate().execute(true);
                 break;
             case WAITING:
-                statusString = "Scanner is waiting for trigger press...";
+                statusString = getString(R.string.scannerIsWaitingForTrigger);
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(false);
                 break;
             case SCANNING:
-                statusString = "Scanning...";
+                statusString = getString(R.string.scanning);
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(false);
                 break;
             case DISABLED:
-                statusString = statusData.getFriendlyName() + " is disabled.";
+                statusString = statusData.getFriendlyName() + getString(R.string.isDisabled);
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(true);
              //   enableScanner(); // viedensky priklad
                 break;
             case ERROR:
-                statusString = "An error has occurred.";
+                statusString = getString(R.string.AnErrorISOccured);
                 new AsyncStatusUpdate().execute(statusString);
                 new AsyncUiControlUpdate().execute(true);
                 break;
@@ -503,7 +489,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
                     new AsyncUiControlUpdate().execute(false);
                 } else {
-                    textViewStatus.setText("Status: Scanner is not enabled");
+                    textViewStatus.setText(R.string.scannerIsNotEnabled);
                 }
 
             } catch (ScannerException e) {
@@ -542,7 +528,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             if ((deviceList != null) && (deviceList.size() != 0)) {
                 scanner = barcodeManager.getDevice(deviceList.get(scannerIndex));
             } else {
-                textViewStatus.setText("Status: " + "Failed to get the specified scanner device! Please close and restart the application.");
+                textViewStatus.setText("Status: " + getString(R.string.FailedToGetScannerDevice));
                 return;
             }
 
@@ -558,7 +544,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                     textViewStatus.setText("Status: " + e.getMessage());
                 }
             } else {
-                textViewStatus.setText("Status: " + "Failed to initialize the scanner device.");
+                textViewStatus.setText("Status: " + getString(R.string.FailedToInitializeScannerDevice));
             }
         }
     }

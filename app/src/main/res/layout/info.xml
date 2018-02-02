@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerHorizontal="false"
-    android:layout_centerInParent="false"
-    android:layout_centerVertical="false">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
 
@@ -24,86 +20,65 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="52dp"
+        android:id="@+id/nadpis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="18sp"
         android:gravity="center"
-        android:text="@string/ScanOrType"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:text="@string/ScanOrType" />
 
     <EditText
         android:id="@+id/scannET"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/nadpis"
         android:layout_marginTop="50dp"
-
-        android:layout_marginRight="34dp"
-        android:ems="14"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="barcode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/buttonStartScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="64dp"
-        android:text="Start"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/scannET"
-        app:layout_constraintTop_toBottomOf="@+id/scannET" />
-
-    <Button
-        android:id="@+id/buttonStopScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="81dp"
-        android:layout_marginTop="64dp"
-        android:text="Stop"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="@+id/btOK"
-        app:layout_constraintTop_toBottomOf="@+id/scannET" />
-
+        android:text="@string/barcode" />
 
     <Button
         android:id="@+id/btOK"
         android:layout_width="180dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="260dp"
-        android:gravity="center"
+        android:layout_marginTop="70dp"
+        android:layout_centerInParent="true"
         android:text="@android:string/ok"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStartScan"
-        app:layout_constraintVertical_bias="1.0" />
+        android:layout_below="@id/scannET" />
 
+    <Button
+        android:id="@+id/buttonStartScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/start"
+        android:visibility="invisible"
+        android:layout_below="@id/btOK"
+        android:layout_toStartOf="@id/btOK" />
+
+    <Button
+        android:id="@+id/buttonStopScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/stop"
+        android:layout_below="@id/btOK"
+        android:visibility="invisible"
+        android:layout_toEndOf="@id/btOK" />
 
     <TextView
         android:id="@+id/textViewStatus"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:text="Status : "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.98" />
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="@string/status" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
