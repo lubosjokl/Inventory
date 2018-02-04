@@ -39,12 +39,11 @@
             />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/textLayout_ServerHttp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txt_server_http"
+                android:id="@+id/etServerAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="http://192.168.1.1"/>
@@ -52,7 +51,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/textview2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -64,12 +62,12 @@
             />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/textLayout_ServerPort"
+            android:id="@+id/ServerPort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txt_server_ip"
+                android:id="@+id/etServerPort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="11235"/>
@@ -77,7 +75,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/textview3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -89,12 +86,11 @@
             />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/textLayout_DaysOFInventorty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/txt_days_of_inventory"
+                android:id="@+id/etDaysOfInventory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="5"/>

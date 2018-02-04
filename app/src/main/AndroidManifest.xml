@@ -59,7 +59,7 @@
         </activity>
         <activity
             android:name=".InventarDetail.ViewInventarDetail"
-            android:label="@string/activity_InventarDetail"
+            android:label=""
             android:screenOrientation="portrait"
             android:parentActivityName=".InventarVMiestnosti.ListInventarVMiestnosti" />
         <activity android:name=".InfoActivity"

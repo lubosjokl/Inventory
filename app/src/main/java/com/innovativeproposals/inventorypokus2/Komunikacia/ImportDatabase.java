@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.R;
 
 import java.security.SecureRandom;
@@ -72,8 +75,15 @@ public class ImportDatabase extends Activity implements View.OnClickListener {
         //mProgressTxt.setText(R.string.filling_buf);
         mProgressTxt.setText("co tu je?");
 
+        // ziskaj globalne SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName()+ Constants.PREF_FILE_NAME,MODE_PRIVATE);
 
-        String fileURL = "http://192.168.1.119:11235";
+        String address = sharedPreferences.getString(Constants.KEY_ADDRESS,"not defined"); // druhy parameter je defaultna hodnota
+        String port = sharedPreferences.getString(Constants.KEY_PORT,"11235");
+        int daysOfInventory = sharedPreferences.getInt(Constants.KEY_DAYS_OF_INVENTORY,5);
+
+        //String fileURL = "http://192.168.1.119:11235";
+        String fileURL = address + ":" + port;
 
         File saveDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         // adresar niekedy nie je vytvoreny a tato funkcia ho vytvori
