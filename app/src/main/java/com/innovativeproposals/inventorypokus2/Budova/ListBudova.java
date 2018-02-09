@@ -24,11 +24,8 @@ import java.util.HashMap;
 
 public class ListBudova extends AppCompatActivity
 {
-    Intent intent;
-    TextView diviziaId;
-    TextView diviziaET;
-    TextView kodDiviziaET;
 
+    TextView diviziaET;
     DataModelBudova dm = new DataModelBudova(this);
 
     protected void onCreate(Bundle savedInstanceState)
@@ -39,7 +36,6 @@ public class ListBudova extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         ArrayList<HashMap<String, String>> zoznamHM =dm.dajZaznamy();
 
@@ -52,20 +48,12 @@ public class ListBudova extends AppCompatActivity
                 public void onItemClick(AdapterView<?> parent,
                                         View view, int position, long id)
                 {
-
                     diviziaET = (TextView) view.findViewById(R.id.diviziaET);
 
                     String sParameter = diviziaET.getText().toString();
                     Intent theIndent = new Intent(getApplication(),
                             ListPoschodie.class);
                     theIndent.putExtra("diviziaET", sParameter);
-                   // theIndent.putExtra(sParameter,sParameter);
-/*
-  <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="5dip">*/
-
 
                     startActivity(theIndent);
                 }
@@ -73,11 +61,7 @@ public class ListBudova extends AppCompatActivity
             ListAdapter adapter = new SimpleAdapter( ListBudova.this,
                     zoznamHM,
                     R.layout.budova_riadok,
-        //            new String[] { "_id","divizia","KodDivizie"}, new int[] {R.id.divizaId,
-          //          R.id.diviziaET,R.id.kodDiviziaET});
-
                     new String[] { "divizia"}, new int[] {R.id.diviziaET});
-
 
             lw.setAdapter(adapter);
         }

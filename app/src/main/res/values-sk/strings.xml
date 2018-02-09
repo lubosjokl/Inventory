@@ -10,7 +10,7 @@
     <string name="search_hint">Hladaj polozku</string>
 
     <string name="search_title">Hladaj</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Nastavenie</string>
     <string name="zoznam_budov">Zoznam budov</string>
     <string name="inventory">Inventúra</string>
     <string name="zoznam_poschodi">Zoznam poschodí</string>
@@ -28,15 +28,15 @@
     <string name="activity_InventarDetail">Detail inventára</string>
     <string name="activity_settings">Nastavenie</string>
     <string name="ScanOrType">Naskenujte alebo zadajte kód inventára</string>
-    <string name="info">Info</string>
+    <string name="info">Inventár info</string>
     <string name="scann_barcode_first">Najprv nasnimajte barcode</string>
     <string name="barcode_doesnt_exist">Neexistujuci barcode</string>
     <string name="Price">Cena : </string>
 
     <!--Chart-->
-    <string name="chart_processed">Spracovane</string>
+    <string name="chart_processed">Spracované</string>
     <string name="chart_opened">Spolu</string>
-    <string name="chart_items">Polozky</string>
+    <string name="chart_items">položky</string>
     <string name="settings">Nastavenie</string>
     <string name="setting">Nastavenie hodnôt</string>
     <string name="preference_description">Inventúra majetku</string>
@@ -60,6 +60,7 @@
     <string name="EMDKclosedUnexpectedlz">EMDK sa neočakávane ukončil! Reštartujte aplikáciu.</string>
     <string name="EMDK_OpenSuccess">EMDK bol úspešne aktivovaný!</string>
 
+    <string name="importData">Import databázy</string>
 
 
 </resources>

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.database.Cursor;
 
-
+import com.innovativeproposals.inventorypokus2.Constants;
 
 
 /**
@@ -15,7 +15,7 @@ import android.database.Cursor;
 
 
 public class DbUtils extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = "inventory";
+    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "majetok";
 

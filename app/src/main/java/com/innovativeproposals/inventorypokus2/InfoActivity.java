@@ -8,13 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -72,13 +75,8 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     String barcodeString = null;
     List<Inventar> zoznamHM = null;
     DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this);
-    //public final static String INTENT_INVENTORY = "inventar";
 
     protected void onCreate(Bundle savedInstanceState) {
-
-        // obnovim premenne ulozene dom kolekcie
-        //  if (savedInstanceState != null)
-        //    restoreState(savedInstanceState);
 
         super.onCreate(savedInstanceState);
 
@@ -88,13 +86,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
             textViewStatus.setText("Status: " + "EMDKManager object request failed!");
         }
-
-        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR); // funguje?
-        //  setDefaultOrientation();  // pouzivat pri dvoch layoutoch
-
-
-        //  String myBarcode = "";
-        //  Inventar inventar = null;
 
         setContentView(R.layout.info);
 
@@ -108,6 +99,22 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         addStartScanButtonListener();
         setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
+
+        // ukrytie klavesnice
+        RelativeLayout layout = (RelativeLayout) findViewById(R.id.layout_info);
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                hideKeyboard(view);
+                return false;
+            }
+        });
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void addStartScanButtonListener() {
@@ -215,7 +222,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
     }
 
-
     @Override
     public void onOpened(EMDKManager emdkManager) {
 
@@ -236,7 +242,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         // Set default scanner
         //  spinnerScannerDevices.setSelection(defaultIndex);
-
 
         // Initialize scanner
         initScanner();
@@ -273,7 +278,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 String dataString = data.getData();
                 barcodeString = dataString;
                 new AsyncDataUpdate().execute(dataString);
-
             }
 
             try {
@@ -284,7 +288,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -356,7 +359,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             }
         }
     }
-
 
     private void enumerateScannerDevices() {
 
@@ -467,7 +469,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
     }
 
-
     private void startScan() {
 
         if (scanner == null) {
@@ -574,47 +575,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             scanner = null;
         }
     }
-
-    // z viedenskeho prikladu
-    //@Override
-    /*
-    public void startScannerRead() {
-        if (mScannerEnabled) {
-            if (scanner == null) {
-                initScanner();
-            }
-            if (scanner != null) {
-                try {
-                    if (scanner.isEnabled()) {
-                        if (!scanner.isReadPending()) {
-                            if (barcodeManager != null) {//**
-                                scanner.read();
-                            }
-                        }
-                    } else {
-                        //  mELogListener.onLogE(TAG, "startScannerRead; Status: Scanner is not enabled");
-                        Log.d("scanner", "startScannerRead; Status: Scanner is not enabled");
-                    }
-                } catch (ScannerException e) {
-                    Log.d("scanner", "startScannerRead; Status: " + e.getMessage(), e);
-                }
-            }
-        }
-    }
-
-    //@Override
-    public void stopScannerRead() {
-        if (mScannerEnabled) {
-            if (scanner != null) {
-                try {
-                    scanner.cancelRead();
-                } catch (ScannerException e) {
-                    Log.d("scanner", "stopScannerRead; Status: " + e.getMessage(), e);
-                }
-            }
-        }
-    }
-*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -732,7 +692,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             status = statusString + " " + scannerNameExtScanner + ":" + statusExtScanner;
             new AsyncStatusUpdate().execute(status);
         }
-
     }
 
     private class AsyncDataUpdate extends AsyncTask<String, Void, String> {
@@ -771,7 +730,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
     }
 
-
     private class AsyncStatusUpdate extends AsyncTask<String, Void, String> {
 
         @Override
@@ -788,7 +746,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     }
 
     private class AsyncUiControlUpdate extends AsyncTask<Boolean, Void, Boolean> {
-
 
         @Override
         protected void onPostExecute(Boolean bEnable) {

@@ -60,5 +60,7 @@
     <string name="EMDKclosedUnexpectedlz">EMDK wurde geschlossen! Bitte Applikation schliessen und wieder starten.</string>
     <string name="EMDK_OpenSuccess">EMDK richtig gestartet!</string>
 
+    <string name="importData">Import Daten</string>
+
 
 </resources>

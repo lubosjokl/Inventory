@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fcfcfc"
+    android:id="@+id/layout_detail"
     tools:context="com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail">
 
     <android.support.design.widget.AppBarLayout
@@ -50,6 +51,7 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_parent_layout">
 

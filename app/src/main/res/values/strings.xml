@@ -63,5 +63,7 @@
     <string name="EMDK_OpenSuccess">EMDK open success!</string>
 
     <!-- -->
+    <string name="importData">Import data</string>
+
 
 </resources>

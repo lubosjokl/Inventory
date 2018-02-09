@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import java.net.URISyntaxException;
 import java.sql.Time;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 
 
 public class DataModelInventarDetail extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = "inventory";
+    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "majetok";
 

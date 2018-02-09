@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 
 import java.net.URISyntaxException;
@@ -23,7 +24,7 @@ SELECT [Id]
  */
 
 public class DataModelMiestnosti  extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = "inventory";
+    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "kancelaria";
 

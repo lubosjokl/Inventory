@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 
 import java.net.URISyntaxException;
@@ -25,7 +26,7 @@ SELECT 	,[itembarcode]		,[itemdescription]	,[roomcodenew]		,[status]		,[datum]		
  */
 
 public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = "inventory";
+    protected static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "majetok";
 

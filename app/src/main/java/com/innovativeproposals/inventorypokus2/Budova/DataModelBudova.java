@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
+import com.innovativeproposals.inventorypokus2.Constants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,7 +24,8 @@ SELECT [Id]
         ORDER BY [Id] DESC LIMIT 500*/
 
 public class DataModelBudova extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = "inventory";
+
+  protected static final String DB_DATABAZA = Constants.FILE_DATABASE; // "inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "divizia";
 
