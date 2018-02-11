@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.InventarVMiestnosti.ListInventarVMiestnosti;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
@@ -43,15 +44,15 @@ public class ViewInventarDetail extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1;
 
-    Intent intent;
+    //Intent intent;
     Inventar inventar;
 
-    TextView itembarcodeET;
+    //TextView itembarcodeET;
     TextView itemdescriptionET;
    // TextView statusET;
-    TextView datumET;
-    TextView datumDisposeET;
-    String origRoomCode= null;
+    //TextView datumET;
+    //TextView datumDisposeET;
+    //String origRoomCode= null;
     Spinner spinner_inventoryType;
     Spinner spinner_responsible;
     EditText txt_Notice;
@@ -59,9 +60,7 @@ public class ViewInventarDetail extends AppCompatActivity {
     FloatingActionButton fab_takePhoto;
     ImageView detailView_Image;
 
-    //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
-
-    DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen
+    DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen co?
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,12 +102,18 @@ public class ViewInventarDetail extends AppCompatActivity {
                 inventar.setZodpovednaOsoba(spinner_responsible.getSelectedItem().toString());
                 inventar.setImage(getImageBytesFromImageView());
 
-                // Test variantov: aku ma hodnotu origRoomCode ?
-                // pri inventarizacii noveho inventara = kod miestnosti v kotrj robim inventarizaciu
-                // pri inventarizacii existujuceho inventara = kod miestnosti v kotrj robim inventarizaciu
-                // pri info = kod miestnosti skenovaneho inventara
+/* ********************************************************************* TEST
+                testovanie inventara
+                pozitivny (exitujuci kod v databaze)
+                        - z info scan ok
+                    - z miestnosti - dotyk ok
+                    - scan z miestnosti ok
 
-                inventar.setRommCode(origRoomCode); // vo vsetkych pripadoch ju mozem prepisat
+                negativny (neexistujuci barcode)
+                scan z miestnosti ( novy )
+                scan z info ok
+*/
+
 
                 //tu uloz nove data do databazy
                 dm.ulozInventar(inventar);
@@ -118,9 +123,10 @@ public class ViewInventarDetail extends AppCompatActivity {
 
                 //ukonci aktualnu aktivitu
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
+                returnIntent.putExtra(Constants.INTENT_INVENTORY, inventar);
                 // TODO pri navrate neaktualizuje datum, alebo to treba urobit reloadnutim Listu
                 // TODO pri editacii lubovolneho pola, napr. seriove cislo sa zablokuje touch screen
+                // TODO pri vlozeni noveho inventara ho nezobrazi v prehlade inventarov miestnosti
                 //                setResult(Activity.RESULT_OK, returnIntent);
                 this.finish();
                 return true;
@@ -176,29 +182,34 @@ public class ViewInventarDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String isValue = "";
         inventar = null;
-        origRoomCode= "";
-        String newBarcode = "";
+      //  origRoomCode= "";
+      //  String newBarcode = "";
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            inventar = getIntent().getParcelableExtra(ListInventarVMiestnosti.INTENT_INVENTORY);
-            origRoomCode = extras.getString("roomcode");
-            newBarcode = extras.getString("barcode");
+            inventar = getIntent().getParcelableExtra(Constants.INTENT_INVENTORY);
+         //   origRoomCode = extras.getString("roomcode"); duplicita
+          //  newBarcode = extras.getString("barcode");
 
         }
 
         // toto mi tu nechaj, alebo uprav odoslanie info z InfoActivity
         if(inventar==null) {
 
-            inventar = getIntent().getParcelableExtra("inventar_object");
+            //inventar = getIntent().getParcelableExtra("inventar_object");
+            // hlaska o chybe
+            //Toast.makeText(Toast.LENGTH_SHORT, "neexistujuci kod").show();
+            Toast.makeText(this,"neexistujuci barcode",Toast.LENGTH_LONG);
+
         }
 
-        // toto je urobene z nudze pre novy naskenovany inventar
-        if(inventar==null) {
+        // toto je urobene  pre novy naskenovany inventar - istota ?
+    /*    if(inventar==null) {
             inventar = new Inventar();
             inventar.setRommCode(origRoomCode);
             inventar.setItemBarcode(newBarcode);
-        }
+         //   Toast.makeText(this,"neexistujuci barcode2",Toast.LENGTH_LONG);
+        }*/
 
         setContentView(R.layout.inventar_detail);
         locateControls(); // co to je?

@@ -232,36 +232,51 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
         try {
 
-        if(isNew == true)
-            mySql = "INSERT INTO majetok ( itemdescription, status, roomcodenew, serialnr, zodpovednaosoba, typmajetku, extranotice, datum, datumREAL, itembarcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
-        else
-            mySql = "UPDATE majetok set itemdescription=?, status=?, roomcodenew=?,serialnr=?,zodpovednaosoba=?,typmajetku=?,extranotice=?,datum=?, datumREAL=? where Id = ? ";
+            // najprv uloz majetok
+            if(isNew == true)
+                mySql = "INSERT INTO majetok ( itemdescription, status, roomcodenew, serialnr, zodpovednaosoba, typmajetku, extranotice, datum, datumREAL, itembarcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+            else
+                mySql = "UPDATE majetok set itemdescription=?, status=?, roomcodenew=?,serialnr=?,zodpovednaosoba=?,typmajetku=?,extranotice=?,datum=?, datumREAL=? where Id = ? ";
 
-        SQLiteStatement insertStmt      =   db.compileStatement(mySql);
-        insertStmt.clearBindings();
-        // insertStmt.bindString(1, Integer.toString(this.accId));
-        insertStmt.bindString(1,myInventar.getItemDescription());
-        insertStmt.bindString(2,"10");
-        insertStmt.bindString(3,myInventar.getRommCode());
-        insertStmt.bindString(4,myInventar.getSerialNr());
-        insertStmt.bindString(5,myInventar.getZodpovednaOsoba());
-        insertStmt.bindString(6,myInventar.getTypeMajetku());
-        insertStmt.bindString(7,myInventar.getPoznamka());
-        insertStmt.bindString(8,ts);
-        insertStmt.bindLong(9,realDatum);
-        if(isNew) {
-            insertStmt.bindString(10, myInventar.getItemBarcode());
-//            insertStmt.executeInsert();
-        }
-        else {
-            // update
-            insertStmt.bindString(10, Integer.toString(myInventar.getId()));
-         //   insertStmt.executeUpdateDelete();
-        }
+            SQLiteStatement insertStmt      =   db.compileStatement(mySql);
+            insertStmt.clearBindings();
+            // insertStmt.bindString(1, Integer.toString(this.accId));
+            insertStmt.bindString(1,myInventar.getItemDescription());
+            insertStmt.bindString(2,"10");
+            insertStmt.bindString(3,myInventar.getRommCode());
+            insertStmt.bindString(4,myInventar.getSerialNr());
+            insertStmt.bindString(5,myInventar.getZodpovednaOsoba());
+            insertStmt.bindString(6,myInventar.getTypeMajetku());
+            insertStmt.bindString(7,myInventar.getPoznamka());
+            insertStmt.bindString(8,ts);
+            insertStmt.bindLong(9,realDatum);
+            if(isNew) {
+                // insert
+                insertStmt.bindString(10, myInventar.getItemBarcode());
+            }
+            else {
+                // update
+                insertStmt.bindString(10, Integer.toString(myInventar.getId()));
+            }
 
             Log.d("update", "Query: " + insertStmt.toString());
             insertStmt.executeInsert();
 
+            // teraz uloz do tabulky inventura - tu je len insert
+            mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
+
+            SQLiteStatement insertStmt2      =   db.compileStatement(mySql);
+            insertStmt2.clearBindings();
+            insertStmt2.bindString(1,myInventar.getItemDescription());
+            insertStmt2.bindString(2,"10");
+            insertStmt2.bindString(3,myInventar.getRommCode());
+            insertStmt2.bindLong(4,realDatum);
+            insertStmt.bindString(5, myInventar.getItemBarcode());
+
+            Log.d("insert", "Query: " + insertStmt2.toString());
+            insertStmt2.executeInsert();
+
+
         }
         catch (Exception e)
         {
@@ -269,76 +284,11 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         }
 
 
-        // https://stackoverflow.com/questions/20349454/sqlite-not-updating-rows
-/*
-        mySql = "UPDATE majetok "
-            + " SET itemdescription = '" + myInventar.getItemDescription() +"' "
-                + ", status =  " + myInventar.getStatus()
-                + ", roomcodenew =  '" + myInventar.getRommCode() +"' "
-                + ", serialnr =  '" + myInventar.getSerialNr() +"' "
-                + ", zodpovednaosoba =  '" + myInventar.getZodpovednaOsoba() +"' "
-                + ", typmajetku =  '" + myInventar.getTypeMajetku() +"' "
-                + ", extranotice =  '" + myInventar.getPoznamka() +"' "
-                + ", datum =  '" + ts +"' "
-            + " WHERE Id = "+ myInventar.getId();
-
-        Log.d("update","Query: "+mySql);
-
-        try
-        {
-           // https://stackoverflow.com/questions/16383471/java-lang-illegalargumentexception-empty-bindargs
-            db.execSQL(mySql); //Here it should be execSQL instead of rawQuery
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }*/
-
-/*
-
-        int time = (int) (System.currentTimeMillis());
-        Timestamp tsTemp = new Timestamp(time);
-        String ts =  tsTemp.toString();
-
-        ContentValues myContentValues = new ContentValues();
-        myContentValues.put("Id",myInventar.getId());
-        myContentValues.put("itemdescription",myInventar.getItemDescription());
-        myContentValues.put("roomcodenew",myInventar.getRommCode());
-        myContentValues.put("status","10");
-        myContentValues.put("datum",ts);
-        myContentValues.put("serialnr",myInventar.getSerialNr());
-        myContentValues.put("zodpovednaosoba",myInventar.getZodpovednaOsoba());
-        myContentValues.put("typmajetku",myInventar.getTypeMajetku());
-        myContentValues.put("extranotice",myInventar.getPoznamka());
-        int aa = 0;
-
-        try{
-            aa =   db.update("majetok", myContentValues, "Id = ?" + xx , null );
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        } */
 
         return aa;
 
     }
 
-    /*
-    public long vlozZaznam(HashMap<String, String> atributy)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues val = new ContentValues();
-        val.put(ATR_AUTOR, atributy.get(ATR_AUTOR));
-        val.put(ATR_KNIHA, atributy.get(ATR_KNIHA));
-        val.put(ATR_DATUM, atributy.get(ATR_DATUM));
-        val.put(ATR_HODNOTENIE, atributy.get(ATR_HODNOTENIE));
-
-        long id = db.insert(DB_TABULKA, null, val);
-        db.close();
-        return id;
-    }
-*/
 
 
 }

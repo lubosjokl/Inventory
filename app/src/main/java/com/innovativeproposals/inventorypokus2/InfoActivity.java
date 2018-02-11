@@ -66,8 +66,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private int triggerIndex = 0;
     private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
-    private int dataLength = 0;
-    // private TextView textViewData = null;
+    //private int dataLength = 0;
     private EditText scannET = null;
     private Button buttonStartScan = null;
 
@@ -140,6 +139,9 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
     private void setupButtonHandlers() {
         findViewById(R.id.btOK).setOnClickListener((View view) -> {
             try {
+
+                barcodeString = scannET.getText().toString();
+
                 doShowDetailCall();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
@@ -149,8 +151,8 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
     private void doShowDetailCall() throws URISyntaxException {
 
-        // TODO : skener sa aktivuje programovo v onOpened
-
+        // pokial nestihol naplnit editbox
+/*
         if (barcodeString == null) {
             barcodeString = scannET.getText().toString();
         }
@@ -158,6 +160,7 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         if (barcodeString.equals("")) {
             barcodeString = scannET.getText().toString();
         }
+*/
 
         if (barcodeString.equals("barcode")) {
             Toast.makeText(this, R.string.barcode_doesnt_read_properly, Toast.LENGTH_LONG).show();
@@ -169,30 +172,29 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
             return;
         }
 
-        zoznamHM = dm.dajNoveZaznamy("", barcodeString); //xx
+        zoznamHM = dm.dajNoveZaznamy("", barcodeString); // List<Inventar> zoznamHM
 
         if (zoznamHM.size() == 0) {
+            // TODO sken neexistujuceho kodu nezobrazi chybu a neskor  to zatuhne - asi 2-3 pokus
             Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
             return;
         }
 
         Log.d("skenujem", "Show 4");
         Inventar inventar = zoznamHM.get(0);
-
         barcodeString = ""; // xx
-        // scannET.setText(""); // tuna to padne, presunul som na onResume
-        Intent theIndent = new Intent(this, ViewInventarDetail.class);
-        theIndent.putExtra("roomcode",inventar.getRommCode());
-        theIndent.putExtra("inventar_object", inventar);
-        startActivity(theIndent);
 
+        Intent theIndent = new Intent(this, ViewInventarDetail.class);
+        // theIndent.putExtra("roomcode",inventar.getRommCode()); duplicita, nachadza sa v objekte
+        theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
+        startActivity(theIndent);
     }
 
     private void setDefaultOrientation() {
 
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
-
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -277,12 +279,14 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
                 String dataString = data.getData();
                 barcodeString = dataString;
+
                 new AsyncDataUpdate().execute(dataString);
             }
 
             try {
                 //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
                 Log.d("skenujem", "1");
+                // scannET.setText(barcodeString); // TODO toto robi problem
                 doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
                 Log.d("skenujem", "2");
             } catch (URISyntaxException e) {
@@ -386,7 +390,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
             //   ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(InfoActivity.this, android.R.layout.simple_spinner_item, friendlyNameList);
             //   spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
             //   spinnerScannerDevices.setAdapter(spinnerAdapter);
         }
     }
@@ -498,7 +501,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
                 textViewStatus.setText("Status: " + e.getMessage());
             }
         }
-
     }
 
     private void stopScan() {
@@ -555,7 +557,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         if (scanner != null) {
 
             try {
-
                 scanner.cancelRead();
                 scanner.disable();
 
@@ -571,7 +572,6 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
                 textViewStatus.setText("Status: " + e.getMessage());
             }
-
             scanner = null;
         }
     }
@@ -703,30 +703,8 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
 
         protected void onPostExecute(String result) {
-
-           /* if (result != null) {
-                if(dataLength ++ > 100) { //Clear the cache after 100 scans
-                    textViewData.setText("");
-                    dataLength = 0;
-                }
-                */
-
-            //  textViewData.append(result+"\n");
-
             scannET.setText(result);
-            //     textViewData.setText(result);
             return;
-
-
-            // scrolovanie v textView
-          /*      ((View) findViewById(R.id.scrollView1)).post(new Runnable()
-                {
-                    public void run()
-                    {
-                        ((ScrollView) findViewById(R.id.scrollView1)).fullScroll(View.FOCUS_DOWN);
-                    }
-                });*/
-
         }
     }
 
@@ -765,5 +743,4 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         }
     }
 }
-
 

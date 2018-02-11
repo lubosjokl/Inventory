@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
@@ -73,9 +74,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
     private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
 
-    public final static String INTENT_INVENTORY = "inventar";
-
-    //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
+        //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,7 +121,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         if (requestCode != 1) return;
 
         if (resultCode == Activity.RESULT_OK) {
-
 
             //nove - skus znovu nacitat zaznamy
             try {
@@ -183,6 +181,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         try {
+            // zoznam inventarov v miestnosti
             zoznamHM = dm.dajNoveZaznamy(myRoomcode, "");
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -208,8 +207,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                     Intent theIndent = new Intent(getApplication(),
                             ViewInventarDetail.class);
 
-                    theIndent.putExtra("roomcode",myRoomcode);
-                    theIndent.putExtra(ListInventarVMiestnosti.INTENT_INVENTORY, inventar);
+                    // theIndent.putExtra("roomcode",myRoomcode); duplicita
+                    theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
 
                     View imageView = view.findViewById(R.id.detailView_Image);
                     ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
@@ -338,41 +337,41 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             for (ScanDataCollection.ScanData data : scanData) {
 
                 String dataString = data.getData();
-                Inventar scannedItem = null;
-                Inventar newItem = new Inventar();
+            //    Inventar scannedItem = null;
+            //    Inventar newItem = new Inventar();
+                Inventar inventar = new Inventar();
 
                 Log.i("Scanned value:", dataString);
                 new AsyncDataUpdate().execute(dataString);
 
 
                 try {
+                    // daj inventar s kodom
                     zoznamHM = dm.dajNoveZaznamy("", dataString); //xx
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
 
-
                 Log.d("skenujem", "Show 4");
                 if (zoznamHM.size() > 0)
-                    scannedItem = zoznamHM.get(0);
+                    inventar = zoznamHM.get(0);
 
                 else {
-
-                    // vytvor novy inventar
-                    // TODO pokial to robim takto, tak to ostane visiet po startActivityForResult
-                    //newItem.setRommCode(myRoomcode);
-                    //newItem.setItemBarcode(dataString);
+                    // je to novy inventar
+                    // TODO pokial to robim takto, tak to ostane visiet po startActivityForResult - opravene, testuj
+                    inventar.setRommCode(myRoomcode);
+                    inventar.setItemBarcode(dataString);
                 }
 
                 Intent theIndent = new Intent(this, ViewInventarDetail.class);
 
                // if(scannedItem == null)
-                    theIndent.putExtra("inventar_object", newItem);
-               // else
-                    theIndent.putExtra("inventar_object", scannedItem);
+                 //   theIndent.putExtra(Constants.INTENT_INVENTORY, newItem);  // novy inventar
+                //else
+                theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
 
-                theIndent.putExtra("roomcode", myRoomcode);
-                theIndent.putExtra("barcode", dataString);
+              //  theIndent.putExtra("roomcode", myRoomcode);
+               // theIndent.putExtra("barcode", dataString);
 
                 //theIndent.putExtra("roomcode", myRoomcode);
                 // TODO treba poslat do detailu aj rommcode a pri zapise prepisat s myRoomcode

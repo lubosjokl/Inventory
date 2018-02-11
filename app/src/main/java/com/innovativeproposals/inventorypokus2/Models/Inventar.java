@@ -168,7 +168,7 @@ public class Inventar implements Parcelable {
         dest.writeString(price);
         dest.writeByteArray(image);
         if(datumReal!= null)
-            dest.writeLong(datumReal); // TODO - tu to padne pri zalozeni noveho inventara
+            dest.writeLong(datumReal);
     }
 
     public static final Parcelable.Creator<Inventar> CREATOR = new Parcelable.Creator<Inventar>() {
@@ -178,14 +178,16 @@ public class Inventar implements Parcelable {
             return new Inventar(source);
 
         }
-
         @Override
         public Inventar[] newArray(int size) {
             return new Inventar[size];
         }
+
+
     };
 
     public Inventar() {
+        return ;
     }
 
 
