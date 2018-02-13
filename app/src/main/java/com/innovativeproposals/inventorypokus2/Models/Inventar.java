@@ -23,6 +23,8 @@ public class Inventar implements Parcelable {
     private byte[] image;
     private String price;
     private Long datumReal;
+    private boolean isInfo;
+
 
     public int getId() {
         return Id;
@@ -96,7 +98,6 @@ public class Inventar implements Parcelable {
         this.serialNr = serialNr;
     }
 
-
     public String getZodpovednaOsoba() {
         return zodpovednaOsoba;
     }
@@ -144,6 +145,15 @@ public class Inventar implements Parcelable {
     public void setDatumReal(Long datumReal) {
         this.datumReal = datumReal;
     }
+
+    public boolean isInfo() {
+        return isInfo;
+    }
+
+    public void setInfo(boolean info) {
+        isInfo = info;
+    }
+
 
 
     @Override

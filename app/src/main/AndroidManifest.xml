@@ -82,6 +82,11 @@
             android:label="@string/importData"
             android:parentActivityName=".MainActivity"
             />
+        <activity android:name=".Komunikacia.ExportDatabase"
+            android:screenOrientation="portrait"
+            android:label="@string/export_data"
+            android:parentActivityName=".MainActivity"
+            />
     </application>
 
 </manifest>

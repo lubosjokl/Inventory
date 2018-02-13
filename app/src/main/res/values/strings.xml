@@ -62,8 +62,14 @@
     <string name="EMDKclosedUnexpectedlz">EMDK closed unexpectedly! Please close and restart the application.</string>
     <string name="EMDK_OpenSuccess">EMDK open success!</string>
 
-    <!-- -->
     <string name="importData">Import data</string>
+    <string name="export_data">Export data</string>
+    <string name="textBeforeImport_Export">Skontrolujte ci nie je prenos blokovany firewallom a stlacte START</string>
+    <string name="NenaimportovalSaZiadnySuborPreverteFirewall">Nenaimportoval Sa Ziadny Subor Preverte Firewall</string>
+    <string name="ImportDone">Import ukonceny za</string>
+    <string name="loadDatabase">Stahujem databazu ...</string>
+    <string name="NeexportovalSaZiadnySuborPreverteFirewall">NeexportovalSaZiadnySuborPreverteFirewall</string>
 
+    <!-- -->
 
 </resources>

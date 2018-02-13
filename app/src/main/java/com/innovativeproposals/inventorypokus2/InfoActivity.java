@@ -183,7 +183,8 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
 
         Log.d("skenujem", "Show 4");
         Inventar inventar = zoznamHM.get(0);
-        barcodeString = ""; // xx
+        barcodeString = "";
+        inventar.setInfo(true);
 
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
         // theIndent.putExtra("roomcode",inventar.getRommCode()); duplicita, nachadza sa v objekte

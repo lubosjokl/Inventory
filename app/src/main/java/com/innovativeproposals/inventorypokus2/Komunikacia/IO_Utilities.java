@@ -32,27 +32,29 @@ public class IO_Utilities {
         _context = context;
     }
 
-    // Retrieve the most recent location available
-    @SuppressLint("MissingPermission")
-    public Location getLocation(){
-        Location lastLocation = null;
 
-        if(_useGpsToGetLocation)
-        {
-            LocationManager locationManager = (LocationManager) _context.getSystemService(_context.LOCATION_SERVICE);
-            lastLocation = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+    static void copyFile(String src, String dst) throws IOException {
+        //InputStream in = new FileInputStream(src);
+
+        try {
+            InputStream in = new FileInputStream(src); // osetri ked nepresiel import
+            OutputStream out = new FileOutputStream(dst);
+            try {
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                out.close();
+                in.close();
+            }
+        } finally {
+            // in.close();
         }
-
-        // If _useGpsToGetLocation is false, or if attempt to retrieve GPS location failed,
-        //  use a manually created location
-/*
-        if(lastLocation == null)
-            lastLocation = createLocationManually();
-*/
-
-
-        return lastLocation;
     }
+
 
 
     // Append the location timestamp, lat/lng, and address to the specified file
@@ -85,8 +87,11 @@ public class IO_Utilities {
         catch (Exception ex){
             Log.e("Worker.save", ex.getMessage());
         }
+    }
 
-
+    private void assureThatDirectoryExist(File directory){
+        if(!directory.exists())
+            directory.mkdirs();
     }
 
 /*
@@ -157,11 +162,7 @@ public class IO_Utilities {
     }
 */
 
-    // Emulators don't always have the standard folder created, so create if necessary
-    private void assureThatDirectoryExist(File directory){
-        if(!directory.exists())
-            directory.mkdirs();
-    }
+
 
     private URL ConvertToUrl(String urlStr) {
         try {

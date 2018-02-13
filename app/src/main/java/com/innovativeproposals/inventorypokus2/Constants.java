@@ -15,6 +15,7 @@ public class Constants {
 
 
     public static final String FILE_DATA_PC2PDA = "transferDataPC2iPOD.db";
+    public static final String FILE_DATA_PDA2PC = "transferDataiPOD2PC.db";
     public static final String FILE_DATABASE = "inventory.db";
 
 }

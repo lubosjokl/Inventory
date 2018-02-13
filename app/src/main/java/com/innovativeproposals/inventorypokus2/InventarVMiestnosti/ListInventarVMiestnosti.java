@@ -120,14 +120,13 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != 1) return;
 
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == 0) { // bolo Activity.RESULT_OK
 
-            //nove - skus znovu nacitat zaznamy
+            //aktualizacia udajov po navrate z Detailu
             try {
 
                 zoznamHM = null;
                 zoznamHM = dm.dajNoveZaznamy(myRoomcode, ""); // array naplni spravne
-//                customListAdapter.clear();
                 customListAdapter.original_data = zoznamHM;
                 customListAdapter.filtered_list = zoznamHM;
 
@@ -135,20 +134,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-
-/*          original
-            Inventar returnedObject = data.getParcelableExtra(this.INTENT_INVENTORY);
-            Inventar inventar = findInventarById(returnedObject.getId());
-
-            if (inventar != null) {
-                inventar.Copy(returnedObject);
-                customListAdapter.notifyDataSetChanged();
-            } else {
-                // TODO ked sa vrati clovek z detailu s novou polozkou, tak ju treba pridat do zoznamu vsetkych poloziek - check
-
-                customListAdapter.original_data.add(returnedObject);
-                customListAdapter.notifyDataSetChanged();
-            }*/
         }
     }
 
@@ -157,14 +142,12 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         //enable search within activity
 
         myRoomcode = "";
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             myRoomcode = extras.getString("roomcode");
         }
 
         setContentView(R.layout.inventar_vmiestnosti);
-
         deviceList = new ArrayList<ScannerInfo>();
 
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
@@ -203,6 +186,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
                     int inventarID = (int) view.getTag();
                     Inventar inventar = findInventarById(inventarID);
+                    inventar.setInfo(false);
 
                     Intent theIndent = new Intent(getApplication(),
                             ViewInventarDetail.class);
@@ -331,7 +315,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
     @Override
     public void onData(ScanDataCollection scanDataCollection) {
 
-
         if ((scanDataCollection != null) && (scanDataCollection.getResult() == ScannerResults.SUCCESS)) {
             ArrayList<ScanDataCollection.ScanData> scanData = scanDataCollection.getScanData();
             for (ScanDataCollection.ScanData data : scanData) {
@@ -361,6 +344,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                     // TODO pokial to robim takto, tak to ostane visiet po startActivityForResult - opravene, testuj
                     inventar.setRommCode(myRoomcode);
                     inventar.setItemBarcode(dataString);
+                    inventar.setInfo(false );
                 }
 
                 Intent theIndent = new Intent(this, ViewInventarDetail.class);

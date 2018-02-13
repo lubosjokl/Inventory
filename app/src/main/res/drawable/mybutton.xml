@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <stroke android:width="2dp"
+        android:color="#FFFFFF"/>
+    <gradient
+        android:angle="90"
+        android:startColor="@color/colorPrimary"
+        android:endColor="@color/blue"/>
+    <corners
+        android:bottomLeftRadius="36dp"
+        android:bottomRightRadius="36dp"
+        android:topLeftRadius="36dp"
+        android:topRightRadius="36dp" />
+</shape>
+<!-- https://stackoverflow.com/questions/6054562/how-to-make-the-corners-of-a-button-round -->

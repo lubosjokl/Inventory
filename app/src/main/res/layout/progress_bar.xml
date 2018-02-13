@@ -21,15 +21,31 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:id="@+id/prog_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:paddingRight="16dp"
+        android:paddingLeft ="16dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:background="@color/colorFiremnaBelasa"
+
+        />
 
 
     <Button
         android:id="@+id/startButton"
         android:layout_width="180dp"
         android:layout_height="80dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center"
         android:padding="10dp"
+        android:textSize="24sp"
+        android:background="@drawable/mybutton"
         android:text="@string/start_btn_label"
         />
 
@@ -43,12 +59,5 @@
 
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:max="100"
-        />
-    <TextView
-        android:id="@+id/prog_txt"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:visibility="gone"
         />
 </LinearLayout>

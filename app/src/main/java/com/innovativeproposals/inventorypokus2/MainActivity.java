@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.innovativeproposals.inventorypokus2.Budova.ListBudova;
+import com.innovativeproposals.inventorypokus2.Komunikacia.ExportDatabase;
 import com.innovativeproposals.inventorypokus2.Komunikacia.ImportDatabase;
 import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             // export
+            Intent intent = new Intent(this, ExportDatabase.class);
+            startActivity(intent);
 
         }
 

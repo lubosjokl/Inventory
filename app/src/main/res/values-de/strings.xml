@@ -61,6 +61,12 @@
     <string name="EMDK_OpenSuccess">EMDK richtig gestartet!</string>
 
     <string name="importData">Import Daten</string>
+    <string name="export_data">Export Daten</string>
+    <string name="textBeforeImport_Export">Kontrolieren Sie, ob Übertragung durch Firewall nicht blockiert ist und klicken an START</string>
+    <string name="NenaimportovalSaZiadnySuborPreverteFirewall">Keine Datei wurde importiert, kontrollieren Sie bitte Firewall</string>
+    <string name="ImportDone">Import wurden beendet in </string>
+    <string name="loadDatabase">Database ist importiert ...</string>
+    <string name="NeexportovalSaZiadnySuborPreverteFirewall">Database wurde nich exportiert, kontrollieren Sie Firewall</string>
 
 
 </resources>

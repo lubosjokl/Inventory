@@ -61,6 +61,11 @@
     <string name="EMDK_OpenSuccess">EMDK bol úspešne aktivovaný!</string>
 
     <string name="importData">Import databázy</string>
-
+    <string name="export_data">Export databázy</string>
+    <string name="textBeforeImport_Export">Skontrolujte či nie je prenos blokovaný firewallom a stlačte ŠTART</string>
+    <string name="NenaimportovalSaZiadnySuborPreverteFirewall">Nenaimportoval sa žiadny súbor, preverte Firewall</string>
+    <string name="ImportDone">Import ukončený za </string>
+    <string name="loadDatabase">Importujem databázu ...</string>
+    <string name="NeexportovalSaZiadnySuborPreverteFirewall">Databáza sa nevyexportovala, preverte Firewall</string>
 
 </resources>

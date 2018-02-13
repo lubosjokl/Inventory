@@ -124,10 +124,8 @@ public class ViewInventarDetail extends AppCompatActivity {
                 //ukonci aktualnu aktivitu
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.INTENT_INVENTORY, inventar);
-                // TODO pri navrate neaktualizuje datum, alebo to treba urobit reloadnutim Listu
-                // TODO pri editacii lubovolneho pola, napr. seriove cislo sa zablokuje touch screen
-                // TODO pri vlozeni noveho inventara ho nezobrazi v prehlade inventarov miestnosti
-                //                setResult(Activity.RESULT_OK, returnIntent);
+                // TODO pri editacii lubovolneho pola, napr. seriove cislo sa zablokuje touch screen - test?
+
                 this.finish();
                 return true;
         }

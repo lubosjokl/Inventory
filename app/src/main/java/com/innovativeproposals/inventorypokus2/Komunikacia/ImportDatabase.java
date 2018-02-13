@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.R;
 
-import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 
 // komunikacia
@@ -35,9 +33,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-/**
- * Created by Lubos on 01.02.18.
- */
+// https://code.google.com/archive/p/android-query/wikis/AsyncAPI.wiki
+// https://eventuallyconsistent.net/2011/08/02/working-with-urlconnection-and-timeouts/
+// http://wptrafficanalyzer.in/blog/android-http-access-with-httpurlconnection-to-download-image-example/
+
+// download sqlite from server
+// https://stackoverflow.com/questions/28810064/how-to-download-sqlite-database-file-from-the-server-in-android
+
 
 public class ImportDatabase extends AppCompatActivity implements View.OnClickListener {
 
@@ -66,6 +68,9 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
         mStartBtn = (Button) findViewById(R.id.startButton);
         mProgressTxt = (TextView) findViewById(R.id.prog_txt);
         mProgress = (ProgressBar) findViewById(R.id.gen_progress);
+
+        mProgressTxt.setText(R.string.textBeforeImport_Export);
+
         mStartBtn.setOnClickListener(this);
     }
 
@@ -100,7 +105,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
         mProgress.setVisibility(View.VISIBLE);
         mProgress.setProgress(0);
         mProgressTxt.setVisibility(View.VISIBLE);
-        mProgressTxt.setText("Stahujem databazu ...");
+        mProgressTxt.setText(R.string.loadDatabase);
 
         // teraz vytvorime AsyncTask
         if (mGenAT == null) {
@@ -121,23 +126,18 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
     // byte[] je vstup do nasho spracovania pozadia
     // Integer je typ ktory sa pouziva na aktualizaciu komponentu uzivatelskeho rozhrania
     // Long je vysledok spracovanie
-    private class GenAsyncTask extends AsyncTask<byte[], Integer, Long> {
+    private class GenAsyncTask extends AsyncTask<byte[], Integer, String> {
 
         // vstup do nasho spracovania pozadia
 
         @Override
-        protected Long doInBackground(byte[]... arg0) {
+        protected String doInBackground(byte[]... arg0) {
 
             int progScale;
             long startTime;
             long endTime;
 
-            // https://code.google.com/archive/p/android-query/wikis/AsyncAPI.wiki
-            // https://eventuallyconsistent.net/2011/08/02/working-with-urlconnection-and-timeouts/
-            // http://wptrafficanalyzer.in/blog/android-http-access-with-httpurlconnection-to-download-image-example/
-
-            // download sqlite from server
-            // https://stackoverflow.com/questions/28810064/how-to-download-sqlite-database-file-from-the-server-in-android
+            startTime = SystemClock.elapsedRealtime();
 
             // ziskaj globalne SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + Constants.PREF_FILE_NAME, MODE_PRIVATE);
@@ -161,7 +161,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
 
             //  vlastna cinnost, toto sa moze zamenit
 
-            startTime = SystemClock.elapsedRealtime();
+
 
             //int BUFFER_SIZE = 1024;
             HttpURLConnection httpConn = null;
@@ -188,7 +188,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
                     String contentType = httpConn.getContentType();
                     int contentLength = httpConn.getContentLength();
 
-                    progScale = contentLength / 100;
+                  //  progScale = contentLength / 100;
 
                     if (disposition != null) {
                         // extracts file name from header field
@@ -212,7 +212,8 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
                     // opens input stream from the HTTP connection toto velkost suboru
                     InputStream inputStream = httpConn.getInputStream();
                     progScale = inputStream.available();
-
+                    if(progScale == 0)
+                        progScale = 500000;
 
                    // String saveFilePath = saveDir + "/" + File.separator + fileName;
 
@@ -223,10 +224,16 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
                     byte[] buffer = new byte[1024];
                     int bufferLength = 0;
 
+                    int aa=0;
+
                     while ((bufferLength = inputStream.read(buffer)) > 0) {
                         outputStream.write(buffer, 0, bufferLength);
                         kolo++;
-                       // publishProgress(kolo*SIZE_KB / progScale); // je to tu spravne
+
+                        aa = (Math.round(30*kolo*bufferLength / progScale));
+                        if(aa>100)
+                            kolo = 1;
+                        publishProgress(aa); // je to tu spravne
                     }
 
                     outputStream.close();
@@ -236,17 +243,16 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
                 } else {
                     System.out.println("No file to download. Server replied HTTP code: " + responseCode);
                 }
-                //            httpConn.disconnect();
 
 
             } catch (IOException ex) {
                 ex.printStackTrace();
-              //  mProgressTxt.setText("Ziadny subor na stiahnutie, skontrolujte firewall alebo antivir");
+                return "nofile";
             }
             httpConn.disconnect();
 
             endTime = SystemClock.elapsedRealtime();
-            return (endTime - startTime);
+            return String.valueOf(endTime - startTime);
         }
 
         // aktualizacia komponenty uzivatelskeho rozhrania
@@ -256,48 +262,37 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             mProgress.setProgress(progress[0]);
         }
 
-        // TODO 1 - nezobrazuje progres importu
-        // TODO 2 - padne to ked neprejde import
-        // TODO 3 - daj tam aj nejake info nad button import
-
         // vysledok spracovanie, napr. pocet sekund trvania operacie
         @Override
-        protected void onPostExecute(Long result) {
+        protected void onPostExecute(String result) {
             //String doneStr = getString(R.string.done_fill);
-            String doneStr = "hotovo";
-            // hodnotu berieme z doInBackground.return (endTime - startTime);
-            doneStr += result.toString() + " ms";
+            String doneStr; // = "hotovo";
+
+            if(result.equals("nofile")) {
+                doneStr = getString(R.string.NenaimportovalSaZiadnySuborPreverteFirewall);
+                publishProgress(0);
+                mProgressTxt.setBackgroundResource(R.color.colorNO );
+            } else {
+
+                // hodnotu berieme z doInBackground.return (endTime - startTime);
+                doneStr = getString(R.string.ImportDone) + result + " ms";
+                publishProgress(100);
+                mProgressTxt.setBackgroundResource(R.color.colorZelena  );
+                // volaj to len pri uspesnom importe
+                try {
+                    //copyFile(fileNameFrom,fileNameTo);
+                    IO_Utilities.copyFile(fileNameFrom, fileNameTo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             mProgressTxt.setText(doneStr);
+            mProgress.setVisibility(View.INVISIBLE); // VISIBLE
             mGenAT = null; // po ukonceni vycistit
 
-            try {
-                copyFile(fileNameFrom,fileNameTo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
-          void copyFile(String src, String dst) throws IOException {
-              //InputStream in = new FileInputStream(src);
-
-            try {
-                InputStream in = new FileInputStream(src); // osetri ked nepresiel import
-                OutputStream out = new FileOutputStream(dst);
-                try {
-                    // Transfer bytes from in to out
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = in.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
-                } finally {
-                    out.close();
-                    in.close();
-                }
-            } finally {
-               // in.close();
-            }
-        }
 
     }
 }

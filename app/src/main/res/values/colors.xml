@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorFiremnaBelasa">#82B1FF</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWhiteBlue">#E3F2FD</color>
     <color name="colorWhite">@android:color/white</color>
+    <color name="colorZelena">#B9F6CA</color>
+    <color name="colorNO">#FF8A80</color>
     <color name="blue">#9cf</color>
     <color name="purple">#c9f</color>
 </resources>

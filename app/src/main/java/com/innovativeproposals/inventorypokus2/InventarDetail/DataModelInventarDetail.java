@@ -262,21 +262,24 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             Log.d("update", "Query: " + insertStmt.toString());
             insertStmt.executeInsert();
 
-            // teraz uloz do tabulky inventura - tu je len insert
-            mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
 
-            SQLiteStatement insertStmt2      =   db.compileStatement(mySql);
-            insertStmt2.clearBindings();
-            insertStmt2.bindString(1,myInventar.getItemDescription());
-            insertStmt2.bindString(2,"10");
-            insertStmt2.bindString(3,myInventar.getRommCode());
-            insertStmt2.bindLong(4,realDatum);
-            insertStmt.bindString(5, myInventar.getItemBarcode());
+            if(!myInventar.isInfo()) {  // pri info nezapisovat ******* !!!
+                // teraz uloz do tabulky inventura - tu je len insert
+                mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
 
-            Log.d("insert", "Query: " + insertStmt2.toString());
-            insertStmt2.executeInsert();
+                SQLiteStatement insertStmt2 = db.compileStatement(mySql);
+                insertStmt2.clearBindings();
+                insertStmt2.bindString(1, myInventar.getItemDescription());
+                insertStmt2.bindString(2, "10");
+                insertStmt2.bindString(3, myInventar.getRommCode());
+                //insertStmt2.bindLong(4,realDatum); // NOK
+                insertStmt2.bindString(4, ts); // NOK
+                insertStmt2.bindString(5, myInventar.getItemBarcode()); // NOK
 
+                Log.d("insert", "Query: " + insertStmt2.toString());
+                insertStmt2.executeInsert();
 
+            }
         }
         catch (Exception e)
         {
