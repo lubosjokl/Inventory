@@ -81,18 +81,11 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
         if (v == mStartBtn) {
             //  Start generating data, do it right here.
             if(isNetworkAvailable()) {
-
-                // ziskaj globalne SharedPreferences
-                /*SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + Constants.PREF_FILE_NAME, MODE_PRIVATE);
-                String address = sharedPreferences.getString(Constants.KEY_ADDRESS, "not defined"); // druhy parameter je defaultna hodnota
-                String port = sharedPreferences.getString(Constants.KEY_PORT, "11235");
-                String upLoadServerUri = address + ":" + port; //String fileURL = "http://192.168.1.119:11235";
-                uploadFile(upLoadServerUri); */
-
                 doGenerate();
-
             } else
-                Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();
+                mProgressTxt.setText(R.string.NetworkisNotAvailable);
+                mProgressTxt.setBackgroundResource(R.color.colorNO );
         }
     }
 

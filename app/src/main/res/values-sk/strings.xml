@@ -67,5 +67,6 @@
     <string name="ImportDone">Import ukončený za </string>
     <string name="loadDatabase">Importujem databázu ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">Databáza sa nevyexportovala, preverte Firewall</string>
+    <string name="NetworkisNotAvailable">WiFi nie je k dispozícii</string>
 
 </resources>

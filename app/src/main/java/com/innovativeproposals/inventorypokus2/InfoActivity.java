@@ -1,5 +1,6 @@
 package com.innovativeproposals.inventorypokus2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -48,8 +49,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class InfoActivity extends AppCompatActivity implements EMDKListener,
-        StatusListener, DataListener, BarcodeManager.ScannerConnectionListener, OnCheckedChangeListener {
+public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDKListener,
+        Scanner.StatusListener, Scanner.DataListener, BarcodeManager.ScannerConnectionListener, CompoundButton.OnCheckedChangeListener {
+
+        //implements EMDKListener,
+       // StatusListener, DataListener, BarcodeManager.ScannerConnectionListener, OnCheckedChangeListener {
 
     // pridanie skenovania
     // http://techdocs.zebra.com/emdk-for-android/6-6/tutorial/tutAdvancedScanningAPI/
@@ -175,11 +179,12 @@ public class InfoActivity extends AppCompatActivity implements EMDKListener,
         zoznamHM = dm.dajNoveZaznamy("", barcodeString); // List<Inventar> zoznamHM
 
         if (zoznamHM.size() == 0) {
-            // TODO sken neexistujuceho kodu nezobrazi chybu a neskor  to zatuhne - asi 2-3 pokus
+            // TODO sken neexistujuceho kodu zobrazi Toast prilis kratko, resp. ho premaze Status skeneru
+            // sem to prejde na button, ale nie na sken
             Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
-            Toast.makeText(getBaseContext(), R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
             return;
         }
+
 
         Log.d("skenujem", "Show 4");
         Inventar inventar = zoznamHM.get(0);

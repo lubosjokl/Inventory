@@ -124,7 +124,6 @@ public class ViewInventarDetail extends AppCompatActivity {
                 //ukonci aktualnu aktivitu
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.INTENT_INVENTORY, inventar);
-                // TODO pri editacii lubovolneho pola, napr. seriove cislo sa zablokuje touch screen - test?
 
                 this.finish();
                 return true;

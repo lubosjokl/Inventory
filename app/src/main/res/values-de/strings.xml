@@ -67,6 +67,7 @@
     <string name="ImportDone">Import wurden beendet in </string>
     <string name="loadDatabase">Database ist importiert ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">Database wurde nich exportiert, kontrollieren Sie Firewall</string>
+    <string name="NetworkisNotAvailable">Network is not Available</string>
 
 
 </resources>

@@ -81,7 +81,9 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             if(isNetworkAvailable()) {
                 doGenerate();
             } else
-                Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();
+                mProgressTxt.setText(R.string.NetworkisNotAvailable);
+                mProgressTxt.setBackgroundResource(R.color.colorNO );
         }
     }
 

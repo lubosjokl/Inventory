@@ -69,6 +69,7 @@
     <string name="ImportDone">Import ukonceny za</string>
     <string name="loadDatabase">Stahujem databazu ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">NeexportovalSaZiadnySuborPreverteFirewall</string>
+    <string name="NetworkisNotAvailable">Network is not Available</string>
 
     <!-- -->
 

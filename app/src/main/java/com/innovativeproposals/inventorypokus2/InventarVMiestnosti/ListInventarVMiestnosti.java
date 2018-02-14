@@ -358,7 +358,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                // theIndent.putExtra("barcode", dataString);
 
                 //theIndent.putExtra("roomcode", myRoomcode);
-                // TODO treba poslat do detailu aj rommcode a pri zapise prepisat s myRoomcode
 
                 Log.d("skenujem", "Show 5");
                // startActivity(theIndent);
