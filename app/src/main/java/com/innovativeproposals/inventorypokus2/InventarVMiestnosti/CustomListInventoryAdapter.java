@@ -100,8 +100,8 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
 
                 // If there is no search value, then add all original list items to filter list
                 if (TextUtils.isEmpty(searchText)) {
-
-                    filtered_list.addAll(original_data);
+                    if(original_data != null)
+                        filtered_list.addAll(original_data);
 
                 } else {
                     // Iterate in the original List and add it to filter list...

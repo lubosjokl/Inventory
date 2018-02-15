@@ -18,13 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-/*
-SELECT 	,[itembarcode]		,[itemdescription]	,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL]		serialnr
-	FROM [majetok]
-
- */
-
 public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
     protected static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
     protected static final int DB_VERZIA = 1;

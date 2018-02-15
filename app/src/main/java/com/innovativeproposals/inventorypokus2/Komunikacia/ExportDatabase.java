@@ -39,7 +39,6 @@ import java.net.URL;
 
 // Uploading Sqlite database to a remote server
 
-
 public class ExportDatabase extends AppCompatActivity implements View.OnClickListener {
 
     private Button mStartBtn;
@@ -65,7 +64,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
         mStartBtn = (Button) findViewById(R.id.startButton);
         mProgressTxt = (TextView) findViewById(R.id.prog_txt);
@@ -118,7 +116,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-
     // Samostatna asynchronna trieda
     // byte[] je vstup do nasho spracovania pozadia
     // Integer je typ ktory sa pouziva na aktualizaciu komponentu uzivatelskeho rozhrania
@@ -133,16 +130,18 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
                 doneStr = getString(R.string.NeexportovalSaZiadnySuborPreverteFirewall);
                 mProgressTxt.setBackgroundResource(R.color.colorNO );
                 publishProgress(0);
+            } else if(result.equals("error1")) {
+                doneStr = "Source File not exist";
+                mProgressTxt.setBackgroundResource(R.color.colorZelena  );
+
             } else {
                 doneStr = getString(R.string.ImportDone) + result + " ms";
                 mProgressTxt.setBackgroundResource(R.color.colorZelena  );
             }
 
-
             mProgress.setVisibility(View.INVISIBLE); // VISIBLE
             mProgressTxt.setText(doneStr);
             mGenAT = null; // po ukonceni vycistit
-
         }
 
         @Override
@@ -171,7 +170,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
             //fileNameTo = p.applicationInfo.dataDir + "/databases";
             String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
             String fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATA_PDA2PC;
-
 
             SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + Constants.PREF_FILE_NAME, MODE_PRIVATE);
             String address = sharedPreferences.getString(Constants.KEY_ADDRESS, "not defined"); // druhy parameter je defaultna hodnota
@@ -204,10 +202,9 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
             if (!sourceFile.isFile()) {
 
                 Log.e("uploadFile", "Source File not exist ");
-                // TODO  return 0;
+
             } else {
                 try {
-
 
                     long progScale = sourceFile.length();
 
@@ -260,7 +257,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
                         if(aa>100) kolo = 0;
                         kolo++;
                         publishProgress(aa);
-
                     }
 
                     // send multipart form data necesssary after file data...
@@ -283,7 +279,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
                         StringBuilder result = new StringBuilder();
 
                         InputStream in = new BufferedInputStream(connection.getInputStream());
-
                         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
                         String line;
@@ -311,15 +306,13 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
                     return "nofile";
                 }
 
-               // TODO return serverResponseCode;
+                return "error1"; // Source File not exist
 
             } // End else block
 
             endTime = SystemClock.elapsedRealtime();
             return String.valueOf(endTime - startTime);
-
         }
     }
-
 
 }

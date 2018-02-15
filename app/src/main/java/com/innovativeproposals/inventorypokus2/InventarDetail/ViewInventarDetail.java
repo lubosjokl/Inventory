@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -44,21 +46,17 @@ public class ViewInventarDetail extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1;
 
-    //Intent intent;
+    String origRoomCode;
     Inventar inventar;
 
-    //TextView itembarcodeET;
     TextView itemdescriptionET;
-   // TextView statusET;
-    //TextView datumET;
-    //TextView datumDisposeET;
-    //String origRoomCode= null;
     Spinner spinner_inventoryType;
     Spinner spinner_responsible;
     EditText txt_Notice;
     EditText txt_SerialNr;
-    FloatingActionButton fab_takePhoto;
+    FloatingActionButton fab_takePhoto; // tlacitko na fotenie
     ImageView detailView_Image;
+    AppBarLayout appBarLayout;
 
     DataModelInventarDetail dm = new DataModelInventarDetail(this); // pri kopirovani do inej triedy zmen co?
 
@@ -80,7 +78,7 @@ public class ViewInventarDetail extends AppCompatActivity {
             case R.id.menu_item_save:
 
                 try {
-                    Object aa = itemdescriptionET.getText();
+                  //  Object aa = itemdescriptionET.getText();
                     String xx = "" + itemdescriptionET.getText();
                     if (xx.equals("")) {
                         Toast.makeText(this, R.string.meno_musi_byt_vyplnene, Toast.LENGTH_LONG).show();
@@ -116,7 +114,7 @@ public class ViewInventarDetail extends AppCompatActivity {
 
 
                 //tu uloz nove data do databazy
-                dm.ulozInventar(inventar);
+                dm.ulozInventar(inventar, origRoomCode);
 
                 if(inventar.getImage() != null)
                     dm.ulozObrazok(inventar);
@@ -159,6 +157,7 @@ public class ViewInventarDetail extends AppCompatActivity {
         spinner_responsible = findViewById(R.id.spinner_responsible);
         fab_takePhoto = findViewById(R.id.fab_inventar_detail_take_picture);
         detailView_Image = findViewById(R.id.detailView_Image);
+        appBarLayout = findViewById(R.id.appBar  );
     }
 
     @Override
@@ -179,37 +178,15 @@ public class ViewInventarDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String isValue = "";
         inventar = null;
-      //  origRoomCode= "";
-      //  String newBarcode = "";
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             inventar = getIntent().getParcelableExtra(Constants.INTENT_INVENTORY);
-         //   origRoomCode = extras.getString("roomcode"); duplicita
-          //  newBarcode = extras.getString("barcode");
-
+            origRoomCode = extras.getString("roomcode"); // musim ziskat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
         }
-
-        // toto mi tu nechaj, alebo uprav odoslanie info z InfoActivity
-        if(inventar==null) {
-
-            //inventar = getIntent().getParcelableExtra("inventar_object");
-            // hlaska o chybe
-            //Toast.makeText(Toast.LENGTH_SHORT, "neexistujuci kod").show();
-            Toast.makeText(this,"neexistujuci barcode",Toast.LENGTH_LONG);
-
-        }
-
-        // toto je urobene  pre novy naskenovany inventar - istota ?
-    /*    if(inventar==null) {
-            inventar = new Inventar();
-            inventar.setRommCode(origRoomCode);
-            inventar.setItemBarcode(newBarcode);
-         //   Toast.makeText(this,"neexistujuci barcode2",Toast.LENGTH_LONG);
-        }*/
 
         setContentView(R.layout.inventar_detail);
-        locateControls(); // co to je?
+        locateControls(); // priradi premennym ekvivalenty z layoutu
 
         //on click listener for take camera
         fab_takePhoto.setOnClickListener(new View.OnClickListener() {
@@ -225,12 +202,20 @@ public class ViewInventarDetail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ImageView myImage = findViewById(R.id.detailView_Image);
-
         if (inventar.getImage() != null && inventar.getImage().length > 1) {
+            detailView_Image.setVisibility(View.VISIBLE); // VISIBLE, INVISIBLE
             ByteArrayInputStream imageStream = new ByteArrayInputStream(inventar.getImage());
             Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-            myImage.setImageBitmap(theImage);
+            detailView_Image.setImageBitmap(theImage); // bolo myImage
+        } else {
+            // appBarLayout.setVisibility(View.INVISIBLE);
+
+            // zmensim vysku pokial nie je obrazok
+            //float heightDp = getResources().getDisplayMetrics().heightPixels / 3;
+            float heightDp = 170; // natvrdo aby sa zmestila aj ikona fotoaparata
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams)appBarLayout.getLayoutParams();
+            lp.height = (int)heightDp;
+
         }
 
         TextView barcode = findViewById(R.id.barcodeET);
@@ -251,12 +236,11 @@ public class ViewInventarDetail extends AppCompatActivity {
                 lastInventory.setText(isValue);
             } else
                 lastInventory.setText(isValue);
-
         }
+
         isValue = inventar.getPoznamka();
         if (isValue != null)
             txt_Notice.setText(isValue);
-
 
         isValue = inventar.getSerialNr();
         if (isValue != null)
@@ -299,7 +283,7 @@ public class ViewInventarDetail extends AppCompatActivity {
         }
         // spinner na typy majetku
         String tempSpinnerTyp = null;
-        isValue = inventar.getTypeMajetku();
+        isValue = inventar.getTypeMajetku(); // TODO toto nacitaj niekde vyssie, nema vyznam dookola nacitavat array
         if (isValue != null)
             tempSpinnerTyp = isValue;
 
@@ -320,7 +304,7 @@ public class ViewInventarDetail extends AppCompatActivity {
 
         // spinner na zodpovednu osobu
         String tempZodpovednaOsoba = null;
-        isValue = inventar.getZodpovednaOsoba();
+        isValue = inventar.getZodpovednaOsoba(); // TODO toto nacitaj niekde vyssie, nema vyznam dookola nacitavat array
         if (isValue != null)
             tempZodpovednaOsoba = isValue;
 
@@ -339,7 +323,6 @@ public class ViewInventarDetail extends AppCompatActivity {
         if (tempZodpovednaOsoba != null)
             spinner_responsible.setSelection(adapterZodpovedneOsoby.getPosition(tempZodpovednaOsoba));
 
-
         // ukrytie klavesnice
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.layout_detail);
         layout.setOnTouchListener(new View.OnTouchListener() {
@@ -352,12 +335,24 @@ public class ViewInventarDetail extends AppCompatActivity {
 
     }
 
+/*
+    public boolean onTouch(View v, MotionEvent event) {
+        // scrolovanie pro EditBoxoch
+        v.getParent().getParent().requestDisallowInterceptTouchEvent(true);
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_UP:
+                v.getParent().getParent().requestDisallowInterceptTouchEvent(false);
+                break;
+        }
+        return false;
+    }
+*/
+
     protected void hideKeyboard(View view)
     {
         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
-
 
     @Override
     protected void onDestroy() {

@@ -192,7 +192,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         inventar.setInfo(true);
 
         Intent theIndent = new Intent(this, ViewInventarDetail.class);
-        // theIndent.putExtra("roomcode",inventar.getRommCode()); duplicita, nachadza sa v objekte
+        theIndent.putExtra("roomcode","info"); // v Detaile sa vyzaduje pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod, tu poslem len "info"
+
         theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
         startActivity(theIndent);
     }
@@ -291,8 +292,6 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
 
             try {
                 //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
-                Log.d("skenujem", "1");
-                // scannET.setText(barcodeString); // TODO toto robi problem
                 doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
                 Log.d("skenujem", "2");
             } catch (URISyntaxException e) {

@@ -48,7 +48,6 @@ import java.util.List;
 public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKManager.EMDKListener,
         Scanner.StatusListener, Scanner.DataListener, BarcodeManager.ScannerConnectionListener, CompoundButton.OnCheckedChangeListener {
 
-    Intent intent;
     private String myRoomcode;
     TextView itembarcodeET;
     TextView itemdescriptionET;
@@ -73,8 +72,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
     private int triggerIndex = 0;
     private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
-
-        //id	,[itembarcode] ,		,[itemdescription]		,[roomcodenew]		,[status]		,[datum]		,[datumDispose]		,[datumREAL], serialnr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,11 +107,10 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 //        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 //        searchView.setSearchableInfo(
 //                searchManager.getSearchableInfo(getComponentName()));
-//
-        return true;
-//        return super.onCreateOptionsMenu(menu);
-    }
 
+        return true;
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,13 +120,14 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
             //aktualizacia udajov po navrate z Detailu
             try {
-
                 zoznamHM = null;
-                zoznamHM = dm.dajNoveZaznamy(myRoomcode, ""); // array naplni spravne
-                customListAdapter.original_data = zoznamHM;
-                customListAdapter.filtered_list = zoznamHM;
+                zoznamHM = dm.dajNoveZaznamy(myRoomcode, "");
+                if(zoznamHM.size()>0) {
 
-                customListAdapter.notifyDataSetChanged();
+                     customListAdapter.original_data = zoznamHM;
+                     customListAdapter.filtered_list = zoznamHM;
+                     customListAdapter.notifyDataSetChanged();
+                }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -170,7 +167,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             e.printStackTrace();
         }
 
-        if (zoznamHM.size() != 0) {
+     //   if (zoznamHM.size() != 0) {
             ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -191,7 +188,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                     Intent theIndent = new Intent(getApplication(),
                             ViewInventarDetail.class);
 
-                    // theIndent.putExtra("roomcode",myRoomcode); duplicita
+                    theIndent.putExtra("roomcode",myRoomcode); // musim posielat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
                     theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
 
                     View imageView = view.findViewById(R.id.detailView_Image);
@@ -202,9 +199,9 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                 }
             });
             customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
-
             lw.setAdapter(customListAdapter);
-        }
+
+      //  }
     }
 
     private Inventar findInventarById(Integer itemId) {
@@ -320,13 +317,10 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             for (ScanDataCollection.ScanData data : scanData) {
 
                 String dataString = data.getData();
-            //    Inventar scannedItem = null;
-            //    Inventar newItem = new Inventar();
                 Inventar inventar = new Inventar();
 
                 Log.i("Scanned value:", dataString);
                 new AsyncDataUpdate().execute(dataString);
-
 
                 try {
                     // daj inventar s kodom
@@ -341,30 +335,17 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
                 else {
                     // je to novy inventar
-                    // TODO pokial to robim takto, tak to ostane visiet po startActivityForResult - opravene, testuj
                     inventar.setRommCode(myRoomcode);
                     inventar.setItemBarcode(dataString);
                     inventar.setInfo(false );
                 }
 
                 Intent theIndent = new Intent(this, ViewInventarDetail.class);
-
-               // if(scannedItem == null)
-                 //   theIndent.putExtra(Constants.INTENT_INVENTORY, newItem);  // novy inventar
-                //else
                 theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
+                theIndent.putExtra("roomcode",myRoomcode); // musim posielat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
 
-              //  theIndent.putExtra("roomcode", myRoomcode);
-               // theIndent.putExtra("barcode", dataString);
-
-                //theIndent.putExtra("roomcode", myRoomcode);
-
-                Log.d("skenujem", "Show 5");
-               // startActivity(theIndent);
-                 startActivityForResult(theIndent, 1);
-
+                startActivityForResult(theIndent, 1);
             }
-
             return;
         }
     }
@@ -447,7 +428,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         }
     }
 
-
     private void startScan() {
 
         if (scanner == null) {
@@ -477,7 +457,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 //                textViewStatus.setText("Status: " + e.getMessage());
             }
         }
-
     }
 
     private void enumerateScannerDevices() {
@@ -640,7 +619,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                         ((ScrollView) findViewById(R.id.scrollView1)).fullScroll(View.FOCUS_DOWN);
                     }
                 });*/
-
         }
     }
 
@@ -746,8 +724,9 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             setTrigger();
             setDecoders();
             startScan();
-
         }
+
+        // a este nacitaj original_data ?
 
 
     }

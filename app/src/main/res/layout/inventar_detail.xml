@@ -8,6 +8,7 @@
     android:id="@+id/layout_detail"
     tools:context="com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail">
 
+    <!-- treba zneviditelnit cely AppBar -->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -55,6 +56,13 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_parent_layout">
 
+            <!-- TOTO zabezpeci spravne scrolovanie v EditTexte
+
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+            -->
+
             <!-- barcode -->
             <TextView
                 android:id="@+id/barcodeET"
@@ -96,6 +104,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+
+
                     android:hint="@string/description_inventoryName"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
@@ -140,6 +154,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+
                     android:hint="@string/description_notice"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
@@ -156,22 +175,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+
                     android:hint="@string/description_serialnr"
                     android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
-            <!-- co je toto?
-
-                android:id="@+id/layout_added_discarded"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textLayout_SerialNr">
- -->
-
             <!-- Zaradeny, vyradeny text -->
-
             <TextView
                 android:id="@+id/lbl_Discarded"
                 android:layout_width="wrap_content"
@@ -223,7 +236,6 @@
                 android:layout_below="@id/lbl_Responsible"
                 android:spinnerMode="dropdown" />
 
-
             <TextView
                 android:id="@+id/location"
                 android:layout_width="match_parent"
@@ -237,7 +249,7 @@
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <!-- fotenie -->
+    <!-- tlacitko fotenia -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_inventar_detail_take_picture"
         android:layout_width="wrap_content"

@@ -213,12 +213,15 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         return vysledok;
     }
 
-    public int ulozInventar(Inventar myInventar)
+    public int ulozInventar(Inventar myInventar, String newRoom)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         int aa = 0; // nepouzite
         String mySql = null;
         boolean isNew = false;
+        String akaRoomcode = newRoom;
+        if(newRoom.equalsIgnoreCase("info"))
+            akaRoomcode = myInventar.getRommCode();
 
         if(myInventar.getId()==0)
             isNew = true;
@@ -243,7 +246,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             // insertStmt.bindString(1, Integer.toString(this.accId));
             insertStmt.bindString(1,myInventar.getItemDescription());
             insertStmt.bindString(2,"10");
-            insertStmt.bindString(3,myInventar.getRommCode());
+            insertStmt.bindString(3,akaRoomcode); // pri vstupe z miestnosti vzdy prepisuj miestnost, pri info ponechaj povodnu miestnost
             insertStmt.bindString(4,myInventar.getSerialNr());
             insertStmt.bindString(5,myInventar.getZodpovednaOsoba());
             insertStmt.bindString(6,myInventar.getTypeMajetku());
@@ -262,8 +265,8 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             Log.d("update", "Query: " + insertStmt.toString());
             insertStmt.executeInsert();
 
-
-            if(!myInventar.isInfo()) {  // pri info nezapisovat ******* !!!
+            // zapis do tabulky inventura **************************************** // pri info nezapisovat ******* !!!
+            if(!myInventar.isInfo()) {
                 // teraz uloz do tabulky inventura - tu je len insert
                 mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
 
