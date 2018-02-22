@@ -62,7 +62,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> alVysledky;
 
         alVysledky = new ArrayList<HashMap<String, String>>();
-        String sSQL = "SELECT id,roomcode, roomdescription FROM " + DB_TABULKA + " WHERE roomcode like '"+myPoschodieKod+"%'";
+        String sSQL = "SELECT id,roomcode, roomdescription FROM " + DB_TABULKA + " WHERE roomcode like '"+myPoschodieKod+"%' ORDER BY roomdescription";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 

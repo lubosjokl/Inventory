@@ -68,6 +68,7 @@
     <string name="loadDatabase">Database ist importiert ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">Database wurde nich exportiert, kontrollieren Sie Firewall</string>
     <string name="NetworkisNotAvailable">Network is not Available</string>
+    <string name="unknown_location">Location unbekannt</string>
 
 
 </resources>

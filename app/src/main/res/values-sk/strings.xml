@@ -68,5 +68,6 @@
     <string name="loadDatabase">Importujem databázu ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">Databáza sa nevyexportovala, preverte Firewall</string>
     <string name="NetworkisNotAvailable">WiFi nie je k dispozícii</string>
+    <string name="unknown_location">Miestnosť nie je určená</string>
 
 </resources>

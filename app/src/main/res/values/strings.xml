@@ -70,6 +70,7 @@
     <string name="loadDatabase">Stahujem databazu ...</string>
     <string name="NeexportovalSaZiadnySuborPreverteFirewall">NeexportovalSaZiadnySuborPreverteFirewall</string>
     <string name="NetworkisNotAvailable">Network is not Available</string>
+    <string name="unknown_location">miestnosť nie je určená</string>
 
     <!-- -->
 

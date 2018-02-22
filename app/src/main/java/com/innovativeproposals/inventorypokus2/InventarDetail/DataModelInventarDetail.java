@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
+import com.innovativeproposals.inventorypokus2.R;
+
 import java.net.URISyntaxException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -89,13 +91,17 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
         String myDivision = null;
         String myOddelenie = null;
         String Zvysok = null;
-        String myLocation = "miestnosť nie je určená";
+        String myLocation = "";
+        myLocation = "Miestnosť nie je určená"; // R.string.unknown_location;
 
         int kde = myRoomCode.indexOf("-");
         if(kde > 0) {
             myDivision = myRoomCode.substring(0,kde);
           //  myDivision = myDivision + "%";
             Zvysok = myRoomCode.substring(kde+1,myRoomCode.length());
+        } else {
+
+            return myLocation;
         }
 
         kde = Zvysok.indexOf("-");

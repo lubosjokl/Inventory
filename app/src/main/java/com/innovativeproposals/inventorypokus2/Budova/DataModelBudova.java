@@ -62,7 +62,7 @@ public class DataModelBudova extends SQLiteOpenHelper {
     {
         ArrayList<HashMap<String, String>> alVysledky;
         alVysledky = new ArrayList<HashMap<String, String>>();
-        String sSQL = "SELECT Id, divizia, KodDivizie FROM " + DB_TABULKA;
+        String sSQL = "SELECT Id, divizia, KodDivizie FROM " + DB_TABULKA + " ORDER BY divizia";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
