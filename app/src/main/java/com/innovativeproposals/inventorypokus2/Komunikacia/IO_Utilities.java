@@ -5,10 +5,17 @@ package com.innovativeproposals.inventorypokus2.Komunikacia;
  */
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.*;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 import android.location.*;
+import android.support.v7.app.AppCompatActivity;
 import android.util.*;
 import android.os.*;
+
+import com.innovativeproposals.inventorypokus2.Constants;
 
 import java.io.*;
 //import java.net.HttpURLConnection;
@@ -24,13 +31,14 @@ import java.util.*;
 // https://stackoverflow.com/questions/11766878/sending-files-using-post-with-httpurlconnection
 
 
-public class IO_Utilities {
+public class IO_Utilities extends Activity {
     private final boolean _useGpsToGetLocation = true;
 
-    Context _context;
-    public IO_Utilities(Context context){
+
+   /* Context _context;
+    public IO_Utilities(Context context) {
         _context = context;
-    }
+    }*/
 
 
     static void copyFile(String src, String dst) throws IOException {
@@ -55,6 +63,41 @@ public class IO_Utilities {
         }
     }
 
+    public boolean fileExist (String filePath)  {
+
+        boolean jeTam = false;
+        try {
+
+            File file = new File(filePath);
+            if(file.exists())
+                jeTam = true;
+
+        } finally {
+            // in.close();
+        }
+        return jeTam;
+    }
+
+    public  String getDBPath() {
+
+        PackageManager m = getPackageManager();
+
+
+        String saveDir = getPackageName();
+        PackageInfo p = null;
+        try {
+            p = m.getPackageInfo(saveDir,0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String sourceFileUri = p.applicationInfo.dataDir + "/databases/";
+       // String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
+       // String fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATA_PDA2PC;
+
+        return sourceFileUri;
+
+    }
 
 
     // Append the location timestamp, lat/lng, and address to the specified file

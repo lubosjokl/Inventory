@@ -153,7 +153,6 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
         @Override
         protected String doInBackground(byte[]... bytes) {
 
-
             long startTime;
             long endTime;
             startTime = SystemClock.elapsedRealtime();
@@ -166,10 +165,21 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            //saveDir = p.applicationInfo.dataDir + "/files"; // /data/user/0/com.innovativeproposals.inventorypokus2
-            //fileNameTo = p.applicationInfo.dataDir + "/databases";
             String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
             String fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATA_PDA2PC;
+
+
+/*            IO_Utilities util = new IO_Utilities(getBaseContext());
+
+            String myPath = util.getDBPath();
+            String sourceFileUri = myPath + Constants.FILE_DATABASE;;
+            boolean exists = util.fileExist(sourceFileUri);
+            if(!exists)
+                return ""; // daj hlasku
+
+           // String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
+            String fileNameTo = myPath  + Constants.FILE_DATA_PDA2PC;
+*/
 
             SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + Constants.PREF_FILE_NAME, MODE_PRIVATE);
             String address = sharedPreferences.getString(Constants.KEY_ADDRESS, "not defined"); // druhy parameter je defaultna hodnota

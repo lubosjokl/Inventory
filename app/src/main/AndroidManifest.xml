@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.innovativeproposals.inventorypokus2">
 
-    <!--Toto odkomentuj-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--Toto musi byt zakomentovane emulator alebo android telefon
+        <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+    -->
+
     <uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
 
@@ -19,8 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--Toto odkomentuj-->
+        <!-- Toto musi byt zakomentovane emulator alebo android telefon
+            <uses-library android:name="com.symbol.emdk" />
+        -->
         <uses-library android:name="com.symbol.emdk" />
+
 
         <activity
             android:name=".MainActivity"

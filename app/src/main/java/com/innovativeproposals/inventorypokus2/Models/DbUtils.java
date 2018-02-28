@@ -41,7 +41,7 @@ public class DbUtils extends SQLiteOpenHelper {
 
 // doplnujuce funkcie
 
-    public Integer dajCelkovyPocetInventara(String myRoomCode) {
+    public Integer dajCelkovyPocetInventara(String myRoomCode) { //xx
 
         Integer results = 0;
         String sSQL = null;
@@ -50,7 +50,7 @@ public class DbUtils extends SQLiteOpenHelper {
         else
             sSQL = "SELECT count(*)  FROM majetok where roomcodenew = '"+myRoomCode+"'";
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(); // mName = inventory.db
         Cursor cursor = db.rawQuery(sSQL, null);
 
         //kurzor na prvy zaznam

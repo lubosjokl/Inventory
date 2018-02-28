@@ -161,8 +161,6 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             assureThatDirectoryExist(fileNameTo); //
             fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
 
-            //  vlastna cinnost, toto sa moze zamenit
-
 
 
             //int BUFFER_SIZE = 1024;

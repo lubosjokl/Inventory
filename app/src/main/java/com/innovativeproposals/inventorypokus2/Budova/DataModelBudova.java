@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.innovativeproposals.inventorypokus2.Constants;
+import com.innovativeproposals.inventorypokus2.Komunikacia.IO_Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,22 +17,17 @@ import java.util.HashMap;
 /**
  * Created by Lubos on 26.12.17.
  */
-/*
-SELECT [Id]
-        ,[divizia]
-        ,[KodDivizie]
-        FROM [divizia]
-        ORDER BY [Id] DESC LIMIT 500*/
 
 public class DataModelBudova extends SQLiteOpenHelper {
 
-  protected static final String DB_DATABAZA = Constants.FILE_DATABASE; // "inventory";
+    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; // "inventory";
     protected static final int DB_VERZIA = 1;
     protected static final String DB_TABULKA = "divizia";
 
     public static final String ATR_ID = "_id";
     public static final String ATR_DIVIZIA = "divizia";
     public static final String ATR_KODDIVIZIE = "KodDivizie";
+    Context ctx;
 
     // zaklad
     @Override
@@ -51,7 +47,6 @@ public class DataModelBudova extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
     public DataModelBudova(Context ctx)
     {
         super(ctx, DB_DATABAZA, null, DB_VERZIA);
@@ -62,23 +57,23 @@ public class DataModelBudova extends SQLiteOpenHelper {
     {
         ArrayList<HashMap<String, String>> alVysledky;
         alVysledky = new ArrayList<HashMap<String, String>>();
+
         String sSQL = "SELECT Id, divizia, KodDivizie FROM " + DB_TABULKA + " ORDER BY divizia";
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sSQL, null);
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(sSQL, null);
 
-        //kurzor na prvy zaznam
-        if (cursor.moveToFirst())
-        {
-            do
-            {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                hm.put(ATR_ID, cursor.getString(0));
-                hm.put(ATR_DIVIZIA, cursor.getString(1));
-                hm.put(ATR_KODDIVIZIE, cursor.getString(2));
+            //kurzor na prvy zaznam
+            if (cursor.moveToFirst()) {
+                do {
+                    HashMap<String, String> hm = new HashMap<String, String>();
+                    hm.put(ATR_ID, cursor.getString(0));
+                    hm.put(ATR_DIVIZIA, cursor.getString(1));
+                    hm.put(ATR_KODDIVIZIE, cursor.getString(2));
 
-                alVysledky.add(hm);
-            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
-        }
+                    alVysledky.add(hm);
+                } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+            }
+
         return alVysledky;
     }
 
