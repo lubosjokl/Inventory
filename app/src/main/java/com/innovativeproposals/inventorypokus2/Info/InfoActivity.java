@@ -1,47 +1,53 @@
-package com.innovativeproposals.inventorypokus2;
+package com.innovativeproposals.inventorypokus2.Info;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.InventarDetail.ViewInventarDetail;
+import com.innovativeproposals.inventorypokus2.InventarVMiestnosti.CustomListInventoryAdapter;
 import com.innovativeproposals.inventorypokus2.InventarVMiestnosti.DataModelInventarVMiestnosti;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 
 // add Zebra
+import com.innovativeproposals.inventorypokus2.MyAlertDialogFragmentOK;
+import com.innovativeproposals.inventorypokus2.R;
 import com.symbol.emdk.EMDKManager;
-import com.symbol.emdk.EMDKManager.EMDKListener;
 import com.symbol.emdk.EMDKResults;
 import com.symbol.emdk.barcode.BarcodeManager;
 import com.symbol.emdk.barcode.ScanDataCollection;
 import com.symbol.emdk.barcode.Scanner;
-import com.symbol.emdk.barcode.Scanner.DataListener;
-import com.symbol.emdk.barcode.Scanner.StatusListener;
 import com.symbol.emdk.barcode.ScannerConfig;
 import com.symbol.emdk.barcode.ScannerException;
 import com.symbol.emdk.barcode.ScannerInfo;
 import com.symbol.emdk.barcode.ScannerResults;
 import com.symbol.emdk.barcode.StatusData;
 
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
 import java.net.URISyntaxException;
@@ -70,48 +76,213 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
     private int triggerIndex = 0;
     private int defaultIndex = 0; // Keep the default scanner
     private int scannerIndex = 0; // Keep the selected scanner
-    //private int dataLength = 0;
-    private EditText scannET = null;
-    private Button buttonStartScan = null;
 
-    private TextView textViewStatus = null;
+    TextView itembarcodeET;
+    TextView itemdescriptionET;
+
+    TextView statusET;
+    TextView datumET;
+    CustomListInventoryAdapter customListAdapter;
+    DataModelInventarVMiestnosti dm2 = new DataModelInventarVMiestnosti(this); // pri kopirovani do inej triedy zmen
+
     String barcodeString = null;
     List<Inventar> zoznamHM = null;
-    DataModelInventarVMiestnosti dm = new DataModelInventarVMiestnosti(this);
+    List<Inventar> zoznamHM2 = null;
+
+
+    DataModelInfo dm = new DataModelInfo(this);
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem myActionMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+                if (!searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchedValue) {
+
+                //tu sa odohrava event, kde sa zmenil search text
+                //  customListAdapter.filter(s);
+
+                //aktualizacia udajov po navrate z Detailu
+                     try {
+                zoznamHM = null;
+                zoznamHM = dm.getInventarList(searchedValue);
+                    if(zoznamHM.size()>0) {
+
+                        customListAdapter.original_data = zoznamHM;
+                        customListAdapter.filtered_list = zoznamHM;
+                        customListAdapter.notifyDataSetChanged();
+                    }
+                    //     Log.i("QUERY CHANGED", "Search Text: " + searchedValue);
+
+                   }
+                   catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    //return false;
+                   }
+                return false;
+            }
+            });
+
+
+        //   Associate searchable configuration with the SearchView
+        //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        //        searchView.setSearchableInfo(
+        //        searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != 1) return; // sem ide po navrate z detailu. Aj niekedy inokedy?
+
+        if (resultCode == 0) { // bolo Activity.RESULT_OK
+
+            //aktualizacia udajov po navrate z Detailu
+            try {
+                zoznamHM = null;
+                zoznamHM = dm.getInventarList("");
+                if(zoznamHM.size()>0) {
+
+                    customListAdapter.original_data = zoznamHM;
+                    customListAdapter.filtered_list = zoznamHM;
+                    customListAdapter.notifyDataSetChanged();
+                }
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        // scanner
         deviceList = new ArrayList<ScannerInfo>();
-
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
-            textViewStatus.setText("Status: " + "EMDKManager object request failed!");
+          //  textViewStatus.setText("Status: " + "EMDKManager object request failed!");
+            ShowMyAlert("Status: " + "EMDKManager object request failed!");
         }
 
-        setContentView(R.layout.info);
+        setContentView(R.layout.inventar_vmiestnosti);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        scannET = (EditText) findViewById(R.id.scannET);
-        textViewStatus = (TextView) findViewById(R.id.textViewStatus);
-         buttonStartScan = (Button) findViewById(R.id.buttonStartScan);
+        try {
+            // zoznam inventarov
+            zoznamHM = dm.getInventarList("");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
 
-        addStartScanButtonListener();
-        setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
+        //   if (zoznamHM.size() != 0) {
+        ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
+        lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            //kliknutie na polozku zoznamu
+            @SuppressLint("RestrictedApi")
+            public void onItemClick(AdapterView<?> parent,
+                                    View view, int position, long id) {
+                itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
+                itemdescriptionET = (TextView) view.findViewById(R.id.itemdescriptionET);
+
+                statusET = (TextView) view.findViewById(R.id.statusET);
+                datumET = (TextView) view.findViewById(R.id.datumET);
+
+                int inventarID = (int) view.getTag();
+                Inventar inventar = findInventarById(inventarID);
+                inventar.setInfo(false);
+
+                Intent theIndent = new Intent(getApplication(),
+                        ViewInventarDetail.class);
+
+                theIndent.putExtra("roomcode","info"); // v Detaile sa vyzaduje pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod, tu poslem len "info"
+                theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
+
+                View imageView = view.findViewById(R.id.detailView_Image);
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(InfoActivity.this  , imageView, "detailView_Image");
+
+                startActivityForResult(theIndent, 1, options.toBundle()); //
+            }
+        });
+        customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
+        lw.setAdapter(customListAdapter);
+
+       //x addStartScanButtonListener();
+       //x  setupButtonHandlers(); // zavolam ovladanie mojich tlacitok
 
         // ukrytie klavesnice
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.layout_info);
+        /*
+        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.layout_info);
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 hideKeyboard(view);
                 return false;
             }
-        });
+        });*/
+
+    }
+
+    public void ShowMyAlert(String msg) {
+
+        // pouzi DialogFragment
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(msg);
+        builder1.setCancelable(true);
+        builder1.setIcon(android.R.drawable.ic_dialog_alert);
+        builder1.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+  /*          builder1.setNegativeButton(
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    }); */
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show(); // sem to nepride
+      //  finish();
+
+    }
+
+
+    private Inventar findInventarById(Integer itemId) {
+        for (Inventar item : zoznamHM) {
+            if (item.getId() == itemId)
+                return item;
+        }
+
+        //toto by sa nikdy nemalo stat
+        return null;
     }
 
     protected void hideKeyboard(View view)
@@ -120,6 +291,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    /*
     private void addStartScanButtonListener() {
         Button btnStartScan = (Button) findViewById(R.id.buttonStartScan);
         btnStartScan.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +311,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             }
         });
     }
-
+*/
+    /*
     private void setupButtonHandlers() {
         findViewById(R.id.btOK).setOnClickListener((View view) -> {
             try {
@@ -153,41 +326,34 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         });
     }
 
-    private void doShowDetailCall() throws URISyntaxException {
-
-        // pokial nestihol naplnit editbox
-/*
-        if (barcodeString == null) {
-            barcodeString = scannET.getText().toString();
-        }
-
-        if (barcodeString.equals("")) {
-            barcodeString = scannET.getText().toString();
-        }
 */
-
-        if (barcodeString.equals("barcode")) {
-            Toast.makeText(this, R.string.barcode_doesnt_read_properly, Toast.LENGTH_LONG).show();
-            return;
-        }
+    private void doShowDetailCall() throws URISyntaxException {
 
         if (barcodeString.equals("")) {
             Toast.makeText(this, R.string.scann_barcode_first, Toast.LENGTH_LONG).show();
             return;
         }
 
-        zoznamHM = dm.dajNoveZaznamy("", barcodeString); // List<Inventar> zoznamHM
+        zoznamHM2 = dm2.dajNoveZaznamy("", barcodeString); // List<Inventar> zoznamHM
 
-        if (zoznamHM.size() == 0) {
+        if (zoznamHM2.size() == 0) {
             // TODO sken neexistujuceho kodu zobrazi Toast prilis kratko, resp. ho premaze Status skeneru
             // sem to prejde na button, ale nie na sken
-            Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show(); // xx
+
+           // ShowMyAlert(getResources().getString(R.string.barcode_doesnt_exist));
+
+          //  DialogFragment newFragment = MyAlertDialogFragmentOK.newInstance(1);
+            //   newFragment.show(getFragmentManager(), "dialog");
+          // nejde  !!!  MyAlertDialogFragmentOK.showAlert("title", "message",null);
+
+
             return;
         }
 
 
         Log.d("skenujem", "Show 4");
-        Inventar inventar = zoznamHM.get(0);
+        Inventar inventar = zoznamHM2.get(0);
         barcodeString = "";
         inventar.setInfo(true);
 
@@ -234,7 +400,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
     @Override
     public void onOpened(EMDKManager emdkManager) {
 
-        textViewStatus.setText("Status: " + getString(R.string.EMDK_OpenSuccess));
+       // textViewStatus.setText("Status: " + getString(R.string.EMDK_OpenSuccess));
 
         this.emdkManager = emdkManager;
 
@@ -274,7 +440,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             emdkManager.release();
             emdkManager = null;
         }
-        textViewStatus.setText("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
+     //   textViewStatus.setText("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
+        ShowMyAlert("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
     }
 
     @Override
@@ -293,7 +460,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             try {
                 //Log.d("skenujem", String.format("MyHandler[running on thread %d] - recevied:%s", threadId,messageText));
                 doShowDetailCall();  // nevolat to automaticky, robi mi to problem ??
-                Log.d("skenujem", "2");
+              //  Log.d("skenujem", "2");
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -364,6 +531,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 } catch (ScannerException e) {
                     // mELogListener.onLogE(TAG, "enableScanner; Status: " + e.getMessage(), e);
                     //textViewStatus.setText("Status: " + e.getMessage());
+                    ShowMyAlert("Status: " + e.getMessage());
                 }
             }
         }
@@ -390,7 +558,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                     ++spinnerIndex;
                 }
             } else {
-                textViewStatus.setText("Status: " + "Failed to get the list of supported scanner devices! Please close and restart the application.");
+               // textViewStatus.setText("Status: " + "Failed to get the list of supported scanner devices! Please close and restart the application.");
+                ShowMyAlert("Status: " +"Failed to get the list of supported scanner devices! Please close and restart the application.");
             }
 
             //   ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(InfoActivity.this, android.R.layout.simple_spinner_item, friendlyNameList);
@@ -472,7 +641,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
 
             } catch (ScannerException e) {
 
-                textViewStatus.setText("Status: " + e.getMessage());
+              //  textViewStatus.setText("Status: " + e.getMessage());
+                ShowMyAlert("Status: " + e.getMessage());
             }
         }
     }
@@ -498,12 +668,14 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
 
                     new AsyncUiControlUpdate().execute(false);
                 } else {
-                    textViewStatus.setText(R.string.scannerIsNotEnabled);
+                 //   textViewStatus.setText(R.string.scannerIsNotEnabled);
+                    ShowMyAlert("Status: " + R.string.scannerIsNotEnabled);
                 }
 
             } catch (ScannerException e) {
 
-                textViewStatus.setText("Status: " + e.getMessage());
+             //   textViewStatus.setText("Status: " + e.getMessage());
+                ShowMyAlert("Status: " +  e.getMessage());
             }
         }
     }
@@ -524,7 +696,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
 
             } catch (ScannerException e) {
 
-                textViewStatus.setText("Status: " + e.getMessage());
+              //  textViewStatus.setText("Status: " + e.getMessage());
+                ShowMyAlert("Status: " +  e.getMessage());
             }
         }
     }
@@ -536,7 +709,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             if ((deviceList != null) && (deviceList.size() != 0)) {
                 scanner = barcodeManager.getDevice(deviceList.get(scannerIndex));
             } else {
-                textViewStatus.setText("Status: " + getString(R.string.FailedToGetScannerDevice));
+              //  textViewStatus.setText("Status: " + getString(R.string.FailedToGetScannerDevice));
+                ShowMyAlert("Status: " +   getString(R.string.FailedToGetScannerDevice));
                 return;
             }
 
@@ -549,10 +723,11 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                     scanner.enable();
                 } catch (ScannerException e) {
 
-                    textViewStatus.setText("Status: " + e.getMessage());
+                //    textViewStatus.setText("Status: " + e.getMessage());
                 }
             } else {
-                textViewStatus.setText("Status: " + getString(R.string.FailedToInitializeScannerDevice));
+             //   textViewStatus.setText("Status: " + getString(R.string.FailedToInitializeScannerDevice));
+                ShowMyAlert("Status: " +  getString(R.string.FailedToInitializeScannerDevice));
             }
         }
     }
@@ -567,7 +742,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
 
             } catch (ScannerException e) {
 
-                textViewStatus.setText("Status: " + e.getMessage());
+             //   textViewStatus.setText("Status: " + e.getMessage());
+                ShowMyAlert("Status: " + e.getMessage());
             }
             scanner.removeDataListener(this);
             scanner.removeStatusListener(this);
@@ -575,7 +751,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 scanner.release();
             } catch (ScannerException e) {
 
-                textViewStatus.setText("Status: " + e.getMessage());
+              //  textViewStatus.setText("Status: " + e.getMessage());
+                ShowMyAlert("Status: " + e.getMessage());
             }
             scanner = null;
         }
@@ -625,7 +802,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
     protected void onResume() {
         super.onResume();
 
-        scannET.setText(""); // vycistit pri navrate z detailu
+     //   scannET.setText(""); // vycistit pri navrate z detailu
 
         // Toto tu musi byt, inak nam po navrate z detailu nefunguje spravne skener
 
@@ -648,7 +825,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             setTrigger();
             setDecoders();
             startScan();
-            scannET.setText(""); // vycistit pri navrate z detailu
+       //     scannET.setText(""); // vycistit pri navrate z detailu
         }
     }
 
@@ -708,7 +885,10 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         }
 
         protected void onPostExecute(String result) {
-            scannET.setText(result);
+        //    scannET.setText(result);
+
+            // xx sem daj hladanie
+
             return;
         }
     }
@@ -724,7 +904,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         @Override
         protected void onPostExecute(String result) {
 
-            textViewStatus.setText("Status: " + result);
+          //  textViewStatus.setText("Status: " + result);
         }
     }
 

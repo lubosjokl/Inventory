@@ -23,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
+
     Context context;
     int layoutResourceId;
-    List<Inventar> original_data = new ArrayList<Inventar>();
-    List<Inventar> filtered_list = new ArrayList<Inventar>();
+    public List<Inventar> original_data = new ArrayList<Inventar>();
+    public List<Inventar> filtered_list = new ArrayList<Inventar>();
 
 
     public CustomListInventoryAdapter(@NonNull Context context, int resource, @NonNull List<Inventar> data) {

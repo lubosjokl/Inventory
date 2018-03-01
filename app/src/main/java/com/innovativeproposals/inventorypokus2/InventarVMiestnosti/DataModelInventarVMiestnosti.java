@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.innovativeproposals.inventorypokus2.Constants;
@@ -15,7 +16,6 @@ import com.innovativeproposals.inventorypokus2.Models.Inventar;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
@@ -69,22 +69,31 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
         ArrayList<Inventar> results = new ArrayList<>();
         String sSQL = null;
+    //    String _myPremenna = "";
         Log.d("skenujem","Datovy Model 1");
 
         if(myKancelariaKod != "" && myBarCode==""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
                     "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myKancelariaKod + "' order by aa.datumREAL asc";
+   //         _myPremenna = myKancelariaKod;
         }
 
         if(myBarCode !="" && myKancelariaKod == ""){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba, " +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
                     "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.datumREAL asc";
+      //      _myPremenna = myBarCode;
         }
 
 
         SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteStatement selectStmt  =   db.compileStatement(sSQL);
+        selectStmt.clearBindings();
+
+     //   selectStmt.bindString(1,_myPremenna);
+
+
         Cursor cursor = db.rawQuery(sSQL, null);
 
         //kurzor na prvy zaznam

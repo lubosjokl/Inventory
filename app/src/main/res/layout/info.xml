@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_info">
+    android:id="@+id/layout_info"
+    tools:context="com.innovativeproposals.inventorypokus2.Info.InfoActivity">
 
     <android.support.design.widget.AppBarLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -22,66 +21,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/nadpis"
+    <ListView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/list_inventar_v_miestnosti"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:text="@string/ScanOrType" />
+        android:layout_weight="1" />
 
-    <EditText
-        android:id="@+id/scannET"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nadpis"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:gravity="center"
-        android:inputType="textPersonName"
-        android:text="@string/barcode" />
-
-    <Button
-        android:id="@+id/btOK"
-        android:layout_width="180dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="70dp"
-        android:layout_centerInParent="true"
-        android:text="@android:string/ok"
-        android:background="@drawable/mybutton"
-        android:textSize="18sp"
-        android:layout_below="@id/scannET" />
-
-    <Button
-        android:id="@+id/buttonStartScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="@string/start"
-        android:visibility="invisible"
-        android:layout_below="@id/btOK"
-        android:layout_toStartOf="@id/btOK" />
-
-    <Button
-        android:id="@+id/buttonStopScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="@string/stop"
-        android:layout_below="@id/btOK"
-        android:visibility="invisible"
-        android:layout_toEndOf="@id/btOK" />
-
-    <TextView
-        android:id="@+id/textViewStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:text="@string/status" />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

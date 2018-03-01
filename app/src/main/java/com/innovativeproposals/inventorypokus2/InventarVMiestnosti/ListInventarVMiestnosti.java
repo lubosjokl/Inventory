@@ -102,11 +102,11 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             }
         });
 
-        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
+        //   Associate searchable configuration with the SearchView
+        //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        //        searchView.setSearchableInfo(
+        //        searchManager.getSearchableInfo(getComponentName()));
 
         return true;
 
@@ -114,7 +114,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != 1) return;
+        if (requestCode != 1) return; // sem ide po navrate z detailu. Aj niekedy inokedy?
 
         if (resultCode == 0) { // bolo Activity.RESULT_OK
 
@@ -144,16 +144,15 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             myRoomcode = extras.getString("roomcode");
         }
 
-        setContentView(R.layout.inventar_vmiestnosti);
+        // scanner
         deviceList = new ArrayList<ScannerInfo>();
-
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
             Log.i("warning", "EMDK failed: ");
         }
 
+        setContentView(R.layout.inventar_vmiestnosti);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         String kancel = dm.dajNazovMiestnosti(myRoomcode);
 
         toolbar.setTitle(kancel);
