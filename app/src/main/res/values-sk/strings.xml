@@ -30,7 +30,7 @@
     <string name="ScanOrType">Naskenujte alebo zadajte kód inventára</string>
     <string name="info">Inventár info</string>
     <string name="scann_barcode_first">Najprv nasnimajte barcode</string>
-    <string name="barcode_doesnt_exist">Neexistujuci barcode</string>
+    <string name="barcode_doesnt_exist">Neexistujúci kód, inventár nie je evidovaný</string>
     <string name="Price">Cena : </string>
 
     <!--Chart-->

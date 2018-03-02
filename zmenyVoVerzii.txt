@@ -10,11 +10,12 @@
 - v info je zameneny textViewStatus dialogAlertom (hlasenie chyb scannera)
 - zacal som s MyAlertDialogFragmentOK
 
-
+2.3.2018
+- nahradeny DialogFragment namiesto ShowMyAlert v Info
 
 
 urob:
-- nahrad DialogFragment namiesto ShowMyAlert v Info
+
 - v miestnosti hore hladanie podla ean, nazvu, poznamky a serioveho cisla vsetkych artiklov
 - vyradenie inventara
 - kontrola pri importe na novsie udaje na skeneri

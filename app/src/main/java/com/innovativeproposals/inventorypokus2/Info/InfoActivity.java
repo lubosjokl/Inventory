@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -179,7 +180,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
           //  textViewStatus.setText("Status: " + "EMDKManager object request failed!");
-            ShowMyAlert("Status: " + "EMDKManager object request failed!");
+
+            showDialogFragment("EMDKManager object request failed!");
         }
 
         setContentView(R.layout.inventar_vmiestnosti);
@@ -243,37 +245,6 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         });*/
 
     }
-
-    public void ShowMyAlert(String msg) {
-
-        // pouzi DialogFragment
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(msg);
-        builder1.setCancelable(true);
-        builder1.setIcon(android.R.drawable.ic_dialog_alert);
-        builder1.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-  /*          builder1.setNegativeButton(
-                    "No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    }); */
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show(); // sem to nepride
-      //  finish();
-
-    }
-
 
     private Inventar findInventarById(Integer itemId) {
         for (Inventar item : zoznamHM) {
@@ -341,11 +312,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             // sem to prejde na button, ale nie na sken
             // Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show(); // xx
 
-           // ShowMyAlert(getResources().getString(R.string.barcode_doesnt_exist));
-
-          //  DialogFragment newFragment = MyAlertDialogFragmentOK.newInstance(1);
-            //   newFragment.show(getFragmentManager(), "dialog");
-          // nejde  !!!  MyAlertDialogFragmentOK.showAlert("title", "message",null);
+            showDialogFragment(getResources().getString(R.string.barcode_doesnt_exist));
 
 
             return;
@@ -363,6 +330,14 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
         startActivity(theIndent);
     }
+
+    private void showDialogFragment(String Mymessage) {
+        FragmentManager fm = getSupportFragmentManager();
+        MyAlertDialogFragmentOK editNameDialogFragment = MyAlertDialogFragmentOK.newInstance(Mymessage);
+        editNameDialogFragment.show(fm, "fragment_edit_name");
+    }
+
+
 
     private void setDefaultOrientation() {
 
@@ -440,8 +415,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             emdkManager.release();
             emdkManager = null;
         }
-     //   textViewStatus.setText("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
-        ShowMyAlert("Status: " + getString(R.string.EMDKclosedUnexpectedlz));
+
+        showDialogFragment(getString(R.string.EMDKclosedUnexpectedlz));
     }
 
     @Override
@@ -531,7 +506,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 } catch (ScannerException e) {
                     // mELogListener.onLogE(TAG, "enableScanner; Status: " + e.getMessage(), e);
                     //textViewStatus.setText("Status: " + e.getMessage());
-                    ShowMyAlert("Status: " + e.getMessage());
+
+                    showDialogFragment(e.getMessage());
                 }
             }
         }
@@ -559,7 +535,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 }
             } else {
                // textViewStatus.setText("Status: " + "Failed to get the list of supported scanner devices! Please close and restart the application.");
-                ShowMyAlert("Status: " +"Failed to get the list of supported scanner devices! Please close and restart the application.");
+                showDialogFragment("Failed to get the list of supported scanner devices! Please close and restart the application.");
             }
 
             //   ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(InfoActivity.this, android.R.layout.simple_spinner_item, friendlyNameList);
@@ -642,7 +618,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             } catch (ScannerException e) {
 
               //  textViewStatus.setText("Status: " + e.getMessage());
-                ShowMyAlert("Status: " + e.getMessage());
+
+                showDialogFragment("Status: " + e.getMessage());
             }
         }
     }
@@ -669,13 +646,14 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                     new AsyncUiControlUpdate().execute(false);
                 } else {
                  //   textViewStatus.setText(R.string.scannerIsNotEnabled);
-                    ShowMyAlert("Status: " + R.string.scannerIsNotEnabled);
+
+                    showDialogFragment("Status: " + R.string.scannerIsNotEnabled);
                 }
 
             } catch (ScannerException e) {
 
              //   textViewStatus.setText("Status: " + e.getMessage());
-                ShowMyAlert("Status: " +  e.getMessage());
+                showDialogFragment("Status: " +  e.getMessage());
             }
         }
     }
@@ -697,7 +675,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             } catch (ScannerException e) {
 
               //  textViewStatus.setText("Status: " + e.getMessage());
-                ShowMyAlert("Status: " +  e.getMessage());
+
+                showDialogFragment("Status: " +  e.getMessage());
             }
         }
     }
@@ -710,7 +689,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 scanner = barcodeManager.getDevice(deviceList.get(scannerIndex));
             } else {
               //  textViewStatus.setText("Status: " + getString(R.string.FailedToGetScannerDevice));
-                ShowMyAlert("Status: " +   getString(R.string.FailedToGetScannerDevice));
+
+                showDialogFragment("Status: " +  getString(R.string.FailedToGetScannerDevice));
                 return;
             }
 
@@ -727,7 +707,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
                 }
             } else {
              //   textViewStatus.setText("Status: " + getString(R.string.FailedToInitializeScannerDevice));
-                ShowMyAlert("Status: " +  getString(R.string.FailedToInitializeScannerDevice));
+
+                showDialogFragment("Status: " +  getString(R.string.FailedToInitializeScannerDevice));
             }
         }
     }
@@ -743,7 +724,8 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             } catch (ScannerException e) {
 
              //   textViewStatus.setText("Status: " + e.getMessage());
-                ShowMyAlert("Status: " + e.getMessage());
+
+                showDialogFragment("Status: " +  e.getMessage());
             }
             scanner.removeDataListener(this);
             scanner.removeStatusListener(this);
@@ -752,7 +734,7 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
             } catch (ScannerException e) {
 
               //  textViewStatus.setText("Status: " + e.getMessage());
-                ShowMyAlert("Status: " + e.getMessage());
+                showDialogFragment("Status: " +  e.getMessage());
             }
             scanner = null;
         }

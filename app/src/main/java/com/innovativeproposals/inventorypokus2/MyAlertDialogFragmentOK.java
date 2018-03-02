@@ -2,49 +2,81 @@ package com.innovativeproposals.inventorypokus2;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+// tu je priklad
+// https://guides.codepath.com/android/using-dialogfragment
 
 /**
  * Created by Lubos on 01.03.18.
  */
 
-public class MyAlertDialogFragmentOK extends DialogFragment {
+public class MyAlertDialogFragmentOK extends DialogFragment implements View.OnClickListener{
 
     public static final String ARG_TITLE = "AlertDialog.Title";
     public static final String ARG_MESSAGE = "AlertDialog.Message";
+   // private EditText mEditText;
+    private TextView tvMessage;
+    private Button btOK;
 
-    public static void showAlert(String title, String message, Fragment targetFragment) {
-        DialogFragment dialog = new MyAlertDialogFragmentOK();
-        Bundle args = new Bundle();
-        args.putString(ARG_TITLE, title);
-        args.putString(ARG_MESSAGE, message);
-        dialog.setArguments(args);
-        dialog.setTargetFragment(targetFragment, 0);
-        dialog.show(targetFragment.getFragmentManager(), "tag");
+
+
+    public MyAlertDialogFragmentOK() {
+        // Empty constructor is required for DialogFragment
+        // Make sure not to add arguments to the constructor
+        // Use `newInstance` instead as shown below
+
     }
 
-    public MyAlertDialogFragmentOK() {}
+    public static MyAlertDialogFragmentOK newInstance(String title) {
+        MyAlertDialogFragmentOK frag = new MyAlertDialogFragmentOK();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        frag.setArguments(args);
+        return frag;
+    }
 
- //   @NonNull
     @Override
-    public AlertDialog onCreateDialog(Bundle savedInstanceState) {
-        Bundle args = getArguments();
-        String title = args.getString(ARG_TITLE, "");
-        String message = args.getString(ARG_MESSAGE, "");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_dialog, container);
+    }
 
-        return new AlertDialog.Builder(getActivity())
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
-                    }
-                })
-                .create();
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        super.onViewCreated(view, savedInstanceState);
+        // Get field from view
+        tvMessage = (TextView) view.findViewById(R.id.lbl_message);
+        btOK = (Button)view.findViewById(R.id.buttonOK);
+        btOK.setOnClickListener(this);
+
+        // Fetch arguments from bundle and set title
+        String title = getArguments().getString("title", "Enter Name");
+        getDialog().setTitle(title);
+        tvMessage.setText(title);
+
+
+        // Show soft keyboard automatically and request focus to field
+        // mEditText.requestFocus();
+
+        // vyvolanie klavesnice
+        // getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        dismiss();
+
     }
 }
