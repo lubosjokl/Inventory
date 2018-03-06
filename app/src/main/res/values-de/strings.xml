@@ -21,7 +21,7 @@
     <string name="description_notice">Bezeichnung</string>
     <string name="description_serialnr">Serien Nr.</string>
     <string name="description_inventoryName">Inventar-Name</string>
-    <string name="description_added">Eingeordnet</string>
+    <string name="description_added">Eingeordnet / </string>
     <string name="description_discarded">Ausgeschaltet</string>
     <string name="description_responsible">Zugewiesen</string>
     <string name="price">Preis</string>
@@ -44,6 +44,9 @@
     <string name="barcode_doesnt_read_properly">Barcode wurde nicht richtig gelesen</string>
     <string name="komunikacia">Kommunikation</string>
     <string name="meno_musi_byt_vyplnene">Name darf nicht leer sein</string>
+    <string name="barcode">barcode</string>
+    <string name="start">Start</string>
+    <string name="imageViewDescription">imageViewDescription</string>
 
     <!--Scanner -->
     <string name="start_btn_label">Start</string>

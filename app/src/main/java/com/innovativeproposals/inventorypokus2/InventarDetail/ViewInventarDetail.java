@@ -198,7 +198,7 @@ public class ViewInventarDetail extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -246,19 +246,19 @@ public class ViewInventarDetail extends AppCompatActivity {
         if (isValue != null)
             txt_SerialNr.setText(isValue);
 
-        isValue = inventar.getDatum_added();
+        isValue = inventar.getDatum_added(); // zaradeny
         TextView txt_Added = findViewById(R.id.txt_Added);
         if (isValue != null && isValue.length() > 0) {
             // tento datum je string, retazec zobrazim po medzeru, cize bez casu
             int kde = isValue.indexOf(" ");
             if (kde > 0) {
                 isValue = isValue.substring(0, kde);
-                txt_Added.setText(isValue);
+                txt_Added.setText(isValue + " / ");
             }
         } else
-            txt_Added.setText(null);
+            txt_Added.setText(" / ");
 
-        isValue = inventar.getDatum_discarded();
+        isValue = inventar.getDatum_discarded(); // vyradeny
         TextView txt_Discarded = findViewById(R.id.txt_Discarded);
         if (isValue != null && isValue.length() > 0) {
             // tento datum je string, retazec zobrazim po medzeru, cize bez casu
@@ -283,19 +283,16 @@ public class ViewInventarDetail extends AppCompatActivity {
         }
         // spinner na typy majetku
         String tempSpinnerTyp = null;
-        isValue = inventar.getTypeMajetku(); // TODO toto nacitaj niekde vyssie, nema vyznam dookola nacitavat array
+        isValue = inventar.getTypeMajetku();
         if (isValue != null)
             tempSpinnerTyp = isValue;
 
+        /*
         List<String> spinnerListTypyMajetku = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
+        spinnerListTypyMajetku = dm.dajTypyMajetku();
+        ArrayAdapter<String> adapterTypyMajetku = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerListTypyMajetku);*/
 
-        try {
-            spinnerListTypyMajetku = dm.dajTypyMajetku();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        ArrayAdapter<String> adapterTypyMajetku = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerListTypyMajetku);
+        ArrayAdapter<String> adapterTypyMajetku = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, Constants.spinnerListTypyMajetku);
         adapterTypyMajetku.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinner_inventoryType.setAdapter(adapterTypyMajetku);
         // nastav spinner ak ma hodnotu
@@ -304,19 +301,16 @@ public class ViewInventarDetail extends AppCompatActivity {
 
         // spinner na zodpovednu osobu
         String tempZodpovednaOsoba = null;
-        isValue = inventar.getZodpovednaOsoba(); // TODO toto nacitaj niekde vyssie, nema vyznam dookola nacitavat array
+        isValue = inventar.getZodpovednaOsoba();
         if (isValue != null)
             tempZodpovednaOsoba = isValue;
-
+        /*
         List<String> spinnerZodpovedneOsoby = new ArrayList<String>(); // nacitaj dynamicky spinner z databazy
-
-        try {
-            spinnerZodpovedneOsoby = dm.dajZodpovedneOsoby();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
+        spinnerZodpovedneOsoby = dm.dajZodpovedneOsoby();
         ArrayAdapter<String> adapterZodpovedneOsoby = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, spinnerZodpovedneOsoby);
+        */
+
+        ArrayAdapter<String> adapterZodpovedneOsoby = new ArrayAdapter<String>(this, R.layout.simple_spinner_item, Constants.spinnerZodpovedneOsoby);
         adapterZodpovedneOsoby.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         spinner_responsible.setAdapter(adapterZodpovedneOsoby);
         // nastav spinner ak ma hodnotu

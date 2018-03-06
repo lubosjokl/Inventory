@@ -20,13 +20,13 @@ import java.util.HashMap;
 
 public class DataModelBudova extends SQLiteOpenHelper {
 
-    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; // "inventory";
-    protected static final int DB_VERZIA = 1;
-    protected static final String DB_TABULKA = "divizia";
+    private static final String DB_DATABAZA = Constants.FILE_DATABASE; // "inventory";
+    private static final int DB_VERZIA = 1;
+    private static final String DB_TABULKA = "divizia";
 
-    public static final String ATR_ID = "_id";
-    public static final String ATR_DIVIZIA = "divizia";
-    public static final String ATR_KODDIVIZIE = "KodDivizie";
+    private static final String ATR_ID = "_id";
+    private static final String ATR_DIVIZIA = "divizia";
+    private static final String ATR_KODDIVIZIE = "KodDivizie";
     Context ctx;
 
     // zaklad
@@ -74,6 +74,7 @@ public class DataModelBudova extends SQLiteOpenHelper {
                 } while (cursor.moveToNext()); // kurzor na dalsi zaznam
             }
 
+        cursor.close();
         return alVysledky;
     }
 
@@ -91,6 +92,7 @@ public class DataModelBudova extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return hm;
     }
 

@@ -17,11 +17,12 @@ import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
-    protected static final int DB_VERZIA = 1;
-    protected static final String DB_TABULKA = "majetok";
+    private static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
+    private static final int DB_VERZIA = 1;
+    private static final String DB_TABULKA = "majetok";
 
     // zaklad
     @Override
@@ -60,7 +61,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
-
+        cursor.close();
         return result;
     }
 
@@ -72,14 +73,14 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
     //    String _myPremenna = "";
         Log.d("skenujem","Datovy Model 1");
 
-        if(myKancelariaKod != "" && myBarCode==""){
+        if(!Objects.equals(myKancelariaKod, "") && Objects.equals(myBarCode, "")){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba," +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
                     "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.roomcodenew = '" + myKancelariaKod + "' order by aa.datumREAL asc";
    //         _myPremenna = myKancelariaKod;
         }
 
-        if(myBarCode !="" && myKancelariaKod == ""){
+        if(!Objects.equals(myBarCode, "") && Objects.equals(myKancelariaKod, "")){
             sSQL = "SELECT aa.Id,aa.itembarcode, aa.itemdescription, aa.roomcodenew,aa.status, aa.datum,aa.datumzaradenia, aa.serialnr, bb.obrazok, aa.datumvyradenia, aa.zodpovednaosoba, " +
                     "aa.typmajetku, aa.obstaravaciacena, aa.extranotice, aa.datumReal FROM majetok aa " +
                     "left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " + "WHERE aa.itembarcode = '" + myBarCode + "' order by aa.datumREAL asc";
@@ -121,7 +122,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
-
+        cursor.close();
         return results;
     }
 

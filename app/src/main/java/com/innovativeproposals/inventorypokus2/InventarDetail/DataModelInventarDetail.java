@@ -25,9 +25,9 @@ import java.util.HashMap;
 
 
 public class DataModelInventarDetail extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
-    protected static final int DB_VERZIA = 1;
-    protected static final String DB_TABULKA = "majetok";
+    private static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
+    private static final int DB_VERZIA = 1;
+    private static final String DB_TABULKA = "majetok";
 
     // zaklad
     @Override
@@ -83,15 +83,15 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
                 alVysledky.add(hm);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
         return alVysledky;
     }
     public String dajNazovLokality(String myRoomCode) {
 
-       // String result = null;
-        String myDivision = null;
+        String myDivision;
         String myOddelenie = null;
-        String Zvysok = null;
-        String myLocation = "";
+        String Zvysok;
+        String myLocation;
         myLocation = "Miestnosť nie je určená"; // R.string.unknown_location;
 
         int kde = myRoomCode.indexOf("-");
@@ -141,10 +141,12 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
                 myLocation = myLocation + "-" + cursor.getString(0);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return myLocation;
     }
 
-    public ArrayList<String> dajTypyMajetku() throws URISyntaxException {
+    /*
+    public ArrayList<String> dajTypyMajetku()  {
 
         ArrayList<String> results = new ArrayList<>();
         String sSQL = "SELECT popis  FROM typmajetku order by popis ASC";
@@ -159,9 +161,10 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         return results;
-    }
+    } */
 
-    public ArrayList<String> dajZodpovedneOsoby() throws URISyntaxException {
+/*
+    public ArrayList<String> dajZodpovedneOsoby()  {
 
         ArrayList<String> results = new ArrayList<>();
         String sSQL = "SELECT meno  FROM osoba order by meno ASC";
@@ -176,7 +179,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         return results;
-    }
+    } */
 
     public long ulozObrazok(Inventar myInventar) {
 
@@ -196,6 +199,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
 
+        cursor.close(); // je to tu dobre?
         try
         {
             // https://stackoverflow.com/questions/7331310/how-to-store-image-as-blob-in-sqlite-how-to-retrieve-it

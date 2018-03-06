@@ -62,10 +62,11 @@ public class MainActivity extends AppCompatActivity
         // zakazanie zmeny orientacie
         // https://stackoverflow.com/questions/20021803/disable-and-enable-orientation-changes-in-an-activity-in-android-programatically
 
+        // napln zoznamy - zodpovedne osoby, atd
+        naplnListy();
+
 
         ImplementChart(); // nemusi prejst pokial nie je databaza
-
-
 
     }
 
@@ -193,15 +194,13 @@ public class MainActivity extends AppCompatActivity
 
             Intent intent = new Intent(this, ImportDatabase.class);
             startActivity(intent);
-
         }
     }
 
     private boolean isDatabaseFile() {
 
         //   IO_Utilities util = new IO_Utilities(getApplicationContext());
-
-       // boolean isFile = false;
+        // boolean isFile = false;
 
         boolean jeTam = false;
         PackageManager m = getPackageManager();
@@ -248,6 +247,13 @@ public class MainActivity extends AppCompatActivity
 
 
         return jeTam;
+    }
+
+    void naplnListy() {
+
+        Constants.spinnerZodpovedneOsoby = dm.dajZodpovedneOsoby();
+        Constants.spinnerListTypyMajetku = dm.dajTypyMajetku();
+
     }
 
 }

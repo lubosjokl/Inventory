@@ -13,15 +13,22 @@
 2.3.2018
 - nahradeny DialogFragment namiesto ShowMyAlert v Info
 
+6.3.2018
+- ListArray pre zodpovednu osobu a typ majetku su nacitane pri starte programu
+- prva optimalizacia kodu pomocou Code Analyse (hlavne performance)
+
 
 urob:
-
 - v miestnosti hore hladanie podla ean, nazvu, poznamky a serioveho cisla vsetkych artiklov
 - vyradenie inventara
 - kontrola pri importe na novsie udaje na skeneri
 - revizia elektrospotrebicov
 - urob spolocny modul pre skener (zluc info a detail)
 - zadanie neexistujuceho kodu v search Bare v miestnosti musi otvorit Detail pre novy inventar
+- aktualizuj zoznam po ulozeni v Info
+
+
+
 
 
 

@@ -1,5 +1,8 @@
 package com.innovativeproposals.inventorypokus2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Lubos on 04.02.18.
  */
@@ -17,6 +20,10 @@ public class Constants {
     public static final String FILE_DATA_PC2PDA = "transferDataPC2iPOD.db";
     public static final String FILE_DATA_PDA2PC = "transferDataiPOD2PC.db";
     public static final String FILE_DATABASE = "inventory.db";
+
+
+    public static List<String> spinnerZodpovedneOsoby = new ArrayList<String>(); // nacitaj dynamicky  databazy
+    public static List<String> spinnerListTypyMajetku = new ArrayList<String>(); // nacitaj dynamicky  z databazy
 
 }
 

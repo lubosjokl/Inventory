@@ -308,7 +308,6 @@ public class InfoActivity extends AppCompatActivity  implements EMDKManager.EMDK
         zoznamHM2 = dm2.dajNoveZaznamy("", barcodeString); // List<Inventar> zoznamHM
 
         if (zoznamHM2.size() == 0) {
-            // TODO sken neexistujuceho kodu zobrazi Toast prilis kratko, resp. ho premaze Status skeneru
             // sem to prejde na button, ale nie na sken
             // Toast.makeText(this, R.string.barcode_doesnt_exist, Toast.LENGTH_LONG).show(); // xx
 

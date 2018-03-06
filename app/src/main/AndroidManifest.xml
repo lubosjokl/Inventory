@@ -94,6 +94,7 @@
             android:label="@string/export_data"
             android:parentActivityName=".MainActivity"
             />
+        <activity android:name=".Komunikacia.IO_Utilities"/>
     </application>
 
 </manifest>

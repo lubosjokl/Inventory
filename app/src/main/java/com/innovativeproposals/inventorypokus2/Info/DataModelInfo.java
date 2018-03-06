@@ -20,9 +20,9 @@ import java.util.List;
 
 public class DataModelInfo extends SQLiteOpenHelper {
 
-    protected static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
-    protected static final int DB_VERZIA = 1;
-    protected static final String DB_TABULKA = "majetok";
+    private static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
+    private static final int DB_VERZIA = 1;
+    private static final String DB_TABULKA = "majetok";
 
     // zaklad
     @Override
@@ -48,26 +48,9 @@ public class DataModelInfo extends SQLiteOpenHelper {
     public List<Inventar> getInventarList(String myFilter) throws URISyntaxException {
 
         ArrayList<Inventar> results = new ArrayList<>();
-        String sSQL = null;
-
-//        String myNazov2 = "'"+ "%"+myFilter+"%"+"'";
-  //      String myKod2 = "'"+myFilter+"%"+"'";
-
-      //  String myNazov2 = "'%"+myFilter+"%'";
+        String sSQL;
         String myNazov2 = "%"+myFilter+"%";
         String myKod2 =  myFilter + "%";
-
-
-
-        //myNazov2 = [myNazov2 stringByAppendingString:myFilter];
-        //myNazov2 = [myNazov2 stringByAppendingString:@"%"];
-        //myKod2 = [myKod2 stringByAppendingString:@"%"];
-
-/*        if(myFilter == "N"){ // nevyradeny
-            sSQL = "SELECT aa.Id,aa.itemdescription,aa.itembarcode,aa.status,aa.datum,bb.obrazok FROM majetok aa left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " +
-                    "WHERE (aa.datumDispose =\\\"\\\" or aa.datumDispose IS NULL) and aa.itembarcode like ? or aa.serialnr like ? or aa.itemdescription like ? " +
-                    "or aa.extranotice like ?  order by aa.datumREAL asc limit 100";
-        } else */
 
         sSQL = "SELECT aa.Id,aa.itemdescription,aa.itembarcode,aa.status,aa.datum,bb.obrazok, aa.datumzaradenia, aa.serialnr, aa.datumvyradenia, aa.zodpovednaosoba, aa.typmajetku," +
                 "aa.obstaravaciacena, aa.extranotice, aa.datumReal " +
@@ -75,9 +58,6 @@ public class DataModelInfo extends SQLiteOpenHelper {
                 "WHERE aa.itembarcode like '" + myKod2 +"' or aa.serialnr like '" + myKod2 +"' or aa.itemdescription like '" + myNazov2 +
                 "' or aa.extranotice like '" + myNazov2 + "' order by aa.datumREAL asc limit 100";
 
-
-        //order by aa.datumREAL asc
-        // order by status, datum desc
 
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement selectStmt  =   db.compileStatement(sSQL);
@@ -108,7 +88,7 @@ public class DataModelInfo extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
-
+        cursor.close();
         return results;
     }
 }

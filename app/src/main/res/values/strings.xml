@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Inventúra</string>
-
     <string name="activity_zoznam_budov">Zoznam Budov</string>
     <string name="activity_zoznam_poschodie">Zoznam Poschodi</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="search_hint">Hladaj polozku</string>
-
+    <string name="imageViewDescription">imageViewDescription</string>
     <string name="search_title">Hladaj</string>
     <string name="action_settings">Settings</string>
     <string name="zoznam_budov">Zoznam budov</string>
@@ -21,7 +18,7 @@
     <string name="description_notice">Poznámka</string>
     <string name="description_serialnr">Sériové číslo</string>
     <string name="description_inventoryName">Názov inventára</string>
-    <string name="description_added">Zaradený</string>
+    <string name="description_added">Zaradený / </string>
     <string name="description_discarded">Vyradený</string>
     <string name="description_responsible">Zodpovedný</string>
     <string name="price">Cena</string>
@@ -72,6 +69,7 @@
     <string name="NetworkisNotAvailable">Network is not Available</string>
     <string name="unknown_location">miestnosť nie je určená</string>
     <string name="database_file_didnt_find">Database file didn\'t find. Import Database</string>
+
 
     <!-- -->
 

@@ -81,8 +81,6 @@ public class IO_Utilities extends Activity {
     public  String getDBPath() {
 
         PackageManager m = getPackageManager();
-
-
         String saveDir = getPackageName();
         PackageInfo p = null;
         try {
@@ -91,11 +89,9 @@ public class IO_Utilities extends Activity {
             e.printStackTrace();
         }
 
-        String sourceFileUri = p.applicationInfo.dataDir + "/databases/";
-       // String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
-       // String fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATA_PDA2PC;
+       // String sourceFileUri = p.applicationInfo.dataDir + "/databases/";
 
-        return sourceFileUri;
+        return p.applicationInfo.dataDir + "/databases/";
 
     }
 
@@ -118,7 +114,8 @@ public class IO_Utilities extends Activity {
             BufferedWriter writer = new BufferedWriter(fileWriter);
 
             // Format the content and write it to the file
-            String outLine = String.format("%s:%f/%f", DateFormat.getDateTimeInstance().format(location.getTime()), location.getLatitude(), location.getLongitude());
+            //String outLine = String.format("%s:%f/%f", DateFormat.getDateTimeInstance().format(location.getTime()), location.getLatitude(), location.getLongitude());
+            String outLine = "test";
             writer.write(outLine);
             writer.write(address);
 

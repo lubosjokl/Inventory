@@ -15,6 +15,7 @@ import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /*
 SELECT [Id]
@@ -24,14 +25,14 @@ SELECT [Id]
  */
 
 public class DataModelMiestnosti  extends SQLiteOpenHelper {
-    protected static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
-    protected static final int DB_VERZIA = 1;
-    protected static final String DB_TABULKA = "kancelaria";
+    private  static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
+    private static final int DB_VERZIA = 1;
+    private static final String DB_TABULKA = "kancelaria";
 
-    public static final String ATR_ID = "_id";
-    public static final String ATR_ROOMCODE = "roomcode";
-    public static final String ATR_ROOMDESCRIPTION = "roomdescription";
-    public static final String ATR_POSTUPSPRACOVANIA = "PostupSpracovania";
+    private static final String ATR_ID = "_id";
+    private static final String ATR_ROOMCODE = "roomcode";
+    private static final String ATR_ROOMDESCRIPTION = "roomdescription";
+    private static final String ATR_POSTUPSPRACOVANIA = "PostupSpracovania";
 
 
     // zaklad
@@ -66,7 +67,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
-        String retazec = null;
+        String retazec;
 
         //kurzor na prvy zaznam
         if (cursor.moveToFirst())
@@ -90,6 +91,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
                 alVysledky.add(hm);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
         return alVysledky;
     }
 
@@ -109,14 +111,15 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return hm;
     }
 
-    public Integer dajCelkovyPocetInventara(String myRoomCode) {
+    private Integer dajCelkovyPocetInventara(String myRoomCode) {
 
         Integer results = 0;
-        String sSQL = null;
-        if(myRoomCode=="")
+        String sSQL;
+        if(Objects.equals(myRoomCode, ""))
             sSQL = "SELECT count(*)  FROM majetok";
         else
             sSQL = "SELECT count(*)  FROM majetok where roomcodenew = '"+myRoomCode+"'";
@@ -130,17 +133,18 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
                 results = cursor.getInt(0);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
         return results;
     }
 
-    public Integer dajPocetSpracovanehoInventara(String myRoomCode) {
+    private Integer dajPocetSpracovanehoInventara(String myRoomCode) {
 
         Integer results = 0;
-        String sSQL = null;
-        if(myRoomCode=="")
+        String sSQL;
+        if(Objects.equals(myRoomCode, ""))
             sSQL = "SELECT count(*) FROM majetok where status = 10 ";
         else
-            sSQL = "SELECT count(*) FROM majetok where status = 10 and roomcodenew = '"+myRoomCode+"'";;
+            sSQL = "SELECT count(*) FROM majetok where status = 10 and roomcodenew = '"+myRoomCode+"'";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
@@ -151,6 +155,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
                 results = cursor.getInt(0);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
         return results;
     }
 

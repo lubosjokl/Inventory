@@ -34,7 +34,7 @@
             android:gravity="center"
             android:text="Server HTTP"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="14dp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             />
@@ -57,7 +57,7 @@
             android:gravity="center"
             android:text="Server Port"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="14dp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             />
@@ -82,7 +82,7 @@
             android:gravity="center"
             android:text="@string/daysOfInventory"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="14dp"
+            android:textSize="14sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             />

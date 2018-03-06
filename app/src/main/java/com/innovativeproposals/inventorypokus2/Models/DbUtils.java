@@ -8,6 +8,8 @@ import android.database.Cursor;
 
 import com.innovativeproposals.inventorypokus2.Constants;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by Lubos on 02.01.18.
@@ -59,6 +61,7 @@ public class DbUtils extends SQLiteOpenHelper {
                 results = cursor.getInt(0);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
         return results;
     }
 
@@ -76,6 +79,46 @@ public class DbUtils extends SQLiteOpenHelper {
                 results = cursor.getInt(0);
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
+        cursor.close();
+        return results;
+    }
+
+    public ArrayList<String> dajZodpovedneOsoby()  {
+
+        ArrayList<String> results = new ArrayList<>();
+        String sSQL = "SELECT meno  FROM osoba order by meno COLLATE NOCASE"; // zohladnuje radenie podla slovenciny
+
+        // vraj mozny aj zapis
+        // SELECT name, assignment_id FROM GrammarAssignments ORDER BY name COLLATE LOCALIZED ASC
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results.add(cursor.getString(0));
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        cursor.close();
+        return results;
+    }
+
+    public ArrayList<String> dajTypyMajetku()  {
+
+        ArrayList<String> results = new ArrayList<>();
+        String sSQL = "SELECT popis  FROM typmajetku order by popis COLLATE NOCASE"; // lower(popis) ASC
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sSQL, null);
+
+        //kurzor na prvy zaznam
+        if (cursor.moveToFirst()) {
+            do {
+                results.add(cursor.getString(0));
+            } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+        }
+        cursor.close();
         return results;
     }
 
