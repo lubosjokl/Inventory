@@ -32,11 +32,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    compile 'de.hdodenhof:circleimageview:2.2.0'
+
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     provided fileTree(include: ['com.symbol.emdk.jar'],
 
             // ponechaj tu obe cesty zakomentovane
-            // dir: 'C:\\Users\\Robert\\AppData\\Local\\Android\\sdk\\add-ons\\addon-symbol_emdk-symbol-22\\libs')
+             //dir: 'C:\\Users\\Robert\\AppData\\Local\\Android\\sdk\\add-ons\\addon-symbol_emdk-symbol-22\\libs')
             // dir: 'C:\\Users\\Lubos\\AppData\\Local\\Android\\sdk\\add-ons\\addon-symbol_emdk-symbol-22\\libs')
             dir: 'C:\\Users\\Lubos\\AppData\\Local\\Android\\sdk\\add-ons\\addon-symbol_emdk-symbol-22\\libs')
 

@@ -19,7 +19,9 @@ import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
 
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
@@ -64,18 +66,31 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         itemBarcode.setText(inventar.getItemBarcode());
         itemDescription.setText(inventar.getItemDescription());
         itemStatus.setText(inventar.getStatus());
-        itemDatum.setText(inventar.getDatum());
+
+        //format datum
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        Date convertedDate = new Date();
+        if (inventar.getDatum() != null && !inventar.getDatum().isEmpty()) {
+
+            try {
+                convertedDate = dateFormat.parse(inventar.getDatum());
+                dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                itemDatum.setText(dateFormat.format(convertedDate));
+            } catch (Exception ex){
+                //do nothing
+            }
+        }
 
         // ak status = 10 tak zmen farbu na zelenu // status bol null, row
-        if(inventar.getStatus() != null)
-            row.setBackgroundColor(Color.rgb(237,255,216)); //android:background="#DCEDC8"
+        if (inventar.getStatus() != null)
+            row.setBackgroundColor(Color.rgb(237, 255, 216)); //android:background="#DCEDC8"
         else
             row.setBackgroundColor(Color.WHITE); //android:background="#DCEDC8"
 
         //ulozenie ID-cka do riadku; ale mozeme sem ulozit aj cely objekt inventara (toto moze byy overkill pri vacsom obsahu dat)
         row.setTag(inventar.getId());
 
-        if(inventar.getImage() != null && inventar.getImage().length > 1) {
+        if (inventar.getImage() != null && inventar.getImage().length > 1) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(inventar.getImage());
             Bitmap theImage = BitmapFactory.decodeStream(imageStream);
             image.setImageBitmap(theImage);
@@ -91,7 +106,7 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         return filtered_list.size();
     }
 
-    public void filter(final String searchText){
+    public void filter(final String searchText) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +116,7 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
 
                 // If there is no search value, then add all original list items to filter list
                 if (TextUtils.isEmpty(searchText)) {
-                    if(original_data != null)
+                    if (original_data != null)
                         filtered_list.addAll(original_data);
 
                 } else {
