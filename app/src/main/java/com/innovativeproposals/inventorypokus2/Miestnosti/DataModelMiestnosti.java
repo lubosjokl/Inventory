@@ -32,7 +32,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
     private static final String ATR_ID = "_id";
     private static final String ATR_ROOMCODE = "roomcode";
     private static final String ATR_ROOMDESCRIPTION = "roomdescription";
-    private static final String ATR_POSTUPSPRACOVANIA = "PostupSpracovania";
+    private static final String ATR_KODMIESTNOSTI = "kodmiestnosti";
 
 
     // zaklad
@@ -85,7 +85,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
                 int spracovanychInventarov = dajPocetSpracovanehoInventara(cursor.getString(1));
 
                 retazec = Integer.toString(spracovanychInventarov)+"/"+Integer.toString(celkomInventarov);
-                hm.put(ATR_POSTUPSPRACOVANIA, retazec);
+                hm.put(ATR_KODMIESTNOSTI , retazec);
 
 
                 alVysledky.add(hm);

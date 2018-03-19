@@ -15,7 +15,7 @@
             android:text="Miestnost" />
 
         <TextView
-            android:id="@+id/postupET"
+            android:id="@+id/kodMiestnostiET"
             style="@style/ListView_RowStyle"
             android:text="Postup" />
 

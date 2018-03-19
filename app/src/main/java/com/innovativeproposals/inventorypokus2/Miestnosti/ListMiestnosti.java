@@ -30,7 +30,7 @@ public class ListMiestnosti extends AppCompatActivity
 
     TextView roomcodeET;
     TextView roomdescriptionEF;
-    TextView postupET;
+    TextView kodMIestnostiET;
 
 
     DataModelMiestnosti dm = new DataModelMiestnosti(this); // pri kopirovani do inej triedy zmen
@@ -72,7 +72,7 @@ public class ListMiestnosti extends AppCompatActivity
 
                     roomcodeET = (TextView) view.findViewById(R.id.roomcodeET);
                     roomdescriptionEF = (TextView) view.findViewById(R.id.roomdescriptionET);
-                    postupET = (TextView) view.findViewById(R.id.postupET);
+                    kodMIestnostiET = (TextView) view.findViewById(R.id.kodMiestnostiET);
 
                     String sKnihaId = roomcodeET.getText().toString();
 
@@ -80,13 +80,13 @@ public class ListMiestnosti extends AppCompatActivity
                             ListInventarVMiestnosti.class);
                     theIndent.putExtra("roomcode", sKnihaId);
                     theIndent.putExtra("roomdescription", roomdescriptionEF.getText());
-                    theIndent.putExtra("PostupSpracovania", postupET.getText());
+                    theIndent.putExtra("kodmiestnosti", kodMIestnostiET.getText());
                     startActivity(theIndent);
                 }
             });
             ListAdapter adapter = new SimpleAdapter( ListMiestnosti.this,
                     zoznamHM, R.layout.miestnosti_riadok,
-                    new String[] { "roomcode","roomdescription","PostupSpracovania"}, new int[] {R.id.roomcodeET,R.id.roomdescriptionET, R.id.postupET});
+                    new String[] { "roomcode","roomdescription","kodmiestnosti"}, new int[] {R.id.roomcodeET,R.id.roomdescriptionET, R.id.kodMiestnostiET});
 
             lw.setAdapter(adapter);
         }

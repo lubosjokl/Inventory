@@ -134,6 +134,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         }
     }
 
+    // bolo protected
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //enable search within activity

@@ -17,6 +17,11 @@
 - ListArray pre zodpovednu osobu a typ majetku su nacitane pri starte programu
 - prva optimalizacia kodu pomocou Code Analyse (hlavne performance)
 
+19.3.2018 - ver 2.01
+- prehlad inventara v miestnosti ma novy design
+- zmena premennej PostupSpracovania na KodMiestnosti
+- datum aktualizovania je string, netreba konvertovat na datum pri CustomListInventioryAdapter
+
 
 urob:
 - v miestnosti hore hladanie podla ean, nazvu, poznamky a serioveho cisla vsetkych artiklov

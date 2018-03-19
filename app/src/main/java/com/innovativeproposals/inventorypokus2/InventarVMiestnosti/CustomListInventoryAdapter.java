@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,19 +68,26 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
         itemDescription.setText(inventar.getItemDescription());
         itemStatus.setText(inventar.getStatus());
 
-        //format datum
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        Date convertedDate = new Date();
-        if (inventar.getDatum() != null && !inventar.getDatum().isEmpty()) {
+        //datum je string, netreba konvertovat
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+//        Date convertedDate = new Date();
+//        if (inventar.getDatum() != null && !inventar.getDatum().isEmpty()) {
+//
+//            try {
+//                convertedDate = dateFormat.parse(inventar.getDatum());
+//
+//
+//                dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+//                itemDatum.setText(dateFormat.format(convertedDate));
+//
+//            } catch (Exception ex){
+//                Log.d("Chyba" ,ex.toString());
+//            }
+//        }
 
-            try {
-                convertedDate = dateFormat.parse(inventar.getDatum());
-                dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                itemDatum.setText(dateFormat.format(convertedDate));
-            } catch (Exception ex){
-                //do nothing
-            }
-        }
+        String xx = inventar.getDatum();
+        itemDatum.setText(inventar.getDatum());
+
 
         // ak status = 10 tak zmen farbu na zelenu // status bol null, row
         if (inventar.getStatus() != null)
