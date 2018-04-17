@@ -100,7 +100,7 @@ public class ViewInventarDetail extends AppCompatActivity {
                 inventar.setZodpovednaOsoba(spinner_responsible.getSelectedItem().toString());
                 inventar.setImage(getImageBytesFromImageView());
 
-/* ********************************************************************* TEST
+                /* ********************************************************************* TEST
                 testovanie inventara
                 pozitivny (exitujuci kod v databaze)
                         - z info scan ok
@@ -110,9 +110,7 @@ public class ViewInventarDetail extends AppCompatActivity {
                 negativny (neexistujuci barcode)
                 scan z miestnosti ( novy )
                 scan z info ok
-*/
-
-
+                *************************************************************************/
                 //tu uloz nove data do databazy
                 dm.ulozInventar(inventar, origRoomCode);
 

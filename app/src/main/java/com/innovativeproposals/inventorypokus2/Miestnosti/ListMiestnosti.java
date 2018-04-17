@@ -31,14 +31,21 @@ public class ListMiestnosti extends AppCompatActivity
     TextView roomcodeET;
     TextView roomdescriptionEF;
     TextView kodMIestnostiET;
+    String myKodOddelenia;
+    ListView lw;
 
 
     DataModelMiestnosti dm = new DataModelMiestnosti(this); // pri kopirovani do inej triedy zmen
+    ArrayList<HashMap<String, String>> zoznamHM = null;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        String myKodOddelenia = "";
+
+        zjednotMetody();
+
+        /*
+        myKodOddelenia = "";
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -52,8 +59,7 @@ public class ListMiestnosti extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        ArrayList<HashMap<String, String>> zoznamHM  = null;
+        zoznamHM  = null;
         try {
             zoznamHM = dm.dajZaznamy(myKodOddelenia);
         } catch (URISyntaxException e) {
@@ -62,7 +68,81 @@ public class ListMiestnosti extends AppCompatActivity
 
         if(zoznamHM.size()!=0)
         {
-            ListView lw = (ListView)findViewById(R.id.list_miestnosti);
+           // ListView lw = (ListView)findViewById(R.id.list_miestnosti);
+            lw = (ListView)findViewById(R.id.list_miestnosti);
+            lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                //kliknutie na polozku zoznamu
+                public void onItemClick(AdapterView<?> parent,
+                                        View view, int position, long id)
+                {
+
+                    roomcodeET = (TextView) view.findViewById(R.id.roomcodeET);
+                    roomdescriptionEF = (TextView) view.findViewById(R.id.roomdescriptionET);
+                    kodMIestnostiET = (TextView) view.findViewById(R.id.kodMiestnostiET);
+
+                    String sKnihaId = roomcodeET.getText().toString();
+
+                    Intent theIndent = new Intent(getApplication(),
+                            ListInventarVMiestnosti.class);
+                    theIndent.putExtra("roomcode", sKnihaId);
+                    theIndent.putExtra("roomdescription", roomdescriptionEF.getText());
+                    theIndent.putExtra("kodmiestnosti", kodMIestnostiET.getText());
+                    startActivity(theIndent);
+                }
+            });
+            ListAdapter adapter = new SimpleAdapter( ListMiestnosti.this,
+                    zoznamHM, R.layout.miestnosti_riadok,
+                    new String[] { "roomcode","roomdescription","kodmiestnosti"}, new int[] {R.id.roomcodeET,R.id.roomdescriptionET, R.id.kodMiestnostiET});
+
+            lw.setAdapter(adapter);
+        }*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        zjednotMetody();
+
+        /*
+        try {
+            zoznamHM = null;
+            //zoznamHM = dm.dajNoveZaznamy(myRoomcode, "");
+            zoznamHM = dm.dajZaznamy(myKodOddelenia);
+
+
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    void zjednotMetody() {
+        myKodOddelenia = "";
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            myKodOddelenia= extras.getString("kododdelenia");
+        }
+
+        setContentView(R.layout.miestnosti);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(extras.getString("description"));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        zoznamHM  = null;
+        try {
+            zoznamHM = dm.dajZaznamy(myKodOddelenia);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        if(zoznamHM.size()!=0)
+        {
+            // ListView lw = (ListView)findViewById(R.id.list_miestnosti);
+            lw = (ListView)findViewById(R.id.list_miestnosti);
             lw.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
                 //kliknutie na polozku zoznamu
@@ -90,7 +170,10 @@ public class ListMiestnosti extends AppCompatActivity
 
             lw.setAdapter(adapter);
         }
+
     }
+
+
 }
 
 

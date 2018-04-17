@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.innovativeproposals.inventorypokus2.Constants;
+import com.innovativeproposals.inventorypokus2.Models.DbUtils;
 import com.innovativeproposals.inventorypokus2.Models.Inventar;
 import com.innovativeproposals.inventorypokus2.R;
 
@@ -28,6 +29,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
     private static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     private static final int DB_VERZIA = 1;
     private static final String DB_TABULKA = "majetok";
+    private Context myCtx;
 
     // zaklad
     @Override
@@ -47,7 +49,9 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
     public DataModelInventarDetail(Context ctx)
     {
+
         super(ctx, DB_DATABAZA, null, DB_VERZIA);
+        myCtx = ctx;
     }
 
     // doplnujuce funkcie
@@ -226,7 +230,7 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
     public int ulozInventar(Inventar myInventar, String newRoom)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        int aa = 0; // nepouzite
+        int aa = -1;
         String mySql = null;
         boolean isNew = false;
         String akaRoomcode = newRoom;
@@ -277,8 +281,14 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
 
             // zapis do tabulky inventura **************************************** // pri info nezapisovat ******* !!!
             if(!myInventar.isInfo()) {
-                // teraz uloz do tabulky inventura - tu je len insert
-                mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
+                //  tu je len insert, zisti ci je tam zodpovedna osoba
+                DbUtils util = new DbUtils(myCtx);
+                boolean isField  = util.GetSQLResultStringNoParam("SELECT zodpovednaosoba FROM inventura");
+
+                if(isField == false)
+                    mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode) VALUES (?, ?, ?,  ?, ?)";
+                 else
+                    mySql = "INSERT INTO inventura ( itemdescription, status, roomcode, insertedDatum, itembarcode, zodpovednaosoba) VALUES (?, ?, ?,  ?, ?, ?)";
 
                 SQLiteStatement insertStmt2 = db.compileStatement(mySql);
                 insertStmt2.clearBindings();
@@ -287,19 +297,20 @@ public class DataModelInventarDetail extends SQLiteOpenHelper {
                 insertStmt2.bindString(3, myInventar.getRommCode());
                 //insertStmt2.bindLong(4,realDatum); // NOK
                 insertStmt2.bindString(4, ts); // NOK
-                insertStmt2.bindString(5, myInventar.getItemBarcode()); // NOK
+                insertStmt2.bindString(5, myInventar.getItemBarcode());
+
+                if(isField == true)
+                   insertStmt2.bindString(6, myInventar.getZodpovednaOsoba());
 
                 Log.d("insert", "Query: " + insertStmt2.toString());
                 insertStmt2.executeInsert();
-
+                aa = 1;
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-
 
         return aa;
 

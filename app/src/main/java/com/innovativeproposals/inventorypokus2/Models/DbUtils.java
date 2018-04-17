@@ -122,5 +122,40 @@ public class DbUtils extends SQLiteOpenHelper {
         return results;
     }
 
+    public Boolean  GetSQLResultStringNoParam(String sqltxt)
+    {
+        Cursor cursor;
+        boolean myResult = false;
+        ArrayList<String> results = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try
+        {
+            cursor = db.rawQuery(sqltxt, null); // musi byt v try bloku
+
+            //kurzor na prvy zaznam
+            if (cursor.moveToFirst()) {
+                myResult = true;
+                do {
+                    results.add(cursor.getString(0));
+                } while (cursor.moveToNext()); // kurzor na dalsi zaznam
+            }
+        }
+
+        catch(Exception exp) // exp
+        {
+           // hodnota = "-1";
+            //MessageBox.Show(exp.ToString());
+            String aa = "a";
+        }
+        finally {
+           // if(cursor != null)
+            //    cursor.close();
+        }
+
+        return myResult;
+
+    }
+
 
 }

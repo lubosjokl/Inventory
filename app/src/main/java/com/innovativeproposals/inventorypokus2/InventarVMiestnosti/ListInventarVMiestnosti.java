@@ -114,6 +114,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // toto refreshuje list
         if (requestCode != 1) return; // sem ide po navrate z detailu. Aj niekedy inokedy?
 
         if (resultCode == 0) { // bolo Activity.RESULT_OK
@@ -271,7 +272,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             emdkManager.release();
             emdkManager = null;
         }
-//        textViewStatus.setText("Status: " + "EMDK closed unexpectedly! Please close and restart the application.");
     }
 
     @Override
