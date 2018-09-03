@@ -61,13 +61,15 @@ public class MainActivity extends AppCompatActivity
 
         // zakazanie zmeny orientacie
         // https://stackoverflow.com/questions/20021803/disable-and-enable-orientation-changes-in-an-activity-in-android-programatically
-
         // napln zoznamy - zodpovedne osoby, atd
-        naplnListy();
 
-
-        ImplementChart(); // nemusi prejst pokial nie je databaza
-
+        if(isDatabaseFile()) {
+            naplnListy(); //xx
+        } else {
+           // Intent intent = new Intent(this, ImportDatabase.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

@@ -120,7 +120,8 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
 
         File dir = new File(directory);
 
-        if (!dir.exists()&& dir.isDirectory())
+       // if ((!dir.exists() && (dir.isDirectory())))
+        if (!dir.exists())
             dir.mkdirs();
     }
 
@@ -158,10 +159,10 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             saveDir = p.applicationInfo.dataDir + "/files"; // /data/user/0/com.innovativeproposals.inventorypokus2
             assureThatDirectoryExist(saveDir); // vytvor adresar ak neexistuje
             fileNameTo = p.applicationInfo.dataDir + "/databases";
+
             assureThatDirectoryExist(fileNameTo); //
+            saveDir = p.applicationInfo.dataDir + "/databases";
             fileNameTo = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
-
-
 
             //int BUFFER_SIZE = 1024;
             HttpURLConnection httpConn = null;
@@ -175,7 +176,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             }
 
             try {
-                httpConn.setConnectTimeout(2000); // 2 Sekundy
+                httpConn.setConnectTimeout(5000); // 5 Sekund
                 int responseCode = httpConn.getResponseCode();
 
                 // always check HTTP response code first
@@ -200,6 +201,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
                     } else {
                         // extracts file name from URL
                         fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.length());
+                       // fileNameFrom = saveDir + "/" + Constants.FILE_DATA_PC2PDA;
                         fileNameFrom = saveDir + "/" + Constants.FILE_DATA_PC2PDA;
 
                     }
