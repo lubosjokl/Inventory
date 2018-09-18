@@ -6,6 +6,7 @@ package com.innovativeproposals.inventorypokus2.InventarDetail;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,13 +16,16 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -49,11 +53,9 @@ public class ViewInventarDetail extends AppCompatActivity {
     String origRoomCode;
     Inventar inventar;
 
-    TextView itemdescriptionET;
-    Spinner spinner_inventoryType;
-    Spinner spinner_responsible;
-    EditText txt_Notice;
-    EditText txt_SerialNr;
+    TextView itemdescriptionET, myBarcode, myPriceET, myLocation, myTxt_Discarded, myTxt_Added, myLastInventory, myDescription;
+    Spinner spinner_inventoryType, spinner_responsible;
+    EditText txt_Notice, txt_SerialNr;
     FloatingActionButton fab_takePhoto; // tlacitko na fotenie
     ImageView detailView_Image;
     AppBarLayout appBarLayout;
@@ -72,13 +74,14 @@ public class ViewInventarDetail extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                supportFinishAfterTransition();
+                //supportFinishAfterTransition();
+                onBackPressed();
                 return true;
 
             case R.id.menu_item_save:
 
                 try {
-                  //  Object aa = itemdescriptionET.getText();
+                    //  Object aa = itemdescriptionET.getText();
                     String xx = "" + itemdescriptionET.getText();
                     if (xx.equals("")) {
                         Toast.makeText(this, R.string.meno_musi_byt_vyplnene, Toast.LENGTH_LONG).show();
@@ -156,6 +159,13 @@ public class ViewInventarDetail extends AppCompatActivity {
         fab_takePhoto = findViewById(R.id.fab_inventar_detail_take_picture);
         detailView_Image = findViewById(R.id.detailView_Image);
         appBarLayout = findViewById(R.id.appBar  );
+        myLastInventory = findViewById(R.id.lastInventory);
+        myTxt_Added = findViewById(R.id.txt_Added);
+        myTxt_Discarded = findViewById(R.id.txt_Discarded);
+        myPriceET = findViewById(R.id.priceET);
+        myLocation = findViewById(R.id.location);
+        myBarcode = findViewById(R.id.barcodeET);
+        myDescription = findViewById(R.id.descriptionET);
     }
 
     @Override
@@ -174,7 +184,6 @@ public class ViewInventarDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        String isValue = "";
         inventar = null;
 
         Bundle extras = getIntent().getExtras();
@@ -216,24 +225,21 @@ public class ViewInventarDetail extends AppCompatActivity {
 
         }
 
-        TextView barcode = findViewById(R.id.barcodeET);
-        barcode.setText(inventar.getItemBarcode());
+        myBarcode.setText(inventar.getItemBarcode());
 
-        isValue = inventar.getItemDescription();
-        TextView description = findViewById(R.id.descriptionET);
+        String isValue = inventar.getItemDescription();
         if (isValue != null)
-            description.setText(isValue);
+            myDescription.setText(isValue);
 
         isValue = inventar.getDatum();
-        TextView lastInventory = findViewById(R.id.lastInventory);
         if (isValue != null && isValue.length() > 0) {
             // tento datum je string, retazec zobrazim po medzeru, cize bez casu, ktory tam vsak nemusi byt
             int kde = isValue.indexOf(" ");
             if (kde > 0) {
                 isValue = isValue.substring(0, kde);
-                lastInventory.setText(isValue);
+                myLastInventory.setText(isValue);
             } else
-                lastInventory.setText(isValue);
+                myLastInventory.setText(isValue);
         }
 
         isValue = inventar.getPoznamka();
@@ -245,39 +251,36 @@ public class ViewInventarDetail extends AppCompatActivity {
             txt_SerialNr.setText(isValue);
 
         isValue = inventar.getDatum_added(); // zaradeny
-        TextView txt_Added = findViewById(R.id.txt_Added);
+     //   txt_Added = findViewById(R.id.txt_Added);
         if (isValue != null && isValue.length() > 0) {
             // tento datum je string, retazec zobrazim po medzeru, cize bez casu
             int kde = isValue.indexOf(" ");
             if (kde > 0) {
                 isValue = isValue.substring(0, kde);
-                txt_Added.setText(isValue + " / ");
+                myTxt_Added.setText(isValue + " / ");
             }
         } else
-            txt_Added.setText(" / ");
+            myTxt_Added.setText(" / ");
 
         isValue = inventar.getDatum_discarded(); // vyradeny
-        TextView txt_Discarded = findViewById(R.id.txt_Discarded);
         if (isValue != null && isValue.length() > 0) {
             // tento datum je string, retazec zobrazim po medzeru, cize bez casu
             int kde = isValue.indexOf(" ");
             isValue = isValue.substring(0, kde);
-            txt_Discarded.setText(isValue);
+            myTxt_Discarded.setText(isValue);
         } else
-            txt_Discarded.setText(null);
+            myTxt_Discarded.setText(null);
 
         isValue = inventar.getPrice();
-        TextView priceET = findViewById(R.id.priceET);
         if (isValue != null) {
-            priceET.setText(getString(R.string.Price) + " " + isValue + " EUR");
+            myPriceET.setText(getString(R.string.Price) + " " + isValue + " EUR");
         }
 
         String myLokacia = null;
-        TextView location = findViewById(R.id.location);
         isValue = inventar.getRommCode();
         if (isValue != null) {
             myLokacia = dm.dajNazovLokality(isValue);
-            location.setText(myLokacia);
+            myLocation.setText(myLokacia);
         }
         // spinner na typy majetku
         String tempSpinnerTyp = null;
@@ -316,14 +319,18 @@ public class ViewInventarDetail extends AppCompatActivity {
             spinner_responsible.setSelection(adapterZodpovedneOsoby.getPosition(tempZodpovednaOsoba));
 
         // ukrytie klavesnice
-        CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.layout_detail);
+        /*CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.layout_detail);
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 hideKeyboard(view);
                 return false;
             }
-        });
+        }); */
+
+
+       // zakaz fokus
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     }
 
@@ -339,6 +346,58 @@ public class ViewInventarDetail extends AppCompatActivity {
         return false;
     }
 */
+
+
+    // odchytenie hw klavesy na odchod z Detailu
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+            alertbox.setTitle("Údaje nebudú uložené");
+            alertbox.setMessage("Aj tak ukončiť ? ");
+
+            alertbox.setPositiveButton("Áno",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            exit();
+                        }
+                    });
+
+            alertbox.setNeutralButton("Nie",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                        }
+                    });
+
+            alertbox.show();
+
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+
+    private  void exit(){
+        this.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Aj tak ukončiť ?")
+                .setCancelable(false)
+                .setTitle("Údaje nebudú uložené")
+                .setPositiveButton("Áno", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        supportFinishAfterTransition();
+                        finish();
+                    }
+                })
+                .setNegativeButton("Nie", null)
+                .show();
+    }
 
     protected void hideKeyboard(View view)
     {

@@ -4,7 +4,7 @@
     <item
         app:showAsAction="always"
         android:id="@+id/menu_item_save"
-        android:icon="@drawable/ic_playlist_add_check_white_24dp"
+        android:icon="@drawable/ic_save"
         android:title="Ulozit"
         android:tooltipText="Ulozit"/>
 </menu>

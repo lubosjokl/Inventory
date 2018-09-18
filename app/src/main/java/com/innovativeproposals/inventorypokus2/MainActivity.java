@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
+
+        ImplementChart();
     }
 
     @Override
@@ -215,9 +217,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         String sourceFileUri = p.applicationInfo.dataDir + "/databases/" + Constants.FILE_DATABASE;
-
-        /*   if(util.fileExist(sourceFileUri)==true)
-            isFile=true; */
 
         File file = new File(sourceFileUri);
         if(file.exists())

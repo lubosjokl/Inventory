@@ -29,8 +29,14 @@
 - zapis zodpovednej osoby do tabulky inventura - dokoncenie
 - aktualizacia poctu invetarizovanych predmetov po navrate do prehladu kancelarii
 
+18.9.2018
+- v detaile inventara sa vypisovalo textView pri neumiestnenom majetku
+- opat zobrazujem graf o stave spracovania
+- pri odchode z detailu bez zapisu zobrazi upozornenie ze udaje nebudu ulozene
 
 urob:
+- pokial neexistuje inventar, zadaj ho rucne
+- ak nebola zmena udajov, tak nezobrazuj hlasku o strateni zmien
 - v miestnosti hore hladanie podla ean, nazvu, poznamky a serioveho cisla vsetkych artiklov
 - vyradenie inventara
 - kontrola pri importe na novsie udaje na skeneri

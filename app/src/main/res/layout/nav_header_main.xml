@@ -23,6 +23,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Inventory v. 2.02 / 17.04.2018" />
+        android:text="Inventory v. 2.03 / 18.09.2018" />
 
 </LinearLayout>

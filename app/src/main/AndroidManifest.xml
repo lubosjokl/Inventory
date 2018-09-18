@@ -31,8 +31,6 @@
 
                 <uses-library android:name="com.symbol.emdk" />
 
-
-
         <activity
             android:name=".MainActivity"
             android:label="@string/preference_description"

@@ -103,12 +103,11 @@
                     android:id="@+id/descriptionET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="100"
 
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
-
 
                     android:hint="@string/description_inventoryName"
                     android:inputType="textPersonName" />
@@ -153,7 +152,7 @@
                     android:id="@+id/notice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="100"
 
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
@@ -174,7 +173,7 @@
                     android:id="@+id/txt_SerialNr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="50"
 
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
@@ -241,7 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="TextView"
+                android:text="nedefinované umiestnenie"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="18sp"
                 android:layout_below="@id/spinner_responsible"/>
