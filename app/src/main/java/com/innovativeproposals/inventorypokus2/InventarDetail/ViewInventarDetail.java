@@ -169,14 +169,13 @@ public class ViewInventarDetail extends AppCompatActivity {
     }
 
     @Override
-    // foto
+    // navrat z fotoaparatu
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data); // vraj treba
 
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            Log.d("CameraDemo", "Pic saved");
+         //   Log.d("CameraDemo", "Pic saved");
             detailView_Image.setImageBitmap(photo);
         }
     }

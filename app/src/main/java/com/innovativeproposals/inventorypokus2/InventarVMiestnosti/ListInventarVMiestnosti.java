@@ -7,13 +7,19 @@ package com.innovativeproposals.inventorypokus2.InventarVMiestnosti;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
@@ -49,6 +55,7 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         Scanner.StatusListener, Scanner.DataListener, BarcodeManager.ScannerConnectionListener, CompoundButton.OnCheckedChangeListener {
 
     private String myRoomcode;
+    String manualEan;
     TextView itembarcodeET;
     TextView itemdescriptionET;
 
@@ -79,6 +86,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         inflater.inflate(R.menu.search_menu, menu);
 
         MenuItem myActionMenuItem = menu.findItem(R.id.search);
+      //  MenuItem myAddInventar = menu.findItem(R.id.addItem);
+
         SearchView searchView = (SearchView) myActionMenuItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -109,15 +118,105 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         //        searchManager.getSearchableInfo(getComponentName()));
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addItem:
+
+                // vytvor View programovo
+                /*LinearLayout rlmain = new LinearLayout(this);
+                LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT);
+                LinearLayout   ll1 = new LinearLayout (this);
+
+                TextView nadpis = new TextView(this);
+                nadpis.setText("Zadajte EAN");
+
+                EditText myEan = new EditText(this);
+
+                Button btHotovo = new Button(this);
+                btHotovo.setLayoutParams(new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT, Toolbar.LayoutParams.WRAP_CONTENT));
+                btHotovo.setText("OK");
+
+                btHotovo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                       // rlmain.removeView(ll1);
+                        manualEan = myEan.getText().toString();
+                        LinearLayout parentLayout = (LinearLayout)v.getParent();
+                        parentLayout.removeView(v);
+                        addNewItem();
+                    }
+                });
+
+                ll1.addView(nadpis);
+                ll1.addView(myEan);
+                ll1.addView(btHotovo);
+
+                rlmain.addView(ll1);
+                setContentView(rlmain, llp); */
+
+                // zavolaj fragment
+                /*if (findViewById(R.id.artikel_fragment) != null) {
+
+                    // However, if we're being restored from a previous state,
+                    // then we don't need to do anything and should return or else
+                    // we could end up with overlapping fragments.
+
+                    if (savedInstanceState != null) {
+                        return;
+                    }
+
+                    // Create an instance of ExampleFragment
+                    addInventarManualne firstFragment = new addInventarManualne();
+
+                    // In case this activity was started with special instructions from an Intent,
+                    // pass the Intent's extras to the fragment as arguments
+                    firstFragment.setArguments(getIntent().getExtras());
+
+                    // Add the fragment to the 'fragment_container' FrameLayout
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.artikel_fragment, firstFragment).commit();
+                }
+                */
+
+                Intent artikelIndent = new Intent(getApplication(), addInventarManualne.class);
+              //  artikelIndent.putExtra("newEAN","");
+                startActivityForResult(artikelIndent, 2); // dvojla je pre novy artikel
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    void addNewItem() {
+        // je to novy inventar zadany rucne
+        Inventar inventar = new Inventar();
+        inventar.setRommCode(myRoomcode);
+        inventar.setItemBarcode(manualEan);
+        inventar.setInfo(false );
+
+
+        Intent theIndent = new Intent(this, ViewInventarDetail.class);
+                    theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
+                    theIndent.putExtra("roomcode",myRoomcode); // musim posielat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
+
+        startActivityForResult(theIndent, 1);
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // toto refreshuje list
-        if (requestCode != 1) return; // sem ide po navrate z detailu. Aj niekedy inokedy?
+        // navrat z childu, refreshuje hodnoty
 
-        if (resultCode == 0) { // bolo Activity.RESULT_OK
+       // if (requestCode != 1 || requestCode != 2) return; // sem ide po navrate z detailu. Aj niekedy inokedy?
+
+        if (requestCode == 1 && resultCode == 0) { // ide z detailu
 
             //aktualizacia udajov po navrate z Detailu
             try {
@@ -133,6 +232,16 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                 e.printStackTrace();
             }
         }
+
+        if (requestCode == 2 && resultCode == 0) { // ide z manualneho noveho EANu
+
+           //  String content = data.getStringExtra("newEAN");
+            manualEan = data.getStringExtra("newEAN");
+            if(manualEan != "")
+                // todo daj kontrolu na existujuci EAN
+                addNewItem();
+        }
+
     }
 
     // bolo protected
@@ -158,6 +267,8 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
         String kancel = dm.dajNazovMiestnosti(myRoomcode);
 
         toolbar.setTitle(kancel);
+
+        // toto odremuj
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -168,41 +279,39 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
             e.printStackTrace();
         }
 
-     //   if (zoznamHM.size() != 0) {
-            ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
-            lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListView lw = (ListView) findViewById(R.id.list_inventar_v_miestnosti);
+        lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                //kliknutie na polozku zoznamu
-                @SuppressLint("RestrictedApi")
-                public void onItemClick(AdapterView<?> parent,
-                                        View view, int position, long id) {
-                    itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
-                    itemdescriptionET = (TextView) view.findViewById(R.id.itemdescriptionET);
+        //kliknutie na polozku zoznamu
+        @SuppressLint("RestrictedApi")
+        public void onItemClick(AdapterView<?> parent,
+                View view, int position, long id) {
+            itembarcodeET = (TextView) view.findViewById(R.id.itembarcodeET);
+            itemdescriptionET = (TextView) view.findViewById(R.id.itemdescriptionET);
 
-                    statusET = (TextView) view.findViewById(R.id.statusET);
-                    datumET = (TextView) view.findViewById(R.id.datumET);
+            statusET = (TextView) view.findViewById(R.id.statusET);
+            datumET = (TextView) view.findViewById(R.id.datumET);
 
-                    int inventarID = (int) view.getTag();
-                    Inventar inventar = findInventarById(inventarID);
-                    inventar.setInfo(false);
+            int inventarID = (int) view.getTag();
+            Inventar inventar = findInventarById(inventarID);
+            inventar.setInfo(false);
 
-                    Intent theIndent = new Intent(getApplication(),
-                            ViewInventarDetail.class);
+            Intent theIndent = new Intent(getApplication(),
+                    ViewInventarDetail.class);
 
-                    theIndent.putExtra("roomcode",myRoomcode); // musim posielat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
-                    theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
+            theIndent.putExtra("roomcode",myRoomcode); // musim posielat aj roomcode, pri nasnimani inventara v inej miestnosti sa musi zapisat jej kod
+            theIndent.putExtra(Constants.INTENT_INVENTORY, inventar);
 
-                    View imageView = view.findViewById(R.id.detailView_Image);
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                            ListInventarVMiestnosti.this, imageView, "detailView_Image");
+            View imageView = view.findViewById(R.id.detailView_Image);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                   ListInventarVMiestnosti.this, imageView, "detailView_Image");
 
-                    startActivityForResult(theIndent, 1, options.toBundle()); //
-                }
-            });
-            customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
-            lw.setAdapter(customListAdapter);
+                 startActivityForResult(theIndent, 1, options.toBundle()); //
+            }
+        });
+        customListAdapter = new CustomListInventoryAdapter(this, R.layout.inventar_vmiestnosti_riadok, zoznamHM);
+        lw.setAdapter(customListAdapter);
 
-      //  }
     }
 
     private Inventar findInventarById(Integer itemId) {
@@ -211,7 +320,6 @@ public class ListInventarVMiestnosti extends AppCompatActivity implements EMDKMa
                 return item;
         }
 
-        //toto by sa nikdy nemalo stat
         return null;
     }
 

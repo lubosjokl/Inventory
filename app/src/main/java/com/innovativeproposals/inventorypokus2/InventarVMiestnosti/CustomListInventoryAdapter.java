@@ -45,6 +45,7 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         View row = convertView;
         ImageView image = null;
         TextView itemBarcode = null;
@@ -135,6 +136,7 @@ public class CustomListInventoryAdapter extends ArrayAdapter<Inventar> {
                             filtered_list.add(item);
                         }
                     }
+
                 }
 
                 // Set on UI Thread

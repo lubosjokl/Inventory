@@ -92,8 +92,6 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
         SQLiteStatement selectStmt  =   db.compileStatement(sSQL);
         selectStmt.clearBindings();
 
-     //   selectStmt.bindString(1,_myPremenna);
-
 
         Cursor cursor = db.rawQuery(sSQL, null);
 

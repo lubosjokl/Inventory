@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+
+    >
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorFiremnaBelasa"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:text="@string/zadajte_ean_inventara"/>
+
+
+
+    <EditText
+        android:id="@+id/newEAN"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:ems="100"
+        android:inputType="text"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+    <Button
+        android:id="@+id/buttonNewArtikelOK"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/mybutton"
+        android:padding="10dp"
+        android:textSize="24sp"
+
+        android:text="OK"
+
+        />
+
+
+</LinearLayout>

@@ -2,11 +2,14 @@ package com.innovativeproposals.inventorypokus2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -64,7 +67,8 @@ public class SettingsActivity extends AppCompatActivity  {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 //supportFinishAfterTransition();  treba to?
-                this.finish();
+                //this.finish();
+                onBackPressed();
                 return true;
 
             case R.id.menu_item_save:
@@ -76,6 +80,20 @@ public class SettingsActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Aj tak ukončiť ?")
+                .setCancelable(false)
+                .setTitle("Údaje nebudú uložené")
+                .setPositiveButton("Áno", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Nie", null)
+                .show();
+    }
 
     public void saveAccountData() { // View view
 
@@ -111,5 +129,39 @@ public class SettingsActivity extends AppCompatActivity  {
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    // odchytenie hw klavesy na odchod z Detailu
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+
+            AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+            alertbox.setTitle("Údaje nebudú uložené");
+            alertbox.setMessage("Aj tak ukončiť ? ");
+
+            alertbox.setPositiveButton("Áno",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            exit();
+                        }
+                    });
+
+            alertbox.setNeutralButton("Nie",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                        }
+                    });
+
+            alertbox.show();
+
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
+
+    private  void exit(){
+        this.finish();
+    }
 
 }

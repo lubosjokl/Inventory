@@ -3,6 +3,7 @@ package com.innovativeproposals.inventorypokus2.Komunikacia;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.innovativeproposals.inventorypokus2.Constants;
 import com.innovativeproposals.inventorypokus2.R;
+import com.innovativeproposals.inventorypokus2.SettingsActivity;
 
 import java.net.MalformedURLException;
 
@@ -63,6 +65,21 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // ziskaj globalne SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + Constants.PREF_FILE_NAME, MODE_PRIVATE);
+        String address = sharedPreferences.getString(Constants.KEY_ADDRESS, "not defined"); // druhy parameter je defaultna hodnota
+
+        if(address == "not defined") {
+            // prepni na nastavenie settings
+
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+
+
+        }
+
+
 
 
         mStartBtn = (Button) findViewById(R.id.startButton);
@@ -147,6 +164,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
             String address = sharedPreferences.getString(Constants.KEY_ADDRESS, "not defined"); // druhy parameter je defaultna hodnota
             String port = sharedPreferences.getString(Constants.KEY_PORT, "11235");
             String fileURL = address + ":" + port; //String fileURL = "http://192.168.1.119:11235";
+
 
             PackageManager m = getPackageManager();
             String saveDir = getPackageName();

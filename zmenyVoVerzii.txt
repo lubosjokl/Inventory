@@ -34,6 +34,12 @@
 - opat zobrazujem graf o stave spracovania
 - pri odchode z detailu bez zapisu zobrazi upozornenie ze udaje nebudu ulozene
 
+28.9.2018
+- v settingsoch pri odchode cez Home vyhlasi ze udaje nebudu zmenene
+
+9.11.2018
+- moznost pridat novy inventar zadanim EANu rucne
+
 urob:
 - pokial neexistuje inventar, zadaj ho rucne
 - ak nebola zmena udajov, tak nezobrazuj hlasku o strateni zmien

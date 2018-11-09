@@ -69,6 +69,8 @@
     <string name="NetworkisNotAvailable">Network is not Available</string>
     <string name="unknown_location">miestnosť nie je určená</string>
     <string name="database_file_didnt_find">Database file didn\'t find. Import Database</string>
+    <string name="add_title">Pridaj inventar</string>
+    <string name="zadajte_ean_inventara">Zadajte EAN inventára</string>
 
 
     <!-- -->
