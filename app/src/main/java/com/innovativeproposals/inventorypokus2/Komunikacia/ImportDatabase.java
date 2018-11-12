@@ -96,6 +96,7 @@ public class ImportDatabase extends AppCompatActivity implements View.OnClickLis
         if (v == mStartBtn) {
             //  Start generating data, do it right here.
             if(isNetworkAvailable()) {
+                mStartBtn.setVisibility(View.INVISIBLE);
                 doGenerate();
             } else
               //  Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();

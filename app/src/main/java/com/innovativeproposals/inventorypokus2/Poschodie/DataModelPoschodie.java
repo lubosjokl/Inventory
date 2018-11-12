@@ -22,7 +22,7 @@ SELECT [Id]        ,[divizia]        ,[oddelenie]        ,[kododdelenia]        
 public class DataModelPoschodie  extends SQLiteOpenHelper {
     private static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     private static final int DB_VERZIA = 1;
-    private static final String DB_TABULKA = "oddelenie";
+    //private static final String DB_TABULKA = "oddelenie";
 
     public static final String ATR_ID = "_id";
     public static final String ATR_DIVIZIA = "divizia";
@@ -41,7 +41,7 @@ public class DataModelPoschodie  extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String query = "DROP TABLE IF EXISTS " + DB_TABULKA;
+        String query = "DROP TABLE IF EXISTS oddelenie";
         db.execSQL(query);
         onCreate(db);
     }
@@ -58,7 +58,7 @@ public class DataModelPoschodie  extends SQLiteOpenHelper {
 
         alVysledky = new ArrayList<HashMap<String, String>>();
 
-        String sSQL = "SELECT Id, divizia, oddelenie, kododdelenia FROM " + DB_TABULKA + " WHERE divizia='"+myDivizia+"'";
+        String sSQL = "SELECT Id, divizia, oddelenie, kododdelenia FROM oddelenie WHERE divizia='"+myDivizia+"'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
@@ -83,7 +83,7 @@ public class DataModelPoschodie  extends SQLiteOpenHelper {
     {
         HashMap<String, String> hm = new HashMap<String, String>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String sSQL = "SELECT * FROM " + DB_TABULKA + " WHERE _id='"+id+"'";
+        String sSQL = "SELECT * FROM oddelenie WHERE _id='"+id+"'";
         Cursor cursor = db.rawQuery(sSQL, null);
         if (cursor.moveToFirst())
         {

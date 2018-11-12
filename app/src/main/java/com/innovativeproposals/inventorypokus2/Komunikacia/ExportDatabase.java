@@ -45,13 +45,10 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
     private TextView mProgressTxt;
     private ProgressBar mProgress;
 
-
     private static final int    SIZE_KB = 1024;
     private static final int    SIZE_MB = (SIZE_KB * 1024);
     private static final int    TOTAL_DATA_POINTS = (4 * SIZE_MB);
-    //public String fileNameFrom;
-    //public String fileNameTo;
-    String TAG  = "Export database";
+    String TAG  = "Export databazy";
 
     private byte[] dataBuf = new byte[TOTAL_DATA_POINTS];
     private GenAsyncTask mGenAT;
@@ -79,6 +76,8 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
         if (v == mStartBtn) {
             //  Start generating data, do it right here.
             if(isNetworkAvailable()) {
+                mStartBtn.setVisibility(View.INVISIBLE);
+
                 doGenerate();
             } else
                // Toast.makeText(getBaseContext(), "Network is not Available", Toast.LENGTH_SHORT).show();
@@ -124,11 +123,13 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String  result) {
+
             String doneStr; // = "hotovo";
 
-            if(result.equals("nofile")) {
+            if(result.equals("")) {
                 doneStr = getString(R.string.NeexportovalSaZiadnySuborPreverteFirewall);
                 mProgressTxt.setBackgroundResource(R.color.colorNO );
+               // doneStr = "Source File not exist";
                 publishProgress(0);
             } else if(result.equals("error1")) {
                 doneStr = "Source File not exist";
@@ -156,6 +157,8 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
             long startTime;
             long endTime;
             startTime = SystemClock.elapsedRealtime();
+            //String myResult = "Prenos bol ukončený";
+            String myResult = "";
 
             PackageManager m = getPackageManager();
             String saveDir = getPackageName();
@@ -212,6 +215,7 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
             if (!sourceFile.isFile()) {
 
                 Log.e("uploadFile", "Source File not exist ");
+                myResult = "Source File not exist ";
 
             } else {
                 try {
@@ -306,22 +310,31 @@ public class ExportDatabase extends AppCompatActivity implements View.OnClickLis
                     dataOutputStream.close();
 
                 } catch (MalformedURLException ex) {
+                    myResult =  "nofile";
                     ex.printStackTrace();
                     Log.e(TAG, "MalformedURLException Exception : check script url.");
                     Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
-                    return "nofile";
+
+                    return myResult;
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e(TAG, "Upload file to server Exception : " + e.getMessage(), e);
-                    return "nofile";
+                    return myResult;
                 }
 
-                return "error1"; // Source File not exist
+                endTime = SystemClock.elapsedRealtime();
+                return String.valueOf(endTime - startTime);
+               //return myResult;
 
             } // End else block
 
-            endTime = SystemClock.elapsedRealtime();
-            return String.valueOf(endTime - startTime);
+            // uploadFile", "Source File not exist ");
+//            endTime = SystemClock.elapsedRealtime();
+  //          return String.valueOf(endTime - startTime);
+
+            return myResult;
+
+
         }
     }
 

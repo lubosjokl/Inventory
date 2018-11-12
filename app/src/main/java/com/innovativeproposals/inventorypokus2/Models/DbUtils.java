@@ -62,6 +62,7 @@ public class DbUtils extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         cursor.close();
+        db.close();
         return results;
     }
 
@@ -80,6 +81,7 @@ public class DbUtils extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         cursor.close();
+        db.close();
         return results;
     }
 
@@ -101,6 +103,7 @@ public class DbUtils extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         cursor.close();
+        db.close();
         return results;
     }
 
@@ -119,6 +122,7 @@ public class DbUtils extends SQLiteOpenHelper {
             } while (cursor.moveToNext()); // kurzor na dalsi zaznam
         }
         cursor.close();
+        db.close();
         return results;
     }
 
@@ -151,9 +155,44 @@ public class DbUtils extends SQLiteOpenHelper {
         finally {
            // if(cursor != null)
             //    cursor.close();
+            db.close();
         }
 
         return myResult;
+
+    }
+
+    public void checkDatabaseIndex()
+    {
+
+        String query = "CREATE INDEX IF NOT EXISTS index_kancelaria_roomcode ON kancelaria (roomcode)";
+        SQLiteDatabase db = this.getWritableDatabase(); // mName = inventory.db
+
+        //onCreate(db);
+
+
+        //        1. CREATE INDEX IF NOT EXISTS index_kancelaria_roomcode ON kancelaria (roomcode);
+        //        2. CREATE INDEX IF NOT EXISTS index_majetok_itembarcode_datumREAL ON majetok (itembarcode,datumREAL,serialnr, itemdescription, extranotice);
+
+        try
+        {
+            db.execSQL(query);
+            query = "CREATE INDEX IF NOT EXISTS index_majetok_itembarcode_datumREAL ON majetok (itembarcode,datumREAL,serialnr, itemdescription, extranotice)";
+            db.execSQL(query);
+        }
+
+        catch(Exception exp) // exp
+        {
+            // hodnota = "-1";
+            String aa = exp.toString();
+        }
+        finally {
+            // if(cursor != null)
+            //    cursor.close();
+            db.close();
+        }
+
+        return;
 
     }
 

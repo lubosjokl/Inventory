@@ -29,8 +29,8 @@ import java.util.HashMap;
 SELECT [Id]         ,[divizia]        ,[oddelenie]        ,[kododdelenia]        FROM [oddelenie] */
 
 public class ListPoschodie extends AppCompatActivity {
-    Intent intent;
-    TextView poschodieID;
+    //Intent intent;
+    //TextView poschodieID;
     TextView diviziaET;
     TextView poschodieET;
     TextView KodOddeleniaET;

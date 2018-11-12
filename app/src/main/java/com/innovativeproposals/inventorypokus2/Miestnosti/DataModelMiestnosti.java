@@ -27,7 +27,7 @@ SELECT [Id]
 public class DataModelMiestnosti  extends SQLiteOpenHelper {
     private  static final String DB_DATABAZA = Constants.FILE_DATABASE; //"inventory";
     private static final int DB_VERZIA = 1;
-    private static final String DB_TABULKA = "kancelaria";
+   // private static final String DB_TABULKA = "kancelaria";
 
     private static final String ATR_ID = "_id";
     private static final String ATR_ROOMCODE = "roomcode";
@@ -47,7 +47,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String query = "DROP TABLE IF EXISTS " + DB_TABULKA;
+        String query = "DROP TABLE IF EXISTS kancelaria";
         db.execSQL(query);
         onCreate(db);
     }
@@ -63,7 +63,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
         ArrayList<HashMap<String, String>> alVysledky;
 
         alVysledky = new ArrayList<HashMap<String, String>>();
-        String sSQL = "SELECT id,roomcode, roomdescription FROM " + DB_TABULKA + " WHERE roomcode like '"+myPoschodieKod+"%' ORDER BY roomdescription";
+        String sSQL = "SELECT id,roomcode, roomdescription FROM kancelaria WHERE roomcode like '"+myPoschodieKod+"%' ORDER BY roomdescription";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sSQL, null);
 
@@ -99,7 +99,7 @@ public class DataModelMiestnosti  extends SQLiteOpenHelper {
     {
         HashMap<String, String> hm = new HashMap<String, String>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String sSQL = "SELECT * FROM " + DB_TABULKA + " WHERE _id='"+id+"'";
+        String sSQL = "SELECT * FROM kancelaria WHERE _id='"+id+"'";
         Cursor cursor = db.rawQuery(sSQL, null);
         if (cursor.moveToFirst())
         {

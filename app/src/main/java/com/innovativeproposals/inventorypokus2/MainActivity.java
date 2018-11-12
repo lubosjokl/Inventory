@@ -252,8 +252,14 @@ public class MainActivity extends AppCompatActivity
 
     void naplnListy() {
 
+        DbUtils dm = new DbUtils(this);
+        dm.checkDatabaseIndex();
+
         Constants.spinnerZodpovedneOsoby = dm.dajZodpovedneOsoby();
         Constants.spinnerListTypyMajetku = dm.dajTypyMajetku();
+
+
+
 
     }
 

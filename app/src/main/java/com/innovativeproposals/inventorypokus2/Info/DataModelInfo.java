@@ -22,7 +22,7 @@ public class DataModelInfo extends SQLiteOpenHelper {
 
     private static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
     private static final int DB_VERZIA = 1;
-    private static final String DB_TABULKA = "majetok";
+   // private static final String DB_TABULKA = "majetok";
 
     // zaklad
     @Override
@@ -56,8 +56,7 @@ public class DataModelInfo extends SQLiteOpenHelper {
                 "aa.obstaravaciacena, aa.extranotice, aa.datumReal " +
                 "FROM majetok aa left join  MajetokObrazky bb on bb.itembarcode = aa.itembarcode " +
                 "WHERE aa.itembarcode like '" + myKod2 +"' or aa.serialnr like '" + myKod2 +"' or aa.itemdescription like '" + myNazov2 +
-                "' or aa.extranotice like '" + myNazov2 + "' order by aa.datumREAL asc limit 100";
-
+                "' or aa.extranotice like '" + myNazov2 + "' order by aa.datumREAL asc limit 50";
 
         SQLiteDatabase db = this.getWritableDatabase();
         SQLiteStatement selectStmt  =   db.compileStatement(sSQL);

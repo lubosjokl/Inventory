@@ -22,7 +22,7 @@ import java.util.Objects;
 public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
     private static final String DB_DATABAZA =  Constants.FILE_DATABASE; //"inventory";
     private static final int DB_VERZIA = 1;
-    private static final String DB_TABULKA = "majetok";
+   // private static final String DB_TABULKA = "majetok";
 
     // zaklad
     @Override
@@ -35,7 +35,7 @@ public class DataModelInventarVMiestnosti extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String query = "DROP TABLE IF EXISTS " + DB_TABULKA;
+        String query = "DROP TABLE IF EXISTS majetok" ;
         db.execSQL(query);
         onCreate(db);
     }
